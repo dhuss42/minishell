@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_base.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:04:39 by dhuss             #+#    #+#             */
-/*   Updated: 2024/04/23 09:18:07 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/03 14:45:13 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,5 @@ void	ft_putnbr_base(unsigned int n, int *counter)
 		if (*counter == -1)
 			return ;
 	}
-	if (n >= 0)
-	{
-		ft_putchar_base(n % 16, counter);
-	}
+	ft_putchar_base(n % 16, counter);
 }

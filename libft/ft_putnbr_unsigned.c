@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_unsigned_fd.c                            :+:      :+:    :+:   */
+/*   ft_putnbr_unsigned.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:08:32 by dhuss             #+#    #+#             */
-/*   Updated: 2024/04/23 09:07:25 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/03 14:45:24 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,5 @@ void	ft_putnbr_unsigned(unsigned int n, int *counter)
 		if (*counter == -1)
 			return ;
 	}
-	if (n >= 0)
-		ft_putchar(n % 10 + 48, counter);
+	ft_putchar(n % 10 + 48, counter);
 }
