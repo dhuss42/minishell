@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 09:46:41 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/03 16:38:55 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/03 16:50:11 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ char	*ft_strdup(const char *s1)
 	i = 0;
 	if (!s1)
 		return (NULL);
-	// while (s1 && s1[i] != '\0')
 	while (s1[i] != '\0')
 		i++;
 	ptr = (char *) malloc (i + 1);
