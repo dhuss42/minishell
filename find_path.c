@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:24:16 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/02 15:19:14 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/03 16:44:29 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,21 +86,27 @@ char	*check_cmd(char **cmd)
 */
 char	*get_path(char *cmd, char **envp)
 {
-	t_get_path	gp;
+	char	*big_path;
+	char	**split_paths;
+	char	**append;
+	char	*move;
+	char	*path;
 
-	gp.append = NULL;
+	append = NULL;
 	if (envp[0] == NULL)
-		return (NULL);
-	gp.big_path = getenv("PATH");
-	if (gp.big_path == NULL)
+		return (NULL);			//something with E_CUSTOM_ENVP
+	big_path = getenv("PATH");
+	if (big_path == NULL)
 		return (NULL);		//something with E_CUSTOM_ARGC
-	gp.move = ft_strchr(gp.big_path, '/');
-	gp.split_paths = ft_split(gp.move, ':');
-	if (!gp.split_paths)
+	move = ft_strchr(big_path, '/');
+	split_paths = ft_split(move, ':');
+	if (!split_paths)
 		return (NULL);
-	gp.append = add_slash_cmd(gp.split_paths, cmd);
-	gp.path = check_cmd(gp.append);
-	if (gp.path == NULL)
-		return (NULL);
-	return (gp.path);
+	append = add_slash_cmd(split_paths, cmd);
+	path = ft_strdup(check_cmd(append));
+	// printf("PATH: %s\n", path);
+	free_paths(split_paths, append);
+	if (path == NULL)
+		return (ft_strdup(cmd));
+	return (path);
 }

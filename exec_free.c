@@ -1,24 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_unsigned.c                               :+:      :+:    :+:   */
+/*   exec_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 12:08:32 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/03 14:45:24 by maustel          ###   ########.fr       */
+/*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
+/*   Updated: 2024/10/03 16:32:06 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "executor.h"
 
-void	ft_putnbr_unsigned(unsigned int n, int *counter)
+void	free_double(char **to_free)
 {
-	if (n >= 10)
+	int	i;
+
+	i = 0;
+	while (to_free[i])
 	{
-		ft_putnbr_unsigned(n / 10, counter);
-		if (*counter == -1)
-			return ;
+		free (to_free[i]);
+		i++;
 	}
-	ft_putchar(n % 10 + 48, counter);
+	if (to_free)
+		free (to_free);
+}
+
+void	free_paths(char **split_paths, char **append)
+{
+	if (split_paths)
+		free_double (split_paths);
+	if (append)
+		free_double(append);
 }
