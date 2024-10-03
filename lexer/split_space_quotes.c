@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell_eichhoernchen.h"
 
 size_t count_tokens(char *str)
 {
@@ -100,14 +100,14 @@ char	**split_space_quotes(char *input)
 	tokens = malloc(sizeof(char *) * (count_tokens(input) + 1));
 	if (!tokens)
 		return (NULL);
-	printf("%zu\n", count_tokens(input) + 1);
-	printf("str: [%s]\n", input);
+	// printf("%zu\n", count_tokens(input) + 1);
+	// printf("str: [%s]\n", input);
 	tokens = fill_token_list(input, tokens); // problem inside here
-	while (tokens[i] != NULL)
-    {
-		printf("[%d] %s\n", i, tokens[i]);
-		i++;
-	}
+	// while (tokens[i] != NULL)
+    // {
+	// 	printf("[%d] %s\n", i, tokens[i]);
+	// 	i++;
+	// }
 	return (tokens);
 }
 

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell_eichhoernchen.h"
 
 void	clear_all(char **to_clear)
 {

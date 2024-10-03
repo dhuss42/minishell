@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell_eichhoernchen.h"
 
 bool	is_special(char input)
 {
@@ -149,7 +149,6 @@ int	main()
 	char	*res;
 	char	**tokens = NULL;
 	t_list	*list = NULL;
-	// int		i = 0;
 
 	input = readline("Type Shit: ");
 	if(!input)
@@ -165,12 +164,10 @@ int	main()
 	printf("\033[32mTOKEN LINKED LIST\n");
 	print_token_list(list);
 	printf("\033[0m");
+
 	free(input);
 	free(trim_inpt);
 	free(res);
-	ft_lstclear(&list, free_token);
+	ft_lstclear(&list, free_token); // remove this clear when sending the list to parsing
 	return (0);
 }
-
-
-//        HELLO << this isa$PATH"CHECK .   JESUS" . halleluija | <>>>'shiti '

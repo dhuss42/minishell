@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef MINISHELL_EICHHOERNCHEN_H
+# define MINISHELL_EICHHOERNCHEN_H
 
 #include <stdio.h>
 #include <stdlib.h>
