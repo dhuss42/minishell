@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/03 16:32:13 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/07 13:22:12 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,16 @@
 
 typedef enum e_custom_err
 {
-	E_CUSTOM_ARGC = 1
+	E_CUSTOM_ARGC = 107,
+	E_PATH = 108
 }			t_custom_err;
+
+typedef struct s_exec
+{
+	char	**args;
+	char	**filenames;
+	char	**redir_symbol;
+}					t_exec;
 
 // typedef struct s_get_path
 // {
@@ -37,5 +45,6 @@ typedef enum e_custom_err
 
 char	*get_path(char *cmd, char **envp);
 void	free_paths(char **split_paths, char **append);
+int		print_error(int err_no, char *str);
 
 #endif

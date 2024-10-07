@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:24:16 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/03 16:44:29 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/07 13:54:14 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,16 @@ char	*get_path(char *cmd, char **envp)
 
 	append = NULL;
 	if (envp[0] == NULL)
-		return (NULL);			//something with E_CUSTOM_ENVP
+		return (NULL);
 	big_path = getenv("PATH");
 	if (big_path == NULL)
-		return (NULL);		//something with E_CUSTOM_ARGC
+		return (NULL);
 	move = ft_strchr(big_path, '/');
 	split_paths = ft_split(move, ':');
 	if (!split_paths)
 		return (NULL);
 	append = add_slash_cmd(split_paths, cmd);
 	path = ft_strdup(check_cmd(append));
-	// printf("PATH: %s\n", path);
 	free_paths(split_paths, append);
 	if (path == NULL)
 		return (ft_strdup(cmd));
