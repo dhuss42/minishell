@@ -95,7 +95,7 @@ char	**fill_token_list(char *input, char **tokens)
 char	**split_space_quotes(char *input)
 {
 	char	**tokens;
-	int		i = 0;
+	// int		i = 0;
 
 	tokens = malloc(sizeof(char *) * (count_tokens(input) + 1));
 	if (!tokens)

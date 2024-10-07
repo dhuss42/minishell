@@ -164,7 +164,7 @@ int	main()
 	printf("\033[32mTOKEN LINKED LIST\n");
 	print_token_list(list);
 	printf("\033[0m");
-
+	parser(list);
 	free(input);
 	free(trim_inpt);
 	free(res);

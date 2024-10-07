@@ -19,6 +19,7 @@
 #include <readline/history.h>
 #include <stdbool.h>
 #include "libft/libft.h"
+#include <string.h>
 
 //----------------structs--------------//
 
@@ -43,6 +44,14 @@ typedef struct s_token
 	char *input;
 } token;
 
+typedef struct s_command
+{
+	char	**args;
+	char	**filename;
+	char	**red_symbol;
+	int		count_pipes; // maybe this needs to be somehwere else, could count the amount of pipes with ft_lstsize - 1
+} t_command;
+
 typedef struct s_trim
 {
 	size_t	i;
@@ -56,6 +65,7 @@ typedef struct s_trim
 
 char	**split_space_quotes(char *input);
 t_list	*tokeniser(char **split_double_array);
+t_list   *parser(t_list *token_list);
 
 void	print_token(token *tok);
 void	print_token_list(t_list *list);
