@@ -8,9 +8,12 @@ LFLAGS = -lreadline
 NAME = minishell
 CFILES = lexer/insert_trim_ws.c\
 	lexer/split_space_quotes.c\
-	lexer/tokeniser.c
+	lexer/tokeniser.c\
+	parser.c
+	
 OFILES = $(CFILES:.c=.o)
 DEPS = $(OFILES:.o=.d)
+# look into again
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -37,8 +40,9 @@ clean:
 	@$(MAKE) -C $(LIBFT_DIR) clean
 # -C changes directory to libft/
 
-fclean: clean
+fclean:
 	@echo "\033[33m fcleaning minishell \033[0m"
+	@rm -f $(OFILES) $(DEPS)
 	@rm -f $(NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 # fclean triggers two messages from clean in libft
