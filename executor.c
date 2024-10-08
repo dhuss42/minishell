@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/07 13:49:24 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/08 11:22:37 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,59 +18,76 @@
 	3)	execve
 */
 
+/*
+	waitpid() blocks until the child process terminates or until a signal occur
+	WIFEXITED(status) macro checks if the process exited normally
+	WEXITSTATUS(status) extracts the exit status value from the status argument
+*/
+int	parent_function(pid_t pid)
+{
+	int	status;
+	int	exit_code;
+
+	if (waitpid(pid, &status, 0) == -1)
+		return (print_error(E_PARENT, NULL));
+	if (WIFEXITED(status))
+		exit_code = WEXITSTATUS(status);
+	else
+		return (print_error(E_PARENT, NULL));
+	return (exit_code);
+}
+
 int	execute_single_command(char **envp, char **args)
 {
-	pid_t	id;
+	pid_t	pid;
 	char	*path;
+	int		exit_code;
 
+	// if (is_built_in)
+	// 	ecexute_builtin();
 	path = get_path(args[0], envp);
 	if (!path)
 		return (print_error(E_PATH, NULL));
-	id = fork();
-	if (id == -1)
+	pid = fork();
+	if (pid == -1)
 		return (print_error(errno, NULL));
-	else if (id == 0)
+	else if (pid == 0)
 	{
-		printf("Child is playing...\n"); //any code after execve in the child process wont be executed
-		sleep(1);
 		if (execve(path, args, envp))
 		{
-			print_error(127, args[0]);
 			if (path)
 				free (path);
-			return (1);
+			return (print_error(127, args[0]));
 		}
 	}
-	else if (id > 0)
-	{
-        wait(NULL);
-        printf("Child process has finished.\n");
-	}
+	else if (pid > 0)
+		exit_code = parent_function(pid);
+	printf("1. exit code: %d\n", exit_code);
 	if (path)
 		free (path);
-	return (0);
+	return (exit_code);
 }
 
-int	executor(char **envp, char **args)
+int	executor(char **envp, char **args, t_exec *test)
 {
-	if (1 == 1)	//check if nbr_pipes == 0
-		execute_single_command(envp, args);
+	//check if nbr_pipes == 0
+	test->exit_code = execute_single_command(envp, args);
+	printf("2. exit code: %d\n", test->exit_code);
 	// else
 	// 	pipechain(envp, args);
-	return (0);
+	return (test->exit_code);
 }
 
 int main (int argc, char **argv, char **envp)
 {
-	char *args[] = {"echt", "Amsel", "Specht", "-l", NULL};
-	// t_exec test;
-	// test.args[0] = ft_strdup("/bin/ls");
-	// test.args[1] = ft_strdup("-la");
-	// test.args[2] = NULL;
-	// char *args[] = {"ls -la", NULL};
+	char *args[] = {"lsff", "-la", NULL};
+	t_exec test;
+	int	result;
 
-	if (executor (envp, args))
-		return (1);
+	test.exit_code = 0;
+	result = executor (envp, args, &test);
+	printf ("3. Exit code: %d\n", test.exit_code);
+	return (result);
 	(void)argc;
 	(void)argv;
 	return (0);
