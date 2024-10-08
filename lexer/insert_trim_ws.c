@@ -164,10 +164,16 @@ int	main()
 	printf("\033[32mTOKEN LINKED LIST\n");
 	print_token_list(list);
 	printf("\033[0m");
+	syntax_errors(list);
+
 	parser(list);
 	free(input);
 	free(trim_inpt);
 	free(res);
-	ft_lstclear(&list, free_token); // remove this clear when sending the list to parsing
+	ft_lstclear(&list, free_token);
 	return (0);
 }
+
+
+// to do here
+// 		create a function that correctly counts the len of the trimmed string

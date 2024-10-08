@@ -61,14 +61,24 @@ typedef struct s_trim
 	char	*res;
 } t_trim;
 
-//------------------------------------//
+//-----------------lexer----------------//
 
 char	**split_space_quotes(char *input);
 t_list	*tokeniser(char **split_double_array);
-t_list   *parser(t_list *token_list);
+void    syntax_errors(t_list *token_list);
 
+//----------------parser----------------//
+t_list   *parser(t_list *token_list);
+int is_filename(token *current_token);
+int is_redirection(token *current_token);
+
+
+//----------free-stuf------------//
+void	free_token(void *content);
+
+//------------extra-shit-----------//
 void	print_token(token *tok);
 void	print_token_list(t_list *list);
-void	free_token(void *content);
+void    print_table(t_list *table);
 
 #endif
