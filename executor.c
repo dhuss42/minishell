@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/08 11:22:37 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/08 16:40:30 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,26 @@
 
 /*
 	waitpid() blocks until the child process terminates or until a signal occur
-	WIFEXITED(status) macro checks if the process exited normally
-	WEXITSTATUS(status) extracts the exit status value from the status argument
+	WIFEXITED(wstatus) macro checks if the process exited normally
+	WEXITwSTATUS(wstatus) extracts the exit wstatus value from the wstatus argument
 */
-int	parent_function(pid_t pid)
+int	parent_function(pid_t id)
 {
-	int	status;
+	int	wstatus;
 	int	exit_code;
 
-	if (waitpid(pid, &status, 0) == -1)
+	if (waitpid(id, &wstatus, 0) == -1)
 		return (print_error(E_PARENT, NULL));
-	if (WIFEXITED(status))
-		exit_code = WEXITSTATUS(status);
+	if (WIFEXITED(wstatus))	//if programm exited normally
+		exit_code = WEXITwSTATUS(wstatus);	//exit_code = value with which the programm exited
 	else
 		return (print_error(E_PARENT, NULL));
-	return (exit_code);
+	return (exit_code); 
 }
 
 int	execute_single_command(char **envp, char **args)
 {
-	pid_t	pid;
+	pid_t	id;
 	char	*path;
 	int		exit_code;
 
@@ -48,21 +48,20 @@ int	execute_single_command(char **envp, char **args)
 	path = get_path(args[0], envp);
 	if (!path)
 		return (print_error(E_PATH, NULL));
-	pid = fork();
-	if (pid == -1)
+	id = fork();
+	if (id == -1)
 		return (print_error(errno, NULL));
-	else if (pid == 0)
+	else if (id == 0)
 	{
 		if (execve(path, args, envp))
 		{
 			if (path)
 				free (path);
-			return (print_error(127, args[0]));
+			exit (print_error(127, args[0]));
 		}
 	}
-	else if (pid > 0)
-		exit_code = parent_function(pid);
-	printf("1. exit code: %d\n", exit_code);
+	else if (id > 0)
+		exit_code = parent_function(id);
 	if (path)
 		free (path);
 	return (exit_code);
@@ -72,7 +71,6 @@ int	executor(char **envp, char **args, t_exec *test)
 {
 	//check if nbr_pipes == 0
 	test->exit_code = execute_single_command(envp, args);
-	printf("2. exit code: %d\n", test->exit_code);
 	// else
 	// 	pipechain(envp, args);
 	return (test->exit_code);
