@@ -6,14 +6,14 @@
 #    By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/03 14:24:16 by maustel           #+#    #+#              #
-#    Updated: 2024/10/07 13:22:57 by maustel          ###   ########.fr        #
+#    Updated: 2024/10/09 11:09:04 by maustel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
 NAME = exec
 CFLAGS = -Wall #-Werror -Wextra -g
-CFILES = executor.c find_path.c exec_free.c error_handling.c
+CFILES = executor.c find_path.c exec_free.c error_handling.c check_files_red.c
 
 OFILES = $(CFILES:.c=.o)
 

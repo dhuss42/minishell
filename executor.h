@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/09 10:10:25 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 12:06:25 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ typedef enum e_custom_err
 {
 	E_CUSTOM_ARGC = 107,
 	E_PATH,
-	E_PARENT
+	E_PARENT,
+	E_FILENOTEXIST,
+	E_NOPERMIT
+
 }			t_custom_err;
 
 typedef struct s_command
@@ -39,6 +42,10 @@ typedef struct s_command
 typedef struct	s_exec
 {
 	int	exit_code;
+	char*	final_infile;
+	char*	final_outfile;
+	char*	final_in_red;
+	char*	final_out_red;
 }					t_exec;
 
 // typedef struct s_get_path
@@ -52,6 +59,7 @@ typedef struct	s_exec
 
 char	*get_path(char *cmd, char **envp);
 void	free_paths(char **split_paths, char **append);
-int		print_error(int err_no, char *str);
+int		print_error(int err_no, char *str, t_exec *test);
+int		handle_redirections(t_command example, t_exec *test);
 
 #endif

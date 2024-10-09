@@ -18,10 +18,16 @@ int	custom_error(int err_no, char *str)
 		ft_putstr_fd("function get_path failed\n", 2);
 	else if (err_no == 127)
 		ft_putstr_fd("command not found\n", 2);
+	else if (err_no == E_PARENT)
+		ft_putstr_fd("error in parent_function\n", 2);
+	else if (err_no == E_FILENOTEXIST)
+		ft_putstr_fd("No such file or directory\n", 2);
+	else if (err_no == E_NOPERMIT)
+		ft_putstr_fd("Permission denied\n", 2);
 	return (err_no);
 }
 
-int	print_error(int err_no, char *str)
+int	print_error(int err_no, char *str, t_exec *test)
 {
 	if (str)
 	{
@@ -32,5 +38,6 @@ int	print_error(int err_no, char *str)
 		custom_error(err_no, str);
 	else
 		perror(NULL);
+	test->exit_code = err_no;
 	return (err_no);
 }

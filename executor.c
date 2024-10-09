@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/09 10:35:53 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 12:15:56 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,61 +23,59 @@
 	WIFEXITED(wstatus) macro checks if the process exited normally
 	WEXITwSTATUS(wstatus) extracts the exit wstatus value from the wstatus argument
 */
-int	parent_function(pid_t id)
+int	parent_function(pid_t id, t_exec *test)
 {
 	int	wstatus;
 	int	exit_code;
 
 	if (waitpid(id, &wstatus, 0) == -1)
-		return (print_error(E_PARENT, NULL));
+		return (print_error(E_PARENT, NULL, test));
 	if (WIFEXITED(wstatus))	//if programm exited normally
 		exit_code = WEXITSTATUS(wstatus);	//exit_code = value with which the programm exited
 	else
-		return (print_error(E_PARENT, NULL));
+		return (print_error(E_PARENT, NULL, test));
+	test->exit_code = exit_code;
 	return (exit_code);
 }
 
-void	handle_redirections()
-{
-
-}
-
-int	execute_single_command(char **envp, t_command example)
+int	execute_single_command(char **envp, t_command example, t_exec *test)
 {
 	pid_t	id;
 	char	*path;
-	int		exit_code = 0;
 
 	// if (is_built_in)
 	// 	ecexute_builtin();
+	if (handle_redirections(example, test))
+		return (1);
 	// if (handle_redirections(data) == ERROR)
 	// 	return (free_process_exit(data));
 	path = get_path(example.args[0], envp);
 	if (!path)
-		return (print_error(E_PATH, NULL));
+		return (print_error(E_PATH, NULL, test));
 	id = fork();
 	if (id == -1)
-		return (print_error(errno, NULL));
+		return (print_error(errno, NULL, test));
 	else if (id == 0)
 	{
 		if (execve(path, example.args, envp))
 		{
 			if (path)
 				free (path);
-			exit (print_error(127, example.args[0]));
+			exit (print_error(127, example.args[0], test));
 		}
 	}
 	else if (id > 0)
-		exit_code = parent_function(id);
+		parent_function(id, test);
 	if (path)
 		free (path);
-	return (exit_code);
+	return (test->exit_code);
 }
 
 int	executor(char **envp, t_command example, t_exec *test)
 {
 	//check if nbr_pipes == 0
-	test->exit_code = execute_single_command(envp, example);
+	if (execute_single_command(envp, example, test))
+		return (1); // freeeee
 	// else
 	// 	pipechain(envp, args);
 	return (test->exit_code);
@@ -86,7 +84,7 @@ int	executor(char **envp, t_command example, t_exec *test)
 void	create_examples(t_command *ex)
 {
 	ex->args = malloc(sizeof(char*) * 10);
-	ex->args[0] = ft_strdup("lsd");
+	ex->args[0] = ft_strdup("ls");
 	ex->args[1] = ft_strdup("-l");
 	ex->args[2] = ft_strdup("libft");
 	ex->args[3] = NULL;
@@ -110,7 +108,8 @@ int main (int argc, char **argv, char **envp)
 	create_examples(&example);
 	test.exit_code = 0;
 	executor (envp, example, &test);
-	printf ("3. Exit code: %d\n", test.exit_code);
+	// printf ("3. Exit code: %d\n", test.exit_code);
+	
 	return (test.exit_code);
 	(void)argc;
 	(void)argv;
