@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/09 16:51:01 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 17:07:54 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,11 @@ int	execute_single_command(char **envp, t_command example, t_exec *test)
 	if (!path)
 		return (print_error(E_PATH, NULL, test));
 	// if (access(path, F_OK) == -1)
-	// 	return (free(path), print_error(127, path, test));	/////
+	// {
+	// 	printf("FILENOTEXIST");
+	// 	free(path);
+	// 	return (print_error(127, example.args[0], test));	/////
+	// }
 	id = fork();
 	if (id == -1)
 		return (print_error(errno, NULL, test));
@@ -99,7 +103,7 @@ int	executor(char **envp, t_command example, t_exec *test)
 void	create_examples(t_command *ex)
 {
 	ex->args = malloc(sizeof(char*) * 10);
-	ex->args[0] = ft_strdup("/Users/maustel/Projects/minishell/a.outi");
+	ex->args[0] = ft_strdup("/Users/maustel/Projects/minishell/a.out2");
 	// ex->args[1] = ft_strdup("Hallo du");
 	ex->args[1] = NULL;
 	// ex->args[1] = ft_strdup("-l");

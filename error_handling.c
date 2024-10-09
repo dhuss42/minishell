@@ -20,6 +20,11 @@ int	custom_error(int err_no, char *str)
 		ft_putstr_fd("command not found\n", 2);
 	else if (err_no == E_PARENT)
 		ft_putstr_fd("error in parent_function\n", 2);
+	else if(err_no == E_FILENOEXIST)
+	{
+		ft_putstr_fd("no such file or directory\n", 2);
+		return (127);
+	}
 	return (err_no);
 }
 
@@ -31,9 +36,11 @@ int	print_error(int err_no, char *str, t_exec *test)
 		write(2, ": ", 2);
 	}
 	if (err_no > 106)
-		custom_error(err_no, str);
+		test->exit_code = custom_error(err_no, str);
 	else
+	{
 		perror(NULL);
-	test->exit_code = err_no;
+		test->exit_code = err_no;
+	}
 	return (err_no);
 }
