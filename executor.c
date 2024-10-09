@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/09 14:48:50 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 16:51:01 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ int	parent_function(pid_t id, t_exec *test)
 	return (exit_code);
 }
 
+//when file not exists ./"filename"--> "No such file or directory", Errorcode: 127
+//when no permission for binary file--> "Permission denied", Errorcode: 126
+//when command does not exist-->"command not found", errorcode: 127
+
 int	execute_single_command(char **envp, t_command example, t_exec *test)
 {
 	pid_t	id;
@@ -47,11 +51,11 @@ int	execute_single_command(char **envp, t_command example, t_exec *test)
 	// 	ecexute_builtin();
 	if (handle_redirections(example, test))
 		return (1);
-	// if (handle_redirections(data) == ERROR)
-	// 	return (free_process_exit(data));
 	path = get_path(example.args[0], envp);
 	if (!path)
 		return (print_error(E_PATH, NULL, test));
+	// if (access(path, F_OK) == -1)
+	// 	return (free(path), print_error(127, path, test));	/////
 	id = fork();
 	if (id == -1)
 		return (print_error(errno, NULL, test));
@@ -73,10 +77,12 @@ int	execute_single_command(char **envp, t_command example, t_exec *test)
 
 int	free_all(t_command *example)
 {
-
-	free_double(example->args);
-	free_double(example->filename);
-	free_double(example->red_symbol);
+	if (example->args)
+		free_double(example->args);
+	if (example->filename)
+		free_double(example->filename);
+	if (example->red_symbol)
+		free_double(example->red_symbol);
 	return (1);
 }
 
@@ -93,22 +99,25 @@ int	executor(char **envp, t_command example, t_exec *test)
 void	create_examples(t_command *ex)
 {
 	ex->args = malloc(sizeof(char*) * 10);
-	ex->args[0] = ft_strdup("echo");
-	ex->args[1] = ft_strdup("Hallo du");
-	ex->args[2] = NULL;
+	ex->args[0] = ft_strdup("/Users/maustel/Projects/minishell/a.outi");
+	// ex->args[1] = ft_strdup("Hallo du");
+	ex->args[1] = NULL;
 	// ex->args[1] = ft_strdup("-l");
 	// ex->args[2] = ft_strdup("libft");
 	// ex->args[3] = NULL;
-	ex->filename = malloc(sizeof(char*) * 10);
-	ex->filename[0] = ft_strdup("out7");
-	ex->filename[1] = ft_strdup("in1");
-	ex->filename[2] = ft_strdup("out2");
-	ex->filename[3] = NULL;
-	ex->red_symbol = malloc(sizeof(char*) * 10);
-	ex->red_symbol[0] = ft_strdup(">");
-	ex->red_symbol[1] = ft_strdup("<");
-	ex->red_symbol[2] = ft_strdup(">");
-	ex->red_symbol[3] = NULL;
+	// ex->filename = malloc(sizeof(char*) * 10);
+	// ex->filename[0] = ft_strdup("out7");
+	// ex->filename[1] = ft_strdup("in1");
+	// ex->filename[2] = ft_strdup("out2");
+	// ex->filename[3] = NULL;
+	// ex->red_symbol = malloc(sizeof(char*) * 10);
+	// ex->red_symbol[0] = ft_strdup(">");
+	// ex->red_symbol[1] = ft_strdup("<");
+	// ex->red_symbol[2] = ft_strdup(">");
+	// ex->red_symbol[3] = NULL;
+
+	ex->filename = NULL;
+	ex->red_symbol = NULL;
 }
 
 
@@ -126,10 +135,10 @@ int main (int argc, char **argv, char **envp)
 	if (executor (envp, example, &test))
 		return (1);
 	// printf ("[Exit code: %d]\n", test.exit_code);
-	printf ("[final infile: %s]\n", test.final_infile);
-	printf ("[final outfile: %s]\n", test.final_outfile);
-	printf ("[final in red: %s]\n", test.final_in_red);
-	printf ("[final out red: %s]\n", test.final_out_red);
+	// printf ("[final infile: %s]\n", test.final_infile);
+	// printf ("[final outfile: %s]\n", test.final_outfile);
+	// printf ("[final in red: %s]\n", test.final_in_red);
+	// printf ("[final out red: %s]\n", test.final_out_red);
 	free_all(&example);
 	return (test.exit_code);
 	(void)argc;

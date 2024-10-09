@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/09 14:45:39 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 15:31:22 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	open_output_files(t_command example, t_exec *test)
 int	check_output_files(t_command example, t_exec *test)
 {
 	int	i;
-	
+
 	i = 0;
 	while (example.filename[i])
 	{
@@ -102,11 +102,14 @@ int	handle_redirections(t_command example, t_exec *test)
 	test->final_in_red = NULL;
 	test->final_out_red = NULL;
 
-	if (check_input_files(example, test))
-		return (1);
-	if (check_output_files(example, test))
-		return (1);
-	if (open_output_files(example, test))
-		return (1);
+	if (example.filename && example.red_symbol)
+	{
+		if (check_input_files(example, test))
+			return (1);
+		if (check_output_files(example, test))
+			return (1);
+		if (open_output_files(example, test))
+			return (1);
+	}
 	return (0);
 }
