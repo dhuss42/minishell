@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/09 12:06:25 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 12:39:20 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ typedef enum e_custom_err
 {
 	E_CUSTOM_ARGC = 107,
 	E_PATH,
-	E_PARENT,
-	E_FILENOTEXIST,
-	E_NOPERMIT
-
+	E_PARENT
 }			t_custom_err;
 
 typedef struct s_command

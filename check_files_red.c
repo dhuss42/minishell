@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/09 12:14:04 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 12:36:34 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	check_input_files(t_command example, t_exec *test)
 		if (example.red_symbol[i] && example.red_symbol)
 		{
 			if (access(example.filename[i], F_OK) == -1)
-				return (print_error(E_FILENOTEXIST, example.filename[i], test));
+				return (print_error(EPERM, example.filename[i], test));
 			if (access(example.filename[i], R_OK) == -1)
-				return (print_error(E_NOPERMIT, example.filename[i], test));
+				return (print_error(EPERM, example.filename[i], test));
 			else
 			{
 				test->final_infile = example.filename[i];

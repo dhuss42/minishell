@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/09 12:15:56 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 12:38:35 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ int main (int argc, char **argv, char **envp)
 	create_examples(&example);
 	test.exit_code = 0;
 	executor (envp, example, &test);
-	// printf ("3. Exit code: %d\n", test.exit_code);
-	
+	printf ("[Exit code: %d]\n", test.exit_code);
+
 	return (test.exit_code);
 	(void)argc;
 	(void)argv;

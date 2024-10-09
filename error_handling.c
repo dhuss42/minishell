@@ -20,10 +20,6 @@ int	custom_error(int err_no, char *str)
 		ft_putstr_fd("command not found\n", 2);
 	else if (err_no == E_PARENT)
 		ft_putstr_fd("error in parent_function\n", 2);
-	else if (err_no == E_FILENOTEXIST)
-		ft_putstr_fd("No such file or directory\n", 2);
-	else if (err_no == E_NOPERMIT)
-		ft_putstr_fd("Permission denied\n", 2);
 	return (err_no);
 }
 
