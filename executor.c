@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/08 16:40:30 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 10:35:53 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,28 @@ int	parent_function(pid_t id)
 	if (waitpid(id, &wstatus, 0) == -1)
 		return (print_error(E_PARENT, NULL));
 	if (WIFEXITED(wstatus))	//if programm exited normally
-		exit_code = WEXITwSTATUS(wstatus);	//exit_code = value with which the programm exited
+		exit_code = WEXITSTATUS(wstatus);	//exit_code = value with which the programm exited
 	else
 		return (print_error(E_PARENT, NULL));
-	return (exit_code); 
+	return (exit_code);
 }
 
-int	execute_single_command(char **envp, char **args)
+void	handle_redirections()
+{
+
+}
+
+int	execute_single_command(char **envp, t_command example)
 {
 	pid_t	id;
 	char	*path;
-	int		exit_code;
+	int		exit_code = 0;
 
 	// if (is_built_in)
 	// 	ecexute_builtin();
-	path = get_path(args[0], envp);
+	// if (handle_redirections(data) == ERROR)
+	// 	return (free_process_exit(data));
+	path = get_path(example.args[0], envp);
 	if (!path)
 		return (print_error(E_PATH, NULL));
 	id = fork();
@@ -53,11 +60,11 @@ int	execute_single_command(char **envp, char **args)
 		return (print_error(errno, NULL));
 	else if (id == 0)
 	{
-		if (execve(path, args, envp))
+		if (execve(path, example.args, envp))
 		{
 			if (path)
 				free (path);
-			exit (print_error(127, args[0]));
+			exit (print_error(127, example.args[0]));
 		}
 	}
 	else if (id > 0)
@@ -67,25 +74,44 @@ int	execute_single_command(char **envp, char **args)
 	return (exit_code);
 }
 
-int	executor(char **envp, char **args, t_exec *test)
+int	executor(char **envp, t_command example, t_exec *test)
 {
 	//check if nbr_pipes == 0
-	test->exit_code = execute_single_command(envp, args);
+	test->exit_code = execute_single_command(envp, example);
 	// else
 	// 	pipechain(envp, args);
 	return (test->exit_code);
 }
 
+void	create_examples(t_command *ex)
+{
+	ex->args = malloc(sizeof(char*) * 10);
+	ex->args[0] = ft_strdup("lsd");
+	ex->args[1] = ft_strdup("-l");
+	ex->args[2] = ft_strdup("libft");
+	ex->args[3] = NULL;
+	ex->filename = malloc(sizeof(char*) * 10);
+	ex->filename[0] = ft_strdup("in1");
+	ex->filename[1] = ft_strdup("out1");
+	ex->filename[2] = NULL;
+	ex->red_symbol = malloc(sizeof(char*) * 10);
+	ex->red_symbol[0] = ft_strdup("<");
+	ex->red_symbol[1] = ft_strdup(">");
+	ex->red_symbol[2] = NULL;
+}
+
 int main (int argc, char **argv, char **envp)
 {
-	char *args[] = {"lsff", "-la", NULL};
+	// char *args[] = {"lsa", "-la", NULL};
 	t_exec test;
-	int	result;
+	t_command example;
+	// int	result;
 
+	create_examples(&example);
 	test.exit_code = 0;
-	result = executor (envp, args, &test);
+	executor (envp, example, &test);
 	printf ("3. Exit code: %d\n", test.exit_code);
-	return (result);
+	return (test.exit_code);
 	(void)argc;
 	(void)argv;
 	return (0);

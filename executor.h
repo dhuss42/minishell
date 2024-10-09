@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/08 10:42:11 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 10:10:25 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,13 @@ typedef enum e_custom_err
 	E_PARENT
 }			t_custom_err;
 
-typedef struct	s_arguments
+typedef struct s_command
 {
 	char	**args;
-	char	**filenames;
-	char	**redir_symbol;
-}					t_arguments;
+	char	**filename;
+	char	**red_symbol;
+	int		count_pipes; // maybe this needs to be somehwere else, could count the amount of pipes with ft_lstsize - 1
+} t_command;
 
 typedef struct	s_exec
 {
