@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/09 12:38:35 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 14:48:50 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,20 @@ int	execute_single_command(char **envp, t_command example, t_exec *test)
 	return (test->exit_code);
 }
 
+int	free_all(t_command *example)
+{
+
+	free_double(example->args);
+	free_double(example->filename);
+	free_double(example->red_symbol);
+	return (1);
+}
+
 int	executor(char **envp, t_command example, t_exec *test)
 {
 	//check if nbr_pipes == 0
 	if (execute_single_command(envp, example, test))
-		return (1); // freeeee
+		return (free_all(&example)); // freeeee
 	// else
 	// 	pipechain(envp, args);
 	return (test->exit_code);
@@ -84,19 +93,26 @@ int	executor(char **envp, t_command example, t_exec *test)
 void	create_examples(t_command *ex)
 {
 	ex->args = malloc(sizeof(char*) * 10);
-	ex->args[0] = ft_strdup("ls");
-	ex->args[1] = ft_strdup("-l");
-	ex->args[2] = ft_strdup("libft");
-	ex->args[3] = NULL;
+	ex->args[0] = ft_strdup("echo");
+	ex->args[1] = ft_strdup("Hallo du");
+	ex->args[2] = NULL;
+	// ex->args[1] = ft_strdup("-l");
+	// ex->args[2] = ft_strdup("libft");
+	// ex->args[3] = NULL;
 	ex->filename = malloc(sizeof(char*) * 10);
-	ex->filename[0] = ft_strdup("in1");
-	ex->filename[1] = ft_strdup("out1");
-	ex->filename[2] = NULL;
+	ex->filename[0] = ft_strdup("out7");
+	ex->filename[1] = ft_strdup("in1");
+	ex->filename[2] = ft_strdup("out2");
+	ex->filename[3] = NULL;
 	ex->red_symbol = malloc(sizeof(char*) * 10);
-	ex->red_symbol[0] = ft_strdup("<");
-	ex->red_symbol[1] = ft_strdup(">");
-	ex->red_symbol[2] = NULL;
+	ex->red_symbol[0] = ft_strdup(">");
+	ex->red_symbol[1] = ft_strdup("<");
+	ex->red_symbol[2] = ft_strdup(">");
+	ex->red_symbol[3] = NULL;
 }
+
+
+
 
 int main (int argc, char **argv, char **envp)
 {
@@ -107,9 +123,14 @@ int main (int argc, char **argv, char **envp)
 
 	create_examples(&example);
 	test.exit_code = 0;
-	executor (envp, example, &test);
-	printf ("[Exit code: %d]\n", test.exit_code);
-
+	if (executor (envp, example, &test))
+		return (1);
+	// printf ("[Exit code: %d]\n", test.exit_code);
+	printf ("[final infile: %s]\n", test.final_infile);
+	printf ("[final outfile: %s]\n", test.final_outfile);
+	printf ("[final in red: %s]\n", test.final_in_red);
+	printf ("[final out red: %s]\n", test.final_out_red);
+	free_all(&example);
 	return (test.exit_code);
 	(void)argc;
 	(void)argv;

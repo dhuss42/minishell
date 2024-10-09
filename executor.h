@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/09 12:39:20 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/09 14:40:09 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ char	*get_path(char *cmd, char **envp);
 void	free_paths(char **split_paths, char **append);
 int		print_error(int err_no, char *str, t_exec *test);
 int		handle_redirections(t_command example, t_exec *test);
+void	free_double(char **to_free);
 
 #endif
