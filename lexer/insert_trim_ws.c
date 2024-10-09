@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   insert_trim_ws.c                                   :+:      :+:    :+:   */
+/*   insert_shell_ws.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -40,7 +40,7 @@ bool	is_wspace(char input)
 	return (false);
 }
 
-void handle_quotes(t_trim *trim, char *input)
+void handle_quotes(t_shell *trim, char *input)
 {
 	char quote;
 
@@ -59,7 +59,7 @@ void handle_quotes(t_trim *trim, char *input)
 		printf("error\n"); // update here
 }
 
-void	handle_op(t_trim *trim, char *input)
+void	handle_op(t_shell *trim, char *input)
 {
 	if (trim->j > 0 && (!is_wspace(trim->res[trim->j - 1]))) // if not the beginning of res and the prior space is not ws
 		trim->res[(trim->j)++] = ' '; // insert ws if there is none
@@ -75,7 +75,7 @@ void	handle_op(t_trim *trim, char *input)
 		trim->res[trim->j++] = ' ';
 }
 
-void	handle_special(t_trim *trim, char *input)
+void	handle_special(t_shell *trim, char *input)
 {
 	char tmp;
 
@@ -95,7 +95,7 @@ void	handle_special(t_trim *trim, char *input)
 		}
 }
 
-void	populate_trim_str(t_trim *trim, char *input)
+void	populate_trim_str(t_shell *trim, char *input)
 {
 	trim->j = 0;
 	trim->i = 0;
@@ -124,7 +124,7 @@ void	populate_trim_str(t_trim *trim, char *input)
 
 char *trim_spaces(char *input)
 {
-	t_trim	trim;
+	t_shell	trim;
 	char	*trim_inpt;
 
 	if (!input)

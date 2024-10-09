@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   minishell_eichhoernchen.h                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/02 17:29:44 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/09 17:05:41 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,22 @@ typedef struct s_command
 	char	**args;
 	char	**filename;
 	char	**red_symbol;
-	int		count_pipes; // maybe this needs to be somehwere else, could count the amount of pipes with ft_lstsize - 1
 } t_command;
 
-typedef struct s_trim
+typedef struct s_shell
 {
 	size_t	i;
 	size_t	j;
 	size_t	len;
+	size_t	lines;
+	size_t	words;
+	size_t	reds;
+	size_t	filenames;
+	t_list	*tmp;
+	t_list	*table;
 	bool	isspace;
 	char	*res;
-} t_trim;
+} t_shell;
 
 //-----------------lexer----------------//
 
@@ -68,13 +73,19 @@ t_list	*tokeniser(char **split_double_array);
 void    syntax_errors(t_list *token_list);
 
 //----------------parser----------------//
-t_list   *parser(t_list *token_list);
+t_list		*parser(t_list *token_list);
+t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing);
+
+//----------------set-to-zero----------------//
 int is_filename(token *current_token);
 int is_redirection(token *current_token);
+void	set_to_zero(t_shell *nbr);
 
 
 //----------free-stuf------------//
 void	free_token(void *content);
+void	clear_all(char **to_clear);
+void	free_table(t_shell *parsing);
 
 //------------extra-shit-----------//
 void	print_token(token *tok);

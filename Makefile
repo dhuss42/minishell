@@ -10,7 +10,9 @@ CFILES = lexer/insert_trim_ws.c\
 	lexer/split_space_quotes.c\
 	lexer/tokeniser.c\
 	lexer/syntax_errors.c\
-	parser.c\
+	parser/parser.c\
+	parser/helper.c\
+	parser/populate_cmd.c\
 	print_table.c
 
 # take out functions later such as print_table.c
@@ -28,7 +30,7 @@ all: $(NAME)
 # works when the echo message is deleted. Also affects libft
 
 $(LIBFT):
-	@$(MAKE) -C $(LIBFT_DIR) all 
+	@$(MAKE) -C $(LIBFT_DIR) all
 	@$(MAKE) -C $(LIBFT_DIR) bonus
 
 $(NAME): $(OFILES) $(LIBFT)
@@ -37,7 +39,7 @@ $(NAME): $(OFILES) $(LIBFT)
 %.o: %.c
 	@$(CC) $(CFLAGS) $(LIBFT_INCLUDES) -c $< -o $@
 
-clean: 
+clean:
 	@echo "\033[33m cleaning minishell files \033[0m"
 	@rm -f $(OFILES) $(DEPS)
 	@$(MAKE) -C $(LIBFT_DIR) clean
@@ -53,7 +55,7 @@ fclean:
 re:
 	@echo "\033[35m re making... \033[0m"
 	@$(MAKE) fclean
-	@$(MAKE) all	
+	@$(MAKE) all
 
 -include $(DEPS)
 # - make won't stop with an error if i it cannot find the DEPS files

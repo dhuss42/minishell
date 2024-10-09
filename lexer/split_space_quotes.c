@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:49:09 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/02 15:15:05 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/09 12:01:47 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,35 +95,10 @@ char	**fill_token_list(char *input, char **tokens)
 char	**split_space_quotes(char *input)
 {
 	char	**tokens;
-	// int		i = 0;
 
 	tokens = malloc(sizeof(char *) * (count_tokens(input) + 1));
 	if (!tokens)
 		return (NULL);
-	// printf("%zu\n", count_tokens(input) + 1);
-	// printf("str: [%s]\n", input);
-	tokens = fill_token_list(input, tokens); // problem inside here
-	// while (tokens[i] != NULL)
-    // {
-	// 	printf("[%d] %s\n", i, tokens[i]);
-	// 	i++;
-	// }
+	tokens = fill_token_list(input, tokens);
 	return (tokens);
 }
-
-// int main()
-// {
-//     size_t len;
-//     size_t  i = 0;
-//     char **tokens;
-
-//     len = count_tokens("Hello | this << >> $ $ \"THE ULTIMATE           \" TEST!!!!! 'FUCK'");
-//     printf("len: %zu\n", len);
-//     tokens = split_space_quotes("Hello | this << >> $ $ \"THE ULTIMATE           \" TEST!!!!! 'FUCK'");
-//     while (tokens[i] != NULL)
-//     {
-//         printf("%s\n", tokens[i]);
-//         i++;
-//     }
-//     return (0);
-// }
