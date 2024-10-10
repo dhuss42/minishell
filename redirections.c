@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:38:08 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/10 16:34:29 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/10 17:05:35 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ int	handle_redirections(t_command example, t_exec *test)
 	{
 		if (test->final_out_red[1] != '>')
 			fd = open(test->final_outfile, O_WRONLY | O_TRUNC);
-		// else if (test->final_out_red[1] == '>')
-		// 	fd = open(test->final_outfile, O_WRONLY | O_APPEND);
+		else if (test->final_out_red[1] == '>')
+			fd = open(test->final_outfile, O_WRONLY | O_APPEND);
 		else
 			return (1);
 		if (fd == -1)
