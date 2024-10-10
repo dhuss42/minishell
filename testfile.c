@@ -10,8 +10,12 @@
 int main()
 {
 	int fd;
+	char str[] = "Hallo du ";
 
-	fd = open("out1", O_WRONLY | O_CREAT);
-	write (fd, "Amsel?", 6);
+	fd = open("out3", O_WRONLY | O_CREAT| O_TRUNC, 0644);
+	dup2(fd, 1);
+	// write (fd, str, strlen(str));
+	close(fd);
+	printf("I am writing !");
 	return (0);
 }
