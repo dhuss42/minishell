@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/09 17:05:41 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/10 16:28:16 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,22 @@ typedef struct s_shell
 
 char	**split_space_quotes(char *input);
 t_list	*tokeniser(char **split_double_array);
-void    syntax_errors(t_list *token_list);
+void	syntax_errors(t_list *token_list);
 
 //----------------parser----------------//
 t_list		*parser(t_list *token_list);
+t_list		*create_table(t_list *token_list, t_shell *parsing);
 t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing);
 
-//----------------set-to-zero----------------//
-int is_filename(token *current_token);
-int is_redirection(token *current_token);
+//----------------helpers----------------//
+
+	//--> lexer
+bool	is_special(char input);
+bool	is_wspace(char input);
+
+	//--> parser
+int		is_filename(token *current_token);
+int		is_redirection(token *current_token);
 void	set_to_zero(t_shell *nbr);
 
 
@@ -90,6 +97,6 @@ void	free_table(t_shell *parsing);
 //------------extra-shit-----------//
 void	print_token(token *tok);
 void	print_token_list(t_list *list);
-void    print_table(t_list *table);
+void	print_table(t_list *table);
 
 #endif

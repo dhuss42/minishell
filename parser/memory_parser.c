@@ -1,30 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   memory_parser.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/09 12:01:02 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/10 11:26:24 by dhuss            ###   ########.fr       */
+/*   Created: 2024/10/10 11:21:11 by dhuss             #+#    #+#             */
+/*   Updated: 2024/10/10 16:28:12 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_eichhoernchen.h"
 
-t_list	*parser(t_list *token_list)
+void	free_table(t_shell *parsing)
 {
-	t_shell	parsing;
+	t_list	*tmp;
+	t_list	*next;
+	t_command *cmd;
 
-	parsing.table = NULL;
-	parsing.table = create_table(token_list, &parsing);
-	print_table(parsing.table);
-
-	free_table(&parsing); // just here for leak check
-	return (parsing.table);
+	tmp = parsing->table;
+	while (tmp != NULL)
+	{
+		cmd = (t_command*)tmp->content;
+		if (cmd)
+		{
+			if (cmd->args)
+				clear_all(cmd->args);
+			if (cmd->filename)
+				clear_all(cmd->filename);
+			if (cmd->red_symbol)
+				clear_all(cmd->red_symbol);
+			free(cmd);
+		}
+		next = tmp->next;
+		free(tmp);
+		tmp = next;
+	}
+	parsing->table = NULL;
 }
-
-// < hello | wc -l | grep a >> outfile >> out
-// "$HOME" > out1 > out2 >> outmain | '     test' |        wc     -l | grep -lala > outfile
-// ls -la | cat -e | cat -e
-// echo $PATH | tr : '\n'

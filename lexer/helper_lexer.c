@@ -1,30 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   helper_lexer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/09 12:01:02 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/10 11:26:24 by dhuss            ###   ########.fr       */
+/*   Created: 2024/10/10 11:12:09 by dhuss             #+#    #+#             */
+/*   Updated: 2024/10/10 16:28:14 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_eichhoernchen.h"
 
-t_list	*parser(t_list *token_list)
+bool	is_special(char input)
 {
-	t_shell	parsing;
+	char *special;
 
-	parsing.table = NULL;
-	parsing.table = create_table(token_list, &parsing);
-	print_table(parsing.table);
-
-	free_table(&parsing); // just here for leak check
-	return (parsing.table);
+	special = "<>|\'\"$";
+	while (*special != '\0')
+	{
+		if (input == *special)
+			return (true);
+		special++;
+	}
+	return (false);
 }
 
-// < hello | wc -l | grep a >> outfile >> out
-// "$HOME" > out1 > out2 >> outmain | '     test' |        wc     -l | grep -lala > outfile
-// ls -la | cat -e | cat -e
-// echo $PATH | tr : '\n'
+bool	is_wspace(char input)
+{
+	char	*ws;
+
+	ws = "\n\t ";
+	while (*ws != '\0')
+	{
+		if (input == *ws)
+			return (true);
+		ws++;
+	}
+	return (false);
+}

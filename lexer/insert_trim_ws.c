@@ -12,34 +12,6 @@
 
 #include "../minishell_eichhoernchen.h"
 
-bool	is_special(char input)
-{
-	char *special;
-
-	special = "<>|\'\"$";
-	while (*special != '\0')
-	{
-		if (input == *special)
-			return (true);
-		special++;
-	}
-	return (false);
-}
-
-bool	is_wspace(char input)
-{
-	char	*ws;
-
-	ws = "\n\t ";
-	while (*ws != '\0')
-	{
-		if (input == *ws)
-			return (true);
-		ws++;
-	}
-	return (false);
-}
-
 void handle_quotes(t_shell *trim, char *input)
 {
 	char quote;
@@ -53,6 +25,7 @@ void handle_quotes(t_shell *trim, char *input)
 	if (input[trim->i] == quote)
 	{
 		trim->res[trim->j++] = input[trim->i];
+		if (input[trim->i + 1] != '\0')
 			trim->res[trim->j++] = ' ';
 	}
 	else
@@ -100,8 +73,9 @@ void	populate_trim_str(t_shell *trim, char *input)
 	trim->j = 0;
 	trim->i = 0;
 	trim->isspace = false; //flag to false
-	while (trim->i < trim->len)
+	while (trim->j < trim->len) // fixed wrong iterater in populate_trim_str
 	{
+		printf("[%zu] < [%zu]\n", trim->j, trim->len);
 		if (is_special(input[trim->i]))
 			handle_special(trim, input);
 		else if (is_wspace(input[trim->i])) // checks if there is a ws in input and sets it to one ws
@@ -117,10 +91,122 @@ void	populate_trim_str(t_shell *trim, char *input)
 			trim->res[trim->j++] = input[trim->i];
 			trim->isspace = false;
 		}
+		printf("str: {%s}\n", trim->res);
 		trim->i++;
 	}
 	trim->res[trim->j] = '\0';
 }
+
+size_t	get_len(char *str)
+{
+	t_shell	nbr;
+	char	quotes = '\0';
+
+	nbr.i = 0;
+	nbr.len = 0;
+	while (str[nbr.i] != '\0')
+	{
+		if (is_wspace(str[nbr.i]))
+		{
+			printf("\e[0;34mis a whitespace: \n\e[0;37m");
+			nbr.len++;
+			printf("len: %zu\n", nbr.len);
+			while (is_wspace(str[nbr.i]) && str[nbr.i] != '\0')
+			{
+				printf("skipping whitespaces: \n");
+				nbr.i++;
+			}
+		}
+		else if (str[nbr.i] == '\'' || str[nbr.i] == '\"')
+		{
+			printf("\e[0;31mis a quote: \e[0;37m\n");
+			quotes = str[nbr.i];
+			nbr.i++;
+			nbr.len++;
+			printf("len: %zu\n", nbr.len);
+			while (str[nbr.i] != quotes && str[nbr.i] != '\0')
+			{
+				nbr.i++;
+				nbr.len++;
+				printf("len: %zu\n", nbr.len);
+				if (str[nbr.i] == '\0')
+					printf("ERROR NO CLOSING QUOTES\n");
+			}
+			printf("\e[0;31mis a closing quote: \e[0;37m\n");
+			if (str[nbr.i] == quotes)
+			{
+				nbr.i++;
+				nbr.len++;
+			}
+			printf("len: %zu\n", nbr.len);
+			if (str[nbr.i] != '\0' && !is_wspace(str[nbr.i]))
+			{
+				nbr.len++;
+				printf("adding whitespace\n");
+				printf("len: %zu\n", nbr.len);
+			}
+		}
+
+		else if ((str[nbr.i] == '<' && str[nbr.i + 1] == '<') || (str[nbr.i] == '>' && str[nbr.i + 1] == '>'))
+		{
+			if (nbr.i != 0 && !is_wspace(str[nbr.i - 1]))
+			{
+				nbr.len++;
+				printf("adding whitespace\n");
+				printf("len: %zu\n", nbr.len);
+			}
+			printf("\e[0;33mis << or >>: \e[0;37m\n");
+			nbr.len += 2;
+			printf("len: %zu\n", nbr.len);
+
+			if (str[nbr.i + 2] != '\0' && !is_wspace(str[nbr.i + 2]) && !is_special(str[nbr.i + 2]))
+			{
+				nbr.len++;
+				printf("adding whitespace\n");
+				printf("len: %zu\n", nbr.len);
+			}
+			nbr.i += 2;
+		}
+		else if (is_special(str[nbr.i]) && str[nbr.i] != '$')
+		{
+			if (nbr.i != 0 && !is_wspace(str[nbr.i - 1]))
+			{
+				nbr.len++;
+				printf("adding whitespace\n");
+				printf("len: %zu\n", nbr.len);
+			}
+			printf("\e[0;33mis a special char: \e[0;37m\n");
+			nbr.len ++;
+			printf("len: %zu\n", nbr.len);
+
+			if (str[nbr.i + 1] != '\0' && !is_wspace(str[nbr.i + 1]) && !is_special(str[nbr.i + 1]))
+			{
+				nbr.len++;
+				printf("adding whitespace\n");
+				printf("len: %zu\n", nbr.len);
+			}
+			nbr.i ++;
+		}
+		else
+		{
+			printf("\e[0;35mis an oridnary char: \e[0;37m\n");
+			nbr.len++;
+			nbr.i++;
+			printf("len: %zu\n", nbr.len);
+		}
+	}
+	return (nbr.len);
+}
+		// if it encounters a whitespace
+			// len +1
+			//	skip whitespaces until it encounters non-whitespace chars
+		// if it encounters quotes
+			// len++ until it encounters the same quote char
+			// if there is no closing quote throw error
+		// if the char (isspecial) and the char before is not ws
+			// len +=2
+		// else
+		//	len++;
 
 char *trim_spaces(char *input)
 {
@@ -131,14 +217,19 @@ char *trim_spaces(char *input)
 		return (NULL);
 	trim.res = NULL;
 	trim_inpt = ft_strtrim(input, " \n\t");
-	trim.len = ft_strlen(trim_inpt); // calculate len properly?
-
+	// trim.len = ft_strlen(trim_inpt); // calculate len properly?
+	trim.len = get_len(trim_inpt);
 	// trim.res = ft_calloc(sizeof(char), (trim.len + 1));
-	trim.res = ft_calloc(sizeof(char), (7000 + 1));
+	trim.res = ft_calloc(sizeof(char), (trim.len + 1));
 	if (!trim.res)
 		return (NULL);
 	populate_trim_str(&trim, trim_inpt);
+	printf("\nonly edge trimmed string: [%s]\n", trim_inpt);
+	printf("calculated length: %zu\n\n", trim.len);
+	printf("trim.res: [%s]\n", trim.res);
+	printf("actual result string length: %zu\n", ft_strlen(trim.res));
 	free(trim_inpt);
+	exit(EXIT_SUCCESS);
 	return (trim.res);
 }
 
@@ -161,9 +252,9 @@ int	main()
 
 	list = tokeniser(tokens);
 
-	printf("\033[32mTOKEN LINKED LIST\n");
-	print_token_list(list);
-	printf("\033[0m");
+	// printf("\033[32mTOKEN LINKED LIST\n");
+	// print_token_list(list);
+	// printf("\033[0m");
 	syntax_errors(list);
 
 	parser(list);
@@ -177,3 +268,12 @@ int	main()
 
 // to do here
 // 		create a function that correctly counts the len of the trimmed string
+
+
+//       ls    -la| "        hello" > outfile >> out |        wc -l > $?
+//    echo    $PATH   |grep "   : "| wc -l >      out>> outfile     > main
+//
+//ls    -la| "        hello" > outfile >> out |        wc -l > $?
+
+// hello >shiti       >         fuck >>>   this
+//

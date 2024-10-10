@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:59:03 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/09 12:08:50 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/10 11:45:17 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ void	syntax_error_red(t_list *tl_pos)
 	if (tmp->next != NULL)
 	{
 		next_token = (token *)tmp->next->content;
+		if (is_redirection(next_token) || next_token->type == TOKEN_PIPE)
+		{
+			printf("\033[31mSYYYNTAX ERROR! CONSECUTIVE REDIRECTION OR PIPE FOLLOWING REDIRECTION\n\033[0m");
+			exit(EXIT_FAILURE); // change
+		}
 		if (!is_filename(next_token))
 		{
 			printf("\033[31mSYYYNTAX ERROR! WRONG FILENAME\n\033[0m");
-			exit(EXIT_FAILURE); // change
-		}
-		if (is_redirection(next_token) || next_token->type == TOKEN_PIPE)
-		{
-			printf("\033[31mSYYYNTAX ERROR! CONSECUTIVE REDIRECTION OR PIPE\n\033[0m");
 			exit(EXIT_FAILURE); // change
 		}
 	}
@@ -88,3 +88,13 @@ void	syntax_errors(t_list *token_list)
 // to do here
 //	  change exit failure to something that stores the exit code in struct and procede accordingly
 //	  test this in more detail
+//			infile >
+//			infile <
+//			infile >>
+//			infile <<
+//			| wc -l
+//			two_pipes ||
+//			infile > outfile > > out
+//			infile > outfile < > out
+//			infile > outfile << > out
+//			infile > outfile >> > out

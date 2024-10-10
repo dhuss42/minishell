@@ -1,30 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   memory_lexer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/09 12:01:02 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/10 11:26:24 by dhuss            ###   ########.fr       */
+/*   Created: 2024/10/10 11:16:00 by dhuss             #+#    #+#             */
+/*   Updated: 2024/10/10 11:19:02 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_eichhoernchen.h"
 
-t_list	*parser(t_list *token_list)
+void	clear_all(char **to_clear)
 {
-	t_shell	parsing;
+	int	j;
 
-	parsing.table = NULL;
-	parsing.table = create_table(token_list, &parsing);
-	print_table(parsing.table);
-
-	free_table(&parsing); // just here for leak check
-	return (parsing.table);
+	j = 0;
+	while (to_clear[j] != NULL)
+	{
+		if (to_clear[j])
+			free(to_clear[j]);
+		j++;
+	}
+	if (to_clear)
+		free(to_clear);
 }
 
-// < hello | wc -l | grep a >> outfile >> out
-// "$HOME" > out1 > out2 >> outmain | '     test' |        wc     -l | grep -lala > outfile
-// ls -la | cat -e | cat -e
-// echo $PATH | tr : '\n'
+void	free_token(void *content)
+{
+	token *tok = (token *)content;
+	if (tok)
+	{
+		free(tok->input);
+		free(tok);
+	}
+}

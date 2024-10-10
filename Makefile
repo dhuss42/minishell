@@ -10,12 +10,17 @@ CFILES = lexer/insert_trim_ws.c\
 	lexer/split_space_quotes.c\
 	lexer/tokeniser.c\
 	lexer/syntax_errors.c\
+	lexer/helper_lexer.c\
+	lexer/memory_lexer.c\
 	parser/parser.c\
-	parser/helper.c\
+	parser/helper_parser.c\
 	parser/populate_cmd.c\
+	parser/create_table.c\
+	parser/memory_parser.c\
+	print_tokenlist.c\
 	print_table.c
 
-# take out functions later such as print_table.c
+# take out functions later such as print_table.c, print_tokenlist.c,
 OFILES = $(CFILES:.c=.o)
 DEPS = $(OFILES:.o=.d)
 # look into again
