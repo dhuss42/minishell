@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/10 10:42:56 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/10 12:18:26 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 	WIFEXITED(wstatus) macro checks if the process exited normally
 	WEXITwSTATUS(wstatus) extracts the exit wstatus value from the wstatus argument
 */
-int	parent_function(pid_t id, t_exec *test)
+int	parent_function(pid_t id, char* cmd, t_exec *test)
 {
 	int	wstatus;
 	int	exit_code;
@@ -31,11 +31,54 @@ int	parent_function(pid_t id, t_exec *test)
 	if (waitpid(id, &wstatus, 0) == -1)
 		return (print_error(E_PARENT, NULL, test));
 	if (WIFEXITED(wstatus))	//if programm exited normally
-		exit_code = WEXITSTATUS(wstatus);	//exit_code = value with which the programm exited
+		{
+			exit_code = WEXITSTATUS(wstatus);	//exit_code = value with which the programm exited
+		}
 	else
 		return (print_error(E_PARENT, NULL, test));
-	test->exit_code = exit_code;
+	if (exit_code != 0)
+		return(print_error(exit_code, cmd, test));
 	return (exit_code);
+}
+
+void	single_child(char *path, char **envp, t_command example, t_exec *test)
+{
+	if (execve(path, example.args, envp))
+		{
+			if (path)
+				free (path);
+			free_all(&example);
+			exit (127);
+		}
+}
+
+char	*get_check_path(char *cmd, char **envp, t_exec *test)
+{
+	char	*path;
+
+	path = get_path(cmd, envp);
+	if (!path)
+	{
+		if (path)
+			free (path);
+		print_error(E_PATH, NULL, test);
+		return (NULL);
+	}
+	else if (access(path, F_OK) != 0)
+	{
+		if (path)
+			free (path);
+		print_error(E_FILENOEXIST, cmd, test);
+		return (NULL);
+	}
+	if (access(path, X_OK) != 0)
+	{
+		if (path)
+			free (path);
+		print_error(E_NOPERMISSION, cmd, test);
+		return (NULL);
+	}
+	return (path);
 }
 
 //when file not exists ./"filename"--> "No such file or directory", Errorcode: 127
@@ -51,44 +94,22 @@ int	execute_single_command(char **envp, t_command example, t_exec *test)
 	// 	ecexute_builtin();
 	if (handle_redirections(example, test))
 		return (1);
-	path = get_path(example.args[0], envp);
+	path = get_check_path(example.args[0], envp, test);
 	if (!path)
-		return (print_error(E_PATH, NULL, test));
-	// if (access(path, F_OK) == -1)
-	// {
-	// 	printf("FILENOTEXIST");
-	// 	free(path);
-	// 	return (print_error(127, example.args[0], test));	/////
-	// }
+		return (1);
 	id = fork();
 	if (id == -1)
 		return (print_error(errno, NULL, test));
 	else if (id == 0)
-	{
-		if (execve(path, example.args, envp))
-		{
-			if (path)
-				free (path);
-			exit (print_error(127, example.args[0], test));
-		}
-	}
+		single_child(path, envp, example, test);
 	else if (id > 0)
-		parent_function(id, test);
+		parent_function(id, example.args[0], test);
 	if (path)
 		free (path);
 	return (test->exit_code);
 }
 
-int	free_all(t_command *example)
-{
-	if (example->args)
-		free_double(example->args);
-	if (example->filename)
-		free_double(example->filename);
-	if (example->red_symbol)
-		free_double(example->red_symbol);
-	return (1);
-}
+
 
 int	executor(char **envp, t_command example, t_exec *test)
 {
@@ -102,31 +123,12 @@ int	executor(char **envp, t_command example, t_exec *test)
 
 void	create_examples(t_command *ex)
 {
-	ex->args = ft_split("lsd -la", ' ');
-	// ex->args = malloc(sizeof(char*) * 10);
-	// ex->args[0] = ft_strdup("/Users/maustel/Projects/minishell/a.out2");
-	// ex->args[1] = ft_strdup("Hallo du");
-	// ex->args[1] = NULL;
-	// ex->args[1] = ft_strdup("-l");
-	// ex->args[2] = ft_strdup("libft");
-	// ex->args[3] = NULL;
-	// ex->filename = malloc(sizeof(char*) * 10);
-	// ex->filename[0] = ft_strdup("out7");
-	// ex->filename[1] = ft_strdup("in1");
-	// ex->filename[2] = ft_strdup("out2");
-	// ex->filename[3] = NULL;
-	// ex->red_symbol = malloc(sizeof(char*) * 10);
-	// ex->red_symbol[0] = ft_strdup(">");
-	// ex->red_symbol[1] = ft_strdup("<");
-	// ex->red_symbol[2] = ft_strdup(">");
-	// ex->red_symbol[3] = NULL;
-
+	ex->args = NULL;
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
+	ex->args = ft_split("echd lo qua", ' ');
+
 }
-
-
-
 
 int main (int argc, char **argv, char **envp)
 {
@@ -138,7 +140,7 @@ int main (int argc, char **argv, char **envp)
 	create_examples(&example);
 	test.exit_code = 0;
 	if (executor (envp, example, &test))
-		return (1);
+		return (test.exit_code);
 	// printf ("[Exit code: %d]\n", test.exit_code);
 	// printf ("[final infile: %s]\n", test.final_infile);
 	// printf ("[final outfile: %s]\n", test.final_outfile);
