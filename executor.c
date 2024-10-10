@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/10 15:39:05 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/10 15:47:45 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,8 @@ void	create_examples(t_command *ex)
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
 	ex->args = ft_split("echo pfe", ' ');
-	ex->filename = ft_split("out4 out1", ' ');
-	ex->red_symbol = ft_split("< >", ' ');
+	ex->filename = ft_split("out1", ' ');
+	ex->red_symbol = ft_split(">", ' ');
 }
 
 int main (int argc, char **argv, char **envp)
