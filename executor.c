@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/09 17:07:54 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/10 10:42:56 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,11 @@ int	executor(char **envp, t_command example, t_exec *test)
 
 void	create_examples(t_command *ex)
 {
-	ex->args = malloc(sizeof(char*) * 10);
-	ex->args[0] = ft_strdup("/Users/maustel/Projects/minishell/a.out2");
+	ex->args = ft_split("lsd -la", ' ');
+	// ex->args = malloc(sizeof(char*) * 10);
+	// ex->args[0] = ft_strdup("/Users/maustel/Projects/minishell/a.out2");
 	// ex->args[1] = ft_strdup("Hallo du");
-	ex->args[1] = NULL;
+	// ex->args[1] = NULL;
 	// ex->args[1] = ft_strdup("-l");
 	// ex->args[2] = ft_strdup("libft");
 	// ex->args[3] = NULL;
