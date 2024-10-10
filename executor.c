@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/10 12:18:26 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/10 12:37:23 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ int	parent_function(pid_t id, char* cmd, t_exec *test)
 	if (waitpid(id, &wstatus, 0) == -1)
 		return (print_error(E_PARENT, NULL, test));
 	if (WIFEXITED(wstatus))	//if programm exited normally
-		{
 			exit_code = WEXITSTATUS(wstatus);	//exit_code = value with which the programm exited
-		}
 	else
 		return (print_error(E_PARENT, NULL, test));
 	if (exit_code != 0)
@@ -41,6 +39,11 @@ int	parent_function(pid_t id, char* cmd, t_exec *test)
 	return (exit_code);
 }
 
+/*
+	if execve fails, its because of command not found (127)
+	child then exits with 127 and the parent will store the exit state
+	if it doesnt fail, exit code is 0
+*/
 void	single_child(char *path, char **envp, t_command example, t_exec *test)
 {
 	if (execve(path, example.args, envp))
@@ -52,6 +55,10 @@ void	single_child(char *path, char **envp, t_command example, t_exec *test)
 		}
 }
 
+/*	when binary file not exists ./"filename"--> "No such file or directory", Errorcode: 127
+	when no permission for binary file--> "Permission denied", Errorcode: 126
+	when command does not exist-->"command not found", errorcode: 127
+*/
 char	*get_check_path(char *cmd, char **envp, t_exec *test)
 {
 	char	*path;
@@ -81,10 +88,6 @@ char	*get_check_path(char *cmd, char **envp, t_exec *test)
 	return (path);
 }
 
-//when file not exists ./"filename"--> "No such file or directory", Errorcode: 127
-//when no permission for binary file--> "Permission denied", Errorcode: 126
-//when command does not exist-->"command not found", errorcode: 127
-
 int	execute_single_command(char **envp, t_command example, t_exec *test)
 {
 	pid_t	id;
@@ -92,7 +95,7 @@ int	execute_single_command(char **envp, t_command example, t_exec *test)
 
 	// if (is_built_in)
 	// 	ecexute_builtin();
-	if (handle_redirections(example, test))
+	if (check_redirections(example, test))
 		return (1);
 	path = get_check_path(example.args[0], envp, test);
 	if (!path)
@@ -113,7 +116,7 @@ int	execute_single_command(char **envp, t_command example, t_exec *test)
 
 int	executor(char **envp, t_command example, t_exec *test)
 {
-	//check if nbr_pipes == 0
+	//check if nbr_pipes == 0 count the amount of pipes with ft_lstsize - 1
 	if (execute_single_command(envp, example, test))
 		return (free_all(&example)); // freeeee
 	// else
@@ -126,7 +129,7 @@ void	create_examples(t_command *ex)
 	ex->args = NULL;
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
-	ex->args = ft_split("echd lo qua", ' ');
+	ex->args = ft_split("echo lo qua", ' ');
 
 }
 
