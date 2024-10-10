@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/10 15:47:45 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/10 16:33:57 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,8 @@ void	create_examples(t_command *ex)
 	ex->args = NULL;
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
-	ex->args = ft_split("echo pfe", ' ');
-	ex->filename = ft_split("out1", ' ');
+	ex->args = ft_split("echo huhu", ' ');
+	ex->filename = ft_split("out", ' ');
 	ex->red_symbol = ft_split(">", ' ');
 }
 
@@ -146,10 +146,10 @@ int main (int argc, char **argv, char **envp)
 	if (executor (envp, example, &test))
 		return (test.exit_code);
 	// printf ("[Exit code: %d]\n", test.exit_code);
-	// printf ("[final infile: %s]\n", test.final_infile);
-	// printf ("[final outfile: %s]\n", test.final_outfile);
-	// printf ("[final in red: %s]\n", test.final_in_red);
-	// printf ("[final out red: %s]\n", test.final_out_red);
+	printf ("[final infile: %s]\n", test.final_infile);
+	printf ("[final outfile: %s]\n", test.final_outfile);
+	printf ("[final in red: %s]\n", test.final_in_red);
+	printf ("[final out red: %s]\n", test.final_out_red);
 	free_all(&example);
 	return (test.exit_code);
 	(void)argc;
