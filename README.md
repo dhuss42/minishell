@@ -4,6 +4,7 @@
 
 1. [Project Overview](#1-Project-overview)
 2. [Project Structure](#2-Project-Structure)
+3. [Description of individual steps](#3-Description-of-individual-steps)
 
 ## 1. Project overview
 
