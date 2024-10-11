@@ -2,8 +2,8 @@
 
 ## Contents
 
-1. [Project Overview](#Project-overview)
-2. [Project Structure](#Project-Structure)
+1. [1.-Project Overview](#Project-overview)
+2. [2.-Project Structure](#Project-Structure)
 
 ## 1. Project overview
 
