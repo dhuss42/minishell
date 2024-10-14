@@ -115,63 +115,13 @@ char *trim_spaces(char *input)
 	if (!trim.res)
 		return (NULL);
 	populate_trim_str(&trim, trim_inpt);
-	printf("\nonly edge trimmed string: [%s]\n", trim_inpt);
-	printf("calculated length: %zu\n\n", trim.len);
-	printf("trim.res: [%s]\n", trim.res);
-	printf("actual result string length: %zu\n", ft_strlen(trim.res));
+	// printf("\nonly edge trimmed string: [%s]\n", trim_inpt);
+	// printf("calculated length: %zu\n\n", trim.len);
+	// printf("trim.res: [%s]\n", trim.res);
+	// printf("actual result string length: %zu\n", ft_strlen(trim.res));
 	free(trim_inpt);
-	exit(EXIT_SUCCESS); /* for debugging */
+	// exit(EXIT_SUCCESS); /* for debugging */
 	return (trim.res);
 }
 
-int	main()
-{
-	char	*input;
-	char	*trim_inpt;
-	char	*res;
-	char	**tokens = NULL;
-	t_list	*list = NULL;
-
-	input = readline("Type Shit: ");
-	if(!input)
-		return (1);
-
-	trim_inpt = trim_spaces(input);
-	res = ft_strtrim(trim_inpt, " \n\t");
-
-	tokens = split_space_quotes(res);
-
-	list = tokeniser(tokens);
-
-	// printf("\033[32mTOKEN LINKED LIST\n");
-	// print_token_list(list);
-	// printf("\033[0m");
-	syntax_errors(list);
-
-	parser(list);
-	free(input);
-	free(trim_inpt);
-	free(res);
-	ft_lstclear(&list, free_token);
-	return (0);
-}
-
-
-// to do here
-// 		create a function that correctly counts the len of the trimmed string
-
-
-//       ls    -la| "        hello" > outfile >> out |        wc -l > $?
-//    echo    $PATH   |grep "   : "| wc -l >      out>> outfile     > main
-//
-//ls    -la| "        hello" > outfile >> out |        wc -l > $?
-
-// hello >shiti       >         fuck >>>   this
-//
-
-// ksdjasfüjaspodka | >> ||| <<<>>>><<< "ajsdjaslkdj " > jashd <<>> $$ $?<><<|" I love quotes'    '"' lalalal'
-// -> correct
-
-// "   hello   "<><<<<||shiti'fuck that    'plasegiveme|the<<>><<<>>>>>correct size    '"'$PATH$"$"''
-// --> fiexed 
 

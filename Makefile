@@ -6,7 +6,9 @@ LFLAGS = -lreadline
 # for readline functions
 # is a linking flag not a compiler flag
 NAME = minishell
-CFILES = lexer/insert_trim_ws.c\
+CFILES = minishell.c\
+	lexer/lexer.c\
+	lexer/insert_trim_ws.c\
 	lexer/get_len.c\
 	lexer/split_space_quotes.c\
 	lexer/tokeniser.c\

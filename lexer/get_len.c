@@ -130,12 +130,12 @@ void    get_len_quotes(t_shell *nbr, char *str)
 	{
 		nbr->i++;
 		nbr->len++;
-		if (str[nbr->i] == '\0')
-        {
-			printf("ERROR NO CLOSING QUOTES\n");
-            exit(EXIT_FAILURE);
-        }
 	}
+	if (str[nbr->i] == '\0')
+    {
+		printf("ERROR NO CLOSING QUOTES\n");
+        exit(EXIT_FAILURE);
+    }
 	if (str[nbr->i] == quotes)
 	{
 		nbr->i++;
