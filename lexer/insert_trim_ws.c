@@ -40,11 +40,12 @@ void	handle_op(t_shell *trim, char *input)
 	if ((input[trim->i] == '<' && input[trim->i + 1] == '<') || (input[trim->i] == '>' && input[trim->i + 1] == '>'))
 	{
 		trim->res[trim->j++] = input[trim->i + 1]; //copy both operators
-		trim->res[trim->j++] = ' ';
+		if (input[trim->i + 2] != '\0')
+			trim->res[trim->j++] = ' ';
 		trim->i++;
 		return ;
 	}
-	if (input[trim->i] != '$')
+	if (input[trim->i] != '$' && input[trim->i + 1] != '\0')
 		trim->res[trim->j++] = ' ';
 }
 
@@ -75,7 +76,7 @@ void	populate_trim_str(t_shell *trim, char *input)
 	trim->isspace = false; //flag to false
 	while (trim->j < trim->len) // fixed wrong iterater in populate_trim_str
 	{
-		printf("[%zu] < [%zu]\n", trim->j, trim->len);
+		// printf("[%zu] < [%zu]\n", trim->j, trim->len);
 		if (is_special(input[trim->i]))
 			handle_special(trim, input);
 		else if (is_wspace(input[trim->i])) // checks if there is a ws in input and sets it to one ws
@@ -91,122 +92,12 @@ void	populate_trim_str(t_shell *trim, char *input)
 			trim->res[trim->j++] = input[trim->i];
 			trim->isspace = false;
 		}
-		printf("str: {%s}\n", trim->res);
+		// printf("str: {%s}\n", trim->res);
 		trim->i++;
 	}
 	trim->res[trim->j] = '\0';
 }
 
-size_t	get_len(char *str)
-{
-	t_shell	nbr;
-	char	quotes = '\0';
-
-	nbr.i = 0;
-	nbr.len = 0;
-	while (str[nbr.i] != '\0')
-	{
-		if (is_wspace(str[nbr.i]))
-		{
-			printf("\e[0;34mis a whitespace: \n\e[0;37m");
-			nbr.len++;
-			printf("len: %zu\n", nbr.len);
-			while (is_wspace(str[nbr.i]) && str[nbr.i] != '\0')
-			{
-				printf("skipping whitespaces: \n");
-				nbr.i++;
-			}
-		}
-		else if (str[nbr.i] == '\'' || str[nbr.i] == '\"')
-		{
-			printf("\e[0;31mis a quote: \e[0;37m\n");
-			quotes = str[nbr.i];
-			nbr.i++;
-			nbr.len++;
-			printf("len: %zu\n", nbr.len);
-			while (str[nbr.i] != quotes && str[nbr.i] != '\0')
-			{
-				nbr.i++;
-				nbr.len++;
-				printf("len: %zu\n", nbr.len);
-				if (str[nbr.i] == '\0')
-					printf("ERROR NO CLOSING QUOTES\n");
-			}
-			printf("\e[0;31mis a closing quote: \e[0;37m\n");
-			if (str[nbr.i] == quotes)
-			{
-				nbr.i++;
-				nbr.len++;
-			}
-			printf("len: %zu\n", nbr.len);
-			if (str[nbr.i] != '\0' && !is_wspace(str[nbr.i]))
-			{
-				nbr.len++;
-				printf("adding whitespace\n");
-				printf("len: %zu\n", nbr.len);
-			}
-		}
-
-		else if ((str[nbr.i] == '<' && str[nbr.i + 1] == '<') || (str[nbr.i] == '>' && str[nbr.i + 1] == '>'))
-		{
-			if (nbr.i != 0 && !is_wspace(str[nbr.i - 1]))
-			{
-				nbr.len++;
-				printf("adding whitespace\n");
-				printf("len: %zu\n", nbr.len);
-			}
-			printf("\e[0;33mis << or >>: \e[0;37m\n");
-			nbr.len += 2;
-			printf("len: %zu\n", nbr.len);
-
-			if (str[nbr.i + 2] != '\0' && !is_wspace(str[nbr.i + 2]) && !is_special(str[nbr.i + 2]))
-			{
-				nbr.len++;
-				printf("adding whitespace\n");
-				printf("len: %zu\n", nbr.len);
-			}
-			nbr.i += 2;
-		}
-		else if (is_special(str[nbr.i]) && str[nbr.i] != '$')
-		{
-			if (nbr.i != 0 && !is_wspace(str[nbr.i - 1]))
-			{
-				nbr.len++;
-				printf("adding whitespace\n");
-				printf("len: %zu\n", nbr.len);
-			}
-			printf("\e[0;33mis a special char: \e[0;37m\n");
-			nbr.len ++;
-			printf("len: %zu\n", nbr.len);
-
-			if (str[nbr.i + 1] != '\0' && !is_wspace(str[nbr.i + 1]) && !is_special(str[nbr.i + 1]))
-			{
-				nbr.len++;
-				printf("adding whitespace\n");
-				printf("len: %zu\n", nbr.len);
-			}
-			nbr.i ++;
-		}
-		else
-		{
-			printf("\e[0;35mis an oridnary char: \e[0;37m\n");
-			nbr.len++;
-			nbr.i++;
-			printf("len: %zu\n", nbr.len);
-		}
-	}
-	return (nbr.len);
-}
-		// if it encounters a whitespace
-			// len +1
-			//	skip whitespaces until it encounters non-whitespace chars
-		// if it encounters quotes
-			// len++ until it encounters the same quote char
-			// if there is no closing quote throw error
-		// if the char (isspecial) and the char before is not ws
-			// len +=2
-		// else
-		//	len++;
 
 char *trim_spaces(char *input)
 {
@@ -229,7 +120,7 @@ char *trim_spaces(char *input)
 	printf("trim.res: [%s]\n", trim.res);
 	printf("actual result string length: %zu\n", ft_strlen(trim.res));
 	free(trim_inpt);
-	exit(EXIT_SUCCESS);
+	exit(EXIT_SUCCESS); /* for debugging */
 	return (trim.res);
 }
 
@@ -277,3 +168,10 @@ int	main()
 
 // hello >shiti       >         fuck >>>   this
 //
+
+// ksdjasfüjaspodka | >> ||| <<<>>>><<< "ajsdjaslkdj " > jashd <<>> $$ $?<><<|" I love quotes'    '"' lalalal'
+// -> correct
+
+// "   hello   "<><<<<||shiti'fuck that    'plasegiveme|the<<>><<<>>>>>correct size    '"'$PATH$"$"''
+// --> fiexed 
+

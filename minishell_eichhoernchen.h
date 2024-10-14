@@ -68,6 +68,8 @@ typedef struct s_shell
 
 //-----------------lexer----------------//
 
+char 	*trim_spaces(char *input);
+size_t	get_len(char *str);
 char	**split_space_quotes(char *input);
 t_list	*tokeniser(char **split_double_array);
 void	syntax_errors(t_list *token_list);
