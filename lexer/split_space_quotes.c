@@ -61,7 +61,8 @@ char	*populate_str(char *input, size_t *end)
 			if (input[*end] == quotes)
 				(*end)++;
 		}
-		(*end)++;
+		if (input[*end] != '\0' && input[*end] != ' ')
+			(*end)++;
 	}
 	return (ft_substr(input, start, (*end - start)));
 }

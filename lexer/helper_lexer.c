@@ -16,7 +16,21 @@ bool	is_special(char input)
 {
 	char *special;
 
-	special = "<>|\'\"$";
+	special = "<>|\'\"";
+	while (*special != '\0')
+	{
+		if (input == *special)
+			return (true);
+		special++;
+	}
+	return (false);
+}
+
+bool	is_special_no_quotes(char input)
+{
+	char *special;
+
+	special = "<>|";
 	while (*special != '\0')
 	{
 		if (input == *special)

@@ -47,26 +47,26 @@ void	handle_op(t_shell *trim, char *input)
 		trim->i++;
 		return ;
 	}
-	if (input[trim->i] != '$' && input[trim->i + 1] != '\0')
+	if (/* input[trim->i] != '$' && */ input[trim->i + 1] != '\0')
 		trim->res[trim->j++] = ' ';
 }
 
 void	handle_special(t_shell *trim, char *input)
 {
-	char tmp;
+/* 	char tmp; */
 
 	if ((input[trim->i] == '\'') || (input[trim->i] == '\"'))
 		{
 			handle_quotes(trim, input);
 			trim->isspace = true;
 		}
-	else if (input[trim->i] == '|' || input[trim->i] == '>' || input[trim->i] == '<' || input[trim->i] == '$')
+	else if (input[trim->i] == '|' || input[trim->i] == '>' || input[trim->i] == '<' /* || input[trim->i] == '$' */)
 		{
-			tmp = input[trim->i];
+			/* tmp = input[trim->i]; */
 			handle_op(trim, input);
-			if (tmp == '$')
+/* 			if (tmp == '$')
 				trim->isspace = false;
-			else
+			else */
 				trim->isspace = true;
 		}
 }

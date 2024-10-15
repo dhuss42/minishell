@@ -52,10 +52,10 @@ void	populate_double_arrays(t_shell *parsing, token*current_token, token *next_t
 	if (is_redirection(current_token))
 	{
 		populate_red_array(parsing, current_token, new_cmd);
-		if (is_filename(next_token))
-		{
+		// if (is_filename(next_token))
+		// {
 			populate_filename_array(parsing, next_token, new_cmd);
-		}
+		// }
 		parsing->i++;
 	}
 	else
@@ -66,7 +66,7 @@ void	populate_double_arrays(t_shell *parsing, token*current_token, token *next_t
 
 // this function checks if the current node is a redirection symbol and allocates enough memory for it in the struct(table)‚
 // copies the symbol in struct at index i (the same index as the filename later on)
-// this part checks if the next node in the list is a possible file name and allocates enough memory in the table for its name
+// this part allocates enough memory in the table for the filename
 // the file name is saved at the same index as the redirection symbol
 // needs and additional itteration
 

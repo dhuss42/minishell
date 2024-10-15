@@ -29,26 +29,26 @@ token *create_token(token_type type, char *input)
 //	assigns the type based on the given input
 //	saves the input string that corresponds to the token in question
 
-token	*quote_tokens(char *str)
-{
-	token	*tok;
+// token	*quote_tokens(char *str)
+// {
+// 	token	*tok;
 
-	tok = NULL;
-	if (str[0] == '\'')
-		tok = create_token(TOKEN_SQUOTES, str);
-	else if (str[0] == '\"')
-		tok = create_token(TOKEN_DQUOTES, str);
-	return (tok);
-}
+// 	tok = NULL;
+// 	if (str[0] == '\'')
+// 		tok = create_token(TOKEN_SQUOTES, str);
+// 	else if (str[0] == '\"')
+// 		tok = create_token(TOKEN_DQUOTES, str);
+// 	return (tok);
+// }
 
 token	*which_token(char *str)
 {
 	token	*tok;
 
 	tok = NULL;
-	if (str[0] == '\'' || str[0] == '\"')
-		tok = quote_tokens(str);
-	else if (str[0] == '|')
+	// if (str[0] == '\'' || str[0] == '\"')
+	// 	tok = quote_tokens(str);
+	/* else */ if (str[0] == '|')
 		tok = create_token(TOKEN_PIPE, str);
 	else if (str[0] == '<')
 		tok = create_token(TOKEN_REDIN, str);
@@ -58,12 +58,12 @@ token	*which_token(char *str)
 		tok = create_token(TOKEN_HEREDOC, str);
 	else if (ft_strncmp(str, ">>", 2) == 0)
 		tok = create_token(TOKEN_REDAPPEND, str);
-	else if (ft_strncmp(str, "$?", 2) == 0)
-		tok = create_token(TOKEN_EXITSTATUS, str);
-	else if (str[0] == '$' && str[1] != '?')
-		tok = create_token(TOKEN_ENVVAR, str);
-	else if (str[0] == '-')
-		tok = create_token(TOKEN_ARGS, str);
+	// else if (ft_strncmp(str, "$?", 2) == 0)
+	// 	tok = create_token(TOKEN_EXITSTATUS, str);
+	// else if (str[0] == '$' && str[1] != '?')
+	// 	tok = create_token(TOKEN_ENVVAR, str);
+	// else if (str[0] == '-')
+	// 	tok = create_token(TOKEN_ARGS, str);
 	else
 		tok = create_token(TOKEN_WORD, str);
 	return (tok);

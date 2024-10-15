@@ -19,9 +19,9 @@ t_list  *lexer(t_list *list)
 
     list = tokeniser(tokens);
 
-    printf("\033[32mTOKEN LINKED LIST\n");
-    print_token_list(list);
-    printf("\033[0m");
+    // printf("\033[32mTOKEN LINKED LIST\n");
+    // print_token_list(list);
+    // printf("\033[0m");
     syntax_errors(list);
     free(input);
     free(trim_inpt);
@@ -45,15 +45,18 @@ t_list  *lexer(t_list *list)
 // --> however might be more efficient to sort only like this $ 
 // --> makes it easier in expansion, searches only in the next array of args for the next chars ft_isalnum or specifically ?
 // ---- solving ------ //
-// ()there should be no space insertionbefore and after a dollar sign or $? or env
-// ()should be treated as a Word Token
-// ()have to check the legit filenames in parser because a filename cannot be an env
-// ()adjust get_len function so that is does not count extra spaces before and after $
-// ()probably need a new is_spacial function without $
-
-
-// problem with echo$PATH
-// --> get_len does not count $ as a character for inserting ws before
+// (x)there should be no space insertionbefore and after a dollar sign or $? or env
+// (x)adjust get_len function so that is does not count extra spaces before and after $
+// (x)probably need a new is_spacial function without $
+// (x)handle correct splitting of Tokens
+// ----- solved ----- //
 
 // problem of unecessary Tokens
 // --> reduce amount of Tokens
+// --> code seems to works, it just contains unnecessary Tokens
+// ----- solving ---- //
+// (x)multiple Tokens should be treated as a Word Token
+//      (x)in lexer
+//      (x)in parser
+// (x)have to check the legit filenames in parser because a filename cannot be an env
+//      --> makes sense to do this somewhere else

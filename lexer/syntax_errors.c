@@ -26,11 +26,11 @@ void	syntax_error_red(t_list *tl_pos)
 			printf("\033[31mSYYYNTAX ERROR! CONSECUTIVE REDIRECTION OR PIPE FOLLOWING REDIRECTION\n\033[0m");
 			exit(EXIT_FAILURE); // change
 		}
-		if (!is_filename(next_token))
+/* 		if (!is_filename(next_token))
 		{
 			printf("\033[31mSYYYNTAX ERROR! WRONG FILENAME\n\033[0m");
 			exit(EXIT_FAILURE); // change
-		}
+		} */ // removed because wrong filename is not a syntax error
 	}
 	else if (tmp->next == NULL)
 	{

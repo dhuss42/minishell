@@ -86,6 +86,7 @@ t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing);
 
 	//--> lexer
 bool	is_special(char input);
+bool	is_special_no_quotes(char input);
 bool	is_wspace(char input);
 
 	//--> parser
