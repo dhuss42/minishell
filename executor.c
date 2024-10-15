@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/15 15:39:12 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/15 17:15:29 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,10 +145,13 @@ int	executor(char **envp, t_command example, t_exec *test)
 
 void	create_examples(t_command *ex)
 {
+	// structi->content = (void *) ex;
+
+	// structi->content = ()
 	ex->args = NULL;
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
-	ex->args = ft_split("echo huhu", ' ');
+	ex->args = ft_split("cat", ' ');
 	ex->filename = ft_split("libft out", ' ');
 	ex->red_symbol = ft_split("< >", ' ');
 }
@@ -158,6 +161,7 @@ int main (int argc, char **argv, char **envp)
 	// char *args[] = {"lsa", "-la", NULL};
 	t_exec test;
 	t_command example;
+	// t_list	structi;
 	// int	result;
 
 	create_examples(&example);

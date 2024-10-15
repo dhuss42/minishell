@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/15 13:07:27 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/15 16:50:54 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ typedef enum e_custom_err
 	E_NOPERMISSION,
 	E_ISDIRECTORY
 }			t_custom_err;
+
+//t_list:
+//void *content --> t_command *example
+//t_list *next
 
 typedef struct s_command
 {
