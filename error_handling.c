@@ -30,6 +30,8 @@ int	custom_error(int err_no, char *str)
 		ft_putstr_fd("Permission denied\n", 2);
 		return (126);
 	}
+	else if(err_no == E_ISDIRECTORY)
+		ft_putstr_fd("Is a directory\n", 2);
 	return (err_no);
 }
 

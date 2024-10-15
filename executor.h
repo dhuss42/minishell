@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/10 12:40:05 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/15 13:07:27 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <stdlib.h>
 #include <errno.h>
 
@@ -27,7 +28,8 @@ typedef enum e_custom_err
 	E_PATH,
 	E_PARENT,
 	E_FILENOEXIST,
-	E_NOPERMISSION
+	E_NOPERMISSION,
+	E_ISDIRECTORY
 }			t_custom_err;
 
 typedef struct s_command
@@ -58,8 +60,8 @@ typedef struct	s_exec
 char	*get_path(char *cmd, char **envp);
 void	free_paths(char **split_paths, char **append);
 int		print_error(int err_no, char *str, t_exec *test);
-int		check_redirections(t_command example, t_exec *test);
-int		handle_redirections(t_command example, t_exec *test);
+int		check_files(t_command example, t_exec *test);
+int		exec_redirections(t_command example, t_exec *test);
 void	free_double(char **to_free);
 int		free_all(t_command *example);
 

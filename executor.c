@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/15 12:45:33 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/15 15:39:12 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,18 +97,28 @@ char	*get_check_path(char *cmd, char **envp, t_exec *test)
 	return (path);
 }
 
+int	handle_stuff(t_command example, t_exec *test)
+{
+
+	// if (is_built_in)
+	// 	ecexute_builtin();
+	if (check_files(example, test))
+		return (1);
+	if (exec_redirections(example, test))
+		return (2);
+	return (0);
+}
+
 int	execute_single_command(char **envp, t_command example, t_exec *test)
 {
 	pid_t	id;
 	char	*path;
 
-	// if (is_built_in)
-	// 	ecexute_builtin();
-	if (check_redirections(example, test))
+	if (handle_stuff(example, test))
 		return (1);
 	path = get_check_path(example.args[0], envp, test);
 	if (!path)
-		return (1);
+		return (2);
 	id = fork();
 	if (id == -1)
 		return (print_error(errno, NULL, test));
@@ -139,8 +149,8 @@ void	create_examples(t_command *ex)
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
 	ex->args = ft_split("echo huhu", ' ');
-	ex->filename = ft_split("out3 in", ' ');
-	ex->red_symbol = ft_split("> <", ' ');
+	ex->filename = ft_split("libft out", ' ');
+	ex->red_symbol = ft_split("< >", ' ');
 }
 
 int main (int argc, char **argv, char **envp)

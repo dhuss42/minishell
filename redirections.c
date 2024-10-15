@@ -6,13 +6,13 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:38:08 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/10 17:05:35 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/15 12:53:26 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-int	handle_redirections(t_command example, t_exec *test)
+int	exec_redirections(t_command example, t_exec *test)
 {
 	int	fd;
 

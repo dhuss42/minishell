@@ -10,9 +10,14 @@
 int main()
 {
 	int fd;
+	struct stat sb;
 
-	fd = open("out3", O_RDONLY | O_APPEND | O_CREAT, 0000);
-	if (access("out3", W_OK) == -1)
+	// fd = open("out3", O_RDONLY | O_APPEND | O_CREAT, 0000);
+	if (stat("/out", &sb) == -1)
+		return (printf("failed\n"));
+	if (S_ISDIR(sb.st_mode))
+		return (printf("IS DIRECTORY!!!\n"));
+	if (access("out", W_OK) == -1)
 		return (printf("NOPERMITS!\n"));
 	else
 		printf("Amsel\n");
