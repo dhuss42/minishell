@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/10 17:06:02 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/15 11:30:40 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,14 @@ void	single_child(char *path, char **envp, t_command example, t_exec *test)
 		}
 }
 
+bool	cmd_is_path(char *cmd)
+{
+	if (ft_strchr(cmd, '/') != NULL)
+		return (true);
+	else
+		return (false);
+}
+
 /*	when binary file not exists ./"filename"--> "No such file or directory", Errorcode: 127
 	when no permission for binary file--> "Permission denied", Errorcode: 126
 	when command does not exist-->"command not found", errorcode: 127
@@ -66,8 +74,6 @@ char	*get_check_path(char *cmd, char **envp, t_exec *test)
 	path = get_path(cmd, envp);
 	if (!path)
 	{
-		if (path)
-			free (path);
 		print_error(E_PATH, NULL, test);
 		return (NULL);
 	}
@@ -75,7 +81,10 @@ char	*get_check_path(char *cmd, char **envp, t_exec *test)
 	{
 		if (path)
 			free (path);
-		print_error(E_FILENOEXIST, cmd, test);
+		if (cmd_is_path(cmd))
+			print_error(E_FILENOEXIST, cmd, test);
+		else
+			print_error(127, cmd, test);
 		return (NULL);
 	}
 	if (access(path, X_OK) != 0)
@@ -129,9 +138,9 @@ void	create_examples(t_command *ex)
 	ex->args = NULL;
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
-	ex->args = ft_split("echo huhu", ' ');
-	ex->filename = ft_split("out", ' ');
-	ex->red_symbol = ft_split(">", ' ');
+	ex->args = ft_split("/bon/echo huhu", ' ');
+	// ex->filename = ft_split("out", ' ');
+	// ex->red_symbol = ft_split(">", ' ');
 }
 
 int main (int argc, char **argv, char **envp)
@@ -146,10 +155,10 @@ int main (int argc, char **argv, char **envp)
 	if (executor (envp, example, &test))
 		return (test.exit_code);
 	// printf ("[Exit code: %d]\n", test.exit_code);
-	printf ("[final infile: %s]\n", test.final_infile);
-	printf ("[final outfile: %s]\n", test.final_outfile);
-	printf ("[final in red: %s]\n", test.final_in_red);
-	printf ("[final out red: %s]\n", test.final_out_red);
+	// printf ("[final infile: %s]\n", test.final_infile);
+	// printf ("[final outfile: %s]\n", test.final_outfile);
+	// printf ("[final in red: %s]\n", test.final_in_red);
+	// printf ("[final out red: %s]\n", test.final_out_red);
 	free_all(&example);
 	return (test.exit_code);
 	(void)argc;
