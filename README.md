@@ -19,7 +19,8 @@ Below is the basic structure of the project, with the names in brackets indicati
 1. 
 2. Lexer (dhuss)
 3. Parser (dhuss)
-4. Executer (maustel)
+4. Expansion (dhuss)
+5. Executer (maustel)
 
 ## 3. Description of individual steps
 
@@ -27,12 +28,14 @@ Below is the basic structure of the project, with the names in brackets indicati
 
 The lexer serves to transform an input string of characters into meaningful tokens. 
 
-It begins by normalizing the input, ensuring that there is a single space between potential tokens, while preserving the integrity of text within single or double quotes. After formatting the string, the lexer splits it into individual components based on spaces and quotes, storing these components in a double character array. Each string in the array is then matched with its corresponding token type and stored in a struct, which is added to a linked list for organized access. Finally, the lexer checks the linked list for any syntax errors, ensuring the validity of the parsed input.
+It begins by normalizing the input, ensuring that there is a single space between potential tokens, while preserving the integrity of text within single or double quotes. After formatting the string, the lexer splits it into individual components based on spaces, storing these components in a double character array. Each string in the array is then matched with its corresponding token type and stored in a struct, which is added to a linked list for organized access. Finally, the lexer checks the linked list for any syntax errors, ensuring the validity of the parsed input.
 
 ### Parser
 
 The parser takes the output from the lexer—a linked list of tokens—and organizes them into meaningful structures. 
 
-It utilizes a command table to separate these tokens into distinct blocks based on the presence of pipes. Each segment to the left of a pipe is treated as a separate block or line within the table. The command table itself is implemented as another linked list, featuring a different struct that contains three double character arrays: one for arguments, one for filenames, and one for redirection symbols. To maintain the correct order of the tokens, the parser indexes the associated redirection symbols and filenames using the same variable, ensuring they remain linked appropriately during parsing.
+It utilizes a command table to separate these tokens into distinct blocks based on the presence of pipes. Each segment to the left of a pipe is treated as a separate row within the table. The command table itself is implemented as another linked list, featuring a different struct that contains three double character arrays: one for arguments, one for filenames, and one for redirection symbols. To maintain the correct order of the tokens, the parser indexes the associated redirection symbols and filenames using the same variable, ensuring they remain linked appropriately during parsing.
+
+### Expansion
 
 ### Executer
