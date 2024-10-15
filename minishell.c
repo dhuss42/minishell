@@ -1,23 +1,29 @@
 
 #include "minishell_eichhoernchen.h"
 
-void    minishell_loop(t_list *list)
+void    minishell_loop(t_list *list, t_list *table, char **env)
 {
     while(1)
     {
         list = lexer(list);
-        parser(list); // returns table
+        table = parser(list);
+        print_table(table);
+        expansion(table, env); // also need to pass env
         ft_lstclear(&list, free_token);
     }
 }
 
 
-int	main()
+int	main(int argc, char *argv[], char **env)
 {
     t_list	*list;
+    t_list  *table;
 
     list = NULL;
-    minishell_loop(list);
+    table = NULL;
+    if (argc == 1)
+        minishell_loop(list, table, env);
+    (void) argv;
 	return (0);
 }
 

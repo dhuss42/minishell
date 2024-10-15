@@ -82,6 +82,9 @@ t_list		*parser(t_list *token_list);
 t_list		*create_table(t_list *token_list, t_shell *parsing);
 t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing);
 
+//----------------expansion----------------//
+t_list *expansion(t_list *table, char **env);
+
 //----------------helpers----------------//
 
 	//--> lexer

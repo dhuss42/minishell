@@ -20,6 +20,7 @@ CFILES = minishell.c\
 	parser/populate_cmd.c\
 	parser/create_table.c\
 	parser/memory_parser.c\
+	expansion/expansion.c\
 	print_tokenlist.c\
 	print_table.c
 
