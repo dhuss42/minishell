@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/15 11:53:45 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/15 12:45:33 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void	create_examples(t_command *ex)
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
 	ex->args = ft_split("echo huhu", ' ');
-	ex->filename = ft_split("out in", ' ');
+	ex->filename = ft_split("out3 in", ' ');
 	ex->red_symbol = ft_split("> <", ' ');
 }
 

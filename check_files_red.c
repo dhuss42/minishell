@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/15 11:52:09 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/15 12:44:41 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ int	check_output_files(t_command example, t_exec *test, int i)
 {
 	if (access(example.filename[i], F_OK) == -1)
 		create_file(example.filename[i], test);
-	else if (access(example.filename[i], R_OK) == -1)
-		return (print_error(EPERM, example.filename[i], test));
+	if (access(example.filename[i], W_OK) == -1)
+		return (print_error(E_NOPERMISSION, example.filename[i], test));
 	test->final_outfile = example.filename[i];
 	test->final_out_red = example.red_symbol[i];
 	return (0);

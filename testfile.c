@@ -11,7 +11,11 @@ int main()
 {
 	int fd;
 
-	fd = open("out3", O_WRONLY | O_APPEND, 0644);
+	fd = open("out3", O_RDONLY | O_APPEND | O_CREAT, 0000);
+	if (access("out3", W_OK) == -1)
+		return (printf("NOPERMITS!\n"));
+	else
+		printf("Amsel\n");
 	dup2(fd, 1);
 	close(fd);
 	printf("I am writing !");

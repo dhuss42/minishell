@@ -35,6 +35,7 @@ int	custom_error(int err_no, char *str)
 
 int	print_error(int err_no, char *str, t_exec *test)
 {
+	ft_putstr_fd("minishell: ", 2);
 	if (str)
 	{
 		ft_putstr_fd(str, 2);
