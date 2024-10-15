@@ -16,8 +16,8 @@ void handle_quotes(t_shell *trim, char *input)
 {
 	char quote;
 
-	if (trim->j > 0 && (!is_wspace(trim->res[trim->j - 1]))) // if not the beginning of res and the prior space is not ws
-		trim->res[trim->j++] = ' ';
+/* 	if (trim->j > 0 && (!is_wspace(trim->res[trim->j - 1]))) // if not the beginning of res and the prior space is not ws
+		trim->res[trim->j++] = ' '; */
 	quote = input[trim->i];
 	trim->res[trim->j++] = input[trim->i++];
 	while ((input[trim->i] != '\0') && (input[trim->i] != quote))
@@ -25,12 +25,14 @@ void handle_quotes(t_shell *trim, char *input)
 	if (input[trim->i] == quote)
 	{
 		trim->res[trim->j++] = input[trim->i];
-		if (input[trim->i + 1] != '\0')
-			trim->res[trim->j++] = ' ';
+/* 		if (input[trim->i + 1] != '\0')
+			trim->res[trim->j++] = ' '; */
 	}
 	else
 		printf("error\n"); // update here
 }
+
+// for proper quote handling remove ws insertion before and after the quotes
 
 void	handle_op(t_shell *trim, char *input)
 {
@@ -115,10 +117,10 @@ char *trim_spaces(char *input)
 	if (!trim.res)
 		return (NULL);
 	populate_trim_str(&trim, trim_inpt);
-	// printf("\nonly edge trimmed string: [%s]\n", trim_inpt);
-	// printf("calculated length: %zu\n\n", trim.len);
-	// printf("trim.res: [%s]\n", trim.res);
-	// printf("actual result string length: %zu\n", ft_strlen(trim.res));
+	printf("\nonly edge trimmed string: [%s]\n", trim_inpt);
+	printf("calculated length: %zu\n\n", trim.len);
+	printf("trim.res: [%s]\n", trim.res);
+	printf("actual result string length: %zu\n", ft_strlen(trim.res));
 	free(trim_inpt);
 	// exit(EXIT_SUCCESS); /* for debugging */
 	return (trim.res);
