@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/16 11:40:39 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/16 15:44:26 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	parent_function(pid_t id, char* cmd, t_exec *test)
 	int	wstatus;
 	int	exit_code;
 
+	exit_code = 0;
 	if (waitpid(id, &wstatus, 0) == -1)
 		return (print_error(E_PARENT, NULL, test));
 	if (WIFEXITED(wstatus))	//if programm exited normally
@@ -51,7 +52,7 @@ void	single_child(char *path, char **envp, t_command example, t_exec *test)
 			if (path)
 				free (path);
 			free_all(&example);
-			exit (127);
+			// exit (127);
 		}
 }
 
@@ -102,6 +103,7 @@ int	handle_stuff(t_command example, t_exec *test)
 
 	// if (is_built_in)
 	// 	ecexute_builtin();
+	// handle heredoc
 	if (check_files(example, test))
 		return (1);
 	if (exec_redirections(example, test))
@@ -131,8 +133,6 @@ int	execute_single_command(char **envp, t_command example, t_exec *test)
 	return (test->exit_code);
 }
 
-
-
 int	executor(char **envp, t_command example, t_exec *test)
 {
 	//check if nbr_pipes == 0 count the amount of pipes with ft_lstsize - 1
@@ -143,16 +143,33 @@ int	executor(char **envp, t_command example, t_exec *test)
 	return (test->exit_code);
 }
 
-void	create_example1(t_list *structi, t_command *ex)
+t_list	*create_example2(t_command *ex)
 {
+	t_list	*new;
+
 	ex->args = NULL;
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
-	ex->args = ft_split("echo amsel", ' ');
+	ex->args = ft_split("grep get", ' ');
 	ex->filename = ft_split("libft", ' ');
 	ex->red_symbol = ft_split("<", ' ');
-	structi->content = (void *) ex;
-	structi->next = NULL;
+	new = ft_lstnew((void *) ex);
+	return (new);
+}
+
+t_list	*create_example1(t_command *ex)
+{
+	t_list	*new;
+	// t_command *ex = malloc(sizeof(t_command));
+
+	ex->args = NULL;
+	ex->filename = NULL;
+	ex->red_symbol = NULL;
+	ex->args = ft_split("echo pieps", ' ');
+	ex->filename = ft_split("libft", ' ');
+	ex->red_symbol = ft_split("<", ' ');
+	new = ft_lstnew((void *) ex);
+	return (new);
 }
 
 int main (int argc, char **argv, char **envp)
@@ -161,12 +178,17 @@ int main (int argc, char **argv, char **envp)
 	t_exec test;
 	t_command	*current_cmd;
 	t_list	*structi = NULL;
+	// t_list	*temp = NULL;
 
-	structi = malloc(sizeof(t_list));
-	create_example1(structi, &example);
+	structi = create_example1(&example);
+	// temp = structi;
+	// structi = structi->next;
+	// structi = create_example2(&example);
+	// current_cmd = (t_command *) temp->content;
+	// printf("temp\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
 	current_cmd = (t_command *) structi->content;
-	printf("structi\nargs: %s\nfiles: %s\nsymbol: %s\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
-	test.exit_code = 0;
+	printf("structi\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
+	// test.exit_code = 0;
 	if (executor (envp, example, &test))
 		return (test.exit_code);
 	// printf ("[Exit code: %d]\n", test.exit_code);
@@ -180,3 +202,4 @@ int main (int argc, char **argv, char **envp)
 	(void)argv;
 	return (0);
 }
+

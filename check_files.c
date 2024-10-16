@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_files_red.c                                  :+:      :+:    :+:   */
+/*   check_files.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/15 15:40:43 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/16 15:12:40 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	create_file(char *filename, t_exec *test)
 
 int	check_input_files(t_command example, t_exec *test, int i)
 {
-
 	if (access(example.filename[i], F_OK) == -1)
 		return (print_error(EPERM, example.filename[i], test));
 	else if (access(example.filename[i], R_OK) == -1)
@@ -74,15 +73,23 @@ int	check_files(t_command example, t_exec *test)
 		i = 0;
 		while (example.filename[i])
 		{
-			if (example.red_symbol[i] && (example.red_symbol[i][0] == '>'))
+			if (example.red_symbol[i] && example.red_symbol[i][0] == '>')
 			{
 				if (check_output_files(example, test, i))
 					return (1);
 			}
-			else if (example.red_symbol[i] && (example.red_symbol[i][0] == '<'))
+			else if (example.red_symbol[i] && example.red_symbol[i][0] == '<'
+				&& example.red_symbol[i][1] == '\0')
 			{
 				if (check_input_files(example, test, i))
 					return (2);
+			}
+			else if (example.red_symbol[i] && example.red_symbol[i][0] == '<'
+				&& example.red_symbol[i][1] == '<')
+			{
+				//heredoc implementation
+				printf("Not handeling heredoc yet\n");
+				return (3);
 			}
 			i++;
 		}
