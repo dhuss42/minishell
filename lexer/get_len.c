@@ -1,7 +1,7 @@
 
 #include "../minishell_eichhoernchen.h"
 
-// // ---for-debugging------/ 
+// ---for-debugging------/ 
 // size_t	get_len(char *str)
 // {
 // 	t_shell	nbr;
@@ -192,3 +192,14 @@ size_t	get_len(char *str)
 // 			------solved-------
 
 // "$?      "<'""'|   "out"        <<in
+
+// "asd" "'    fgd  "t t | sa $TEST $sa
+// --> not splitting correct
+// 			------solved-------
+// --> setting isspace flag to false solved it
+
+// halla < >ads>
+// --> funktioniert wirft syntax error wegen < >
+// test "asd"asd"asds"
+// --> funktioniert
+// "asd" "'    fgd  "t t | sa $TEST $sa echo hallo"welt    "hallo"

@@ -21,6 +21,7 @@ CFILES = minishell.c\
 	parser/create_table.c\
 	parser/memory_parser.c\
 	expansion/expansion.c\
+	expansion/check_for_quotes.c\
 	print_tokenlist.c\
 	print_table.c
 

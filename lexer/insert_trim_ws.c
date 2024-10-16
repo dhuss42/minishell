@@ -24,6 +24,9 @@ void handle_quotes(t_shell *trim, char *input)
 		trim->res[trim->j++] = input[trim->i++];
 	if (input[trim->i] == quote)
 	{
+		printf("\033[32mTest\n");
+		printf("char trim: %c\n", trim->res[trim->j]);
+		printf("char og: %c\n\033[0m", input[trim->i + 1]);
 		trim->res[trim->j++] = input[trim->i];
 /* 		if (input[trim->i + 1] != '\0')
 			trim->res[trim->j++] = ' '; */
@@ -58,7 +61,7 @@ void	handle_special(t_shell *trim, char *input)
 	if ((input[trim->i] == '\'') || (input[trim->i] == '\"'))
 		{
 			handle_quotes(trim, input);
-			trim->isspace = true;
+			trim->isspace = false;
 		}
 	else if (input[trim->i] == '|' || input[trim->i] == '>' || input[trim->i] == '<' /* || input[trim->i] == '$' */)
 		{
@@ -78,7 +81,7 @@ void	populate_trim_str(t_shell *trim, char *input)
 	trim->isspace = false; //flag to false
 	while (trim->j < trim->len) // fixed wrong iterater in populate_trim_str
 	{
-		// printf("[%zu] < [%zu]\n", trim->j, trim->len);
+		printf("[%zu] < [%zu]\n", trim->j, trim->len);
 		if (is_special(input[trim->i]))
 			handle_special(trim, input);
 		else if (is_wspace(input[trim->i])) // checks if there is a ws in input and sets it to one ws
@@ -94,7 +97,7 @@ void	populate_trim_str(t_shell *trim, char *input)
 			trim->res[trim->j++] = input[trim->i];
 			trim->isspace = false;
 		}
-		// printf("str: {%s}\n", trim->res);
+		printf("str: {%s}\n", trim->res);
 		trim->i++;
 	}
 	trim->res[trim->j] = '\0';
