@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/16 15:44:26 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/16 16:04:50 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,41 +133,35 @@ int	execute_single_command(char **envp, t_command example, t_exec *test)
 	return (test->exit_code);
 }
 
-int	executor(char **envp, t_command example, t_exec *test)
+int	executor(char **envp, t_list *structi, t_exec *test)
 {
-	//check if nbr_pipes == 0 count the amount of pipes with ft_lstsize - 1
-	if (execute_single_command(envp, example, test))
-		return (free_all(&example));
-	// else
-	// 	pipechain(envp, args);
+	t_command	*current_cmd;
+
+	if (ft_lstsize(structi) == 1)
+	{
+		current_cmd = (t_command*) structi->content;
+		if (execute_single_command(envp, *current_cmd, test))
+			return (free_all(current_cmd));
+	}
+	else if (ft_lstsize(structi) == 2)
+	{
+		if (execute_pipe(envp, structi, test))
+			return (free_all(structi->content)); //todo: free list
+	}
 	return (test->exit_code);
 }
 
-t_list	*create_example2(t_command *ex)
+t_list	*create_example(t_command *example, char *args, char *files, char* red)
 {
 	t_list	*new;
+	t_command *ex = malloc(sizeof(t_command));
 
 	ex->args = NULL;
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
-	ex->args = ft_split("grep get", ' ');
-	ex->filename = ft_split("libft", ' ');
-	ex->red_symbol = ft_split("<", ' ');
-	new = ft_lstnew((void *) ex);
-	return (new);
-}
-
-t_list	*create_example1(t_command *ex)
-{
-	t_list	*new;
-	// t_command *ex = malloc(sizeof(t_command));
-
-	ex->args = NULL;
-	ex->filename = NULL;
-	ex->red_symbol = NULL;
-	ex->args = ft_split("echo pieps", ' ');
-	ex->filename = ft_split("libft", ' ');
-	ex->red_symbol = ft_split("<", ' ');
+	ex->args = ft_split(args, ' ');
+	ex->filename = ft_split(files, ' ');
+	ex->red_symbol = ft_split(red, ' ');
 	new = ft_lstnew((void *) ex);
 	return (new);
 }
@@ -180,7 +174,7 @@ int main (int argc, char **argv, char **envp)
 	t_list	*structi = NULL;
 	// t_list	*temp = NULL;
 
-	structi = create_example1(&example);
+	structi = create_example(&example, "echo pieps", "out1", ">");
 	// temp = structi;
 	// structi = structi->next;
 	// structi = create_example2(&example);
@@ -188,8 +182,8 @@ int main (int argc, char **argv, char **envp)
 	// printf("temp\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
 	current_cmd = (t_command *) structi->content;
 	printf("structi\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
-	// test.exit_code = 0;
-	if (executor (envp, example, &test))
+	test.exit_code = 0;
+	if (executor (envp, structi, &test))
 		return (test.exit_code);
 	// printf ("[Exit code: %d]\n", test.exit_code);
 	// printf ("[final infile: %s]\n", test.final_infile);
