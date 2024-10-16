@@ -84,6 +84,10 @@ t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing);
 
 //----------------expansion----------------//
 t_list *expansion(t_list *table, char **env);
+bool    check_for_quotes(t_list *table, char **env);
+void    check_for_dollar(t_list *table, char **env);
+void    get_expanded(char *pos_dollar, char **env, t_command *row, size_t *i);
+void    get_expanded_2(char *pos_dollar, char **env, t_command *row, size_t *i, size_t *k);
 
 //----------------helpers----------------//
 
