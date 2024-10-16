@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/15 17:15:29 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/16 11:40:39 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,34 +137,35 @@ int	executor(char **envp, t_command example, t_exec *test)
 {
 	//check if nbr_pipes == 0 count the amount of pipes with ft_lstsize - 1
 	if (execute_single_command(envp, example, test))
-		return (free_all(&example)); // freeeee
+		return (free_all(&example));
 	// else
 	// 	pipechain(envp, args);
 	return (test->exit_code);
 }
 
-void	create_examples(t_command *ex)
+void	create_example1(t_list *structi, t_command *ex)
 {
-	// structi->content = (void *) ex;
-
-	// structi->content = ()
 	ex->args = NULL;
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
-	ex->args = ft_split("cat", ' ');
-	ex->filename = ft_split("libft out", ' ');
-	ex->red_symbol = ft_split("< >", ' ');
+	ex->args = ft_split("echo amsel", ' ');
+	ex->filename = ft_split("libft", ' ');
+	ex->red_symbol = ft_split("<", ' ');
+	structi->content = (void *) ex;
+	structi->next = NULL;
 }
 
 int main (int argc, char **argv, char **envp)
 {
-	// char *args[] = {"lsa", "-la", NULL};
-	t_exec test;
 	t_command example;
-	// t_list	structi;
-	// int	result;
+	t_exec test;
+	t_command	*current_cmd;
+	t_list	*structi = NULL;
 
-	create_examples(&example);
+	structi = malloc(sizeof(t_list));
+	create_example1(structi, &example);
+	current_cmd = (t_command *) structi->content;
+	printf("structi\nargs: %s\nfiles: %s\nsymbol: %s\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
 	test.exit_code = 0;
 	if (executor (envp, example, &test))
 		return (test.exit_code);
