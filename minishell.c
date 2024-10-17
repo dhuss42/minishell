@@ -9,7 +9,7 @@ void    minishell_loop(t_list *list, t_list *table, char **env)
         table = parser(list);
         print_table(table);
         expansion(table, env); // also need to pass env
-        ft_lstclear(&list, free_token);
+        // ft_lstclear(&list, free_token);
     }
 }
 

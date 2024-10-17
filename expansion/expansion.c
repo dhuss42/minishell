@@ -267,7 +267,7 @@ t_list *expansion(t_list *table, char **env) // change to our env
 {
     check_for_quotes(table, env); // cif there are no quotes go into check_for_dollar
     // exit(EXIT_SUCCESS);
-    check_for_dollar(table, env); 
+    // check_for_dollar(table, env); 
     print_table(table);
     return (NULL);
 }
