@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/16 16:04:50 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/17 13:07:27 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ int	parent_function(pid_t id, char* cmd, t_exec *test)
 	child then exits with 127 and the parent will store the exit state
 	if it doesnt fail, exit code is 0
 */
-void	single_child(char *path, char **envp, t_command example, t_exec *test)
+void	single_child(char *path, char **envp, t_command example)
 {
 	if (execve(path, example.args, envp))
 		{
 			if (path)
 				free (path);
 			free_all(&example);
-			// exit (127);
+			exit (127);
 		}
 }
 
@@ -125,7 +125,7 @@ int	execute_single_command(char **envp, t_command example, t_exec *test)
 	if (id == -1)
 		return (print_error(errno, NULL, test));
 	else if (id == 0)
-		single_child(path, envp, example, test);
+		single_child(path, envp, example);
 	else if (id > 0)
 		parent_function(id, example.args[0], test);
 	if (path)
@@ -151,7 +151,7 @@ int	executor(char **envp, t_list *structi, t_exec *test)
 	return (test->exit_code);
 }
 
-t_list	*create_example(t_command *example, char *args, char *files, char* red)
+t_list	*create_example(char *args, char *files, char* red)
 {
 	t_list	*new;
 	t_command *ex = malloc(sizeof(t_command));
@@ -168,21 +168,24 @@ t_list	*create_example(t_command *example, char *args, char *files, char* red)
 
 int main (int argc, char **argv, char **envp)
 {
-	t_command example;
 	t_exec test;
-	t_command	*current_cmd;
+	// t_command	*current_cmd;
 	t_list	*structi = NULL;
+	t_list	*second = NULL;
 	// t_list	*temp = NULL;
 
-	structi = create_example(&example, "echo pieps", "out1", ">");
+	structi = create_example("echo pieps\nund\niiiii", "", "");
 	// temp = structi;
 	// structi = structi->next;
-	// structi = create_example2(&example);
+	second = create_example("grep i", "executor.h", "<");
+	ft_lstadd_back(&structi, second);
 	// current_cmd = (t_command *) temp->content;
 	// printf("temp\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
-	current_cmd = (t_command *) structi->content;
-	printf("structi\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
+	// current_cmd = (t_command *) structi->content;
+	// printf("structi\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
 	test.exit_code = 0;
+	// structi = temp;
+	// printf("list size: %d\n", ft_lstsize(structi));
 	if (executor (envp, structi, &test))
 		return (test.exit_code);
 	// printf ("[Exit code: %d]\n", test.exit_code);
@@ -190,7 +193,7 @@ int main (int argc, char **argv, char **envp)
 	// printf ("[final outfile: %s]\n", test.final_outfile);
 	// printf ("[final in red: %s]\n", test.final_in_red);
 	// printf ("[final out red: %s]\n", test.final_out_red);
-	free_all(&example);
+	// free_all(&example);
 	return (test.exit_code);
 	(void)argc;
 	(void)argv;

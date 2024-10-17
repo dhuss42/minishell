@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/16 16:03:58 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/17 12:26:36 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,7 @@ int		exec_redirections(t_command example, t_exec *test);
 void	free_double(char **to_free);
 int		free_all(t_command *example);
 int		execute_pipe(char **envp, t_list *structi, t_exec *test);
+int		handle_stuff(t_command example, t_exec *test);
+char	*get_check_path(char *cmd, char **envp, t_exec *test);
 
 #endif
