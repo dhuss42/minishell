@@ -6,130 +6,106 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/17 13:34:39 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/17 18:14:27 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-void	pipe_child_write(char *path, t_command *cmd, char **envp, int *fd, t_exec *test)
+void	pipe_child_write(t_command *cmd, char **envp, int (*fd)[2], t_exec *test)
 {
-	if (close(fd[0]) == -1)
-		printf("close fd failed write");
-	if (test->final_outfile == NULL)
+	int	i;
+
+	if (cmd->id != 0 && test->final_infile == NULL)
 	{
-		if (dup2(fd[1], 1) == -1)
+		if (dup2(fd[cmd->id - 1][0], 0) == -1)
+			printf("dup2 failed write");
+	}
+
+	// if (close(fd[cmd->id - 1][0]) == -1)		//close read
+	// 	printf("close fd failed write");
+
+	if (cmd->id != test->nbr_pipes && test->final_outfile == NULL)		//write
+	{
+		if (dup2(fd[cmd->id][1], 1) == -1)
 		{
 			exit (print_error(errno, NULL, test));
 			printf("dup2 failed write");
 		}
 	}
-	if (close(fd[1]) == -1)
-		printf("close fd failed write");
+	// if (close(fd[cmd->id][1]) == -1)			//close write
+	// 	printf("close fd failed write");
 
-	execve(path, cmd->args, envp); //maybe safe path in cmd->path??
+	i = 0;
+	while (i <= test->nbr_pipes)
+	{
+		if (close(fd[i][0]) == -1)		//close read
+			printf("close fd failed write");
+		if (close(fd[i][1]) == -1)			//close write
+			printf("close fd failed write");
+		i++;
+	}
+	execve(cmd->path, cmd->args, envp);
 	printf("execve failed\n");
 	exit(1);
 }
 
-void	pipe_child_read(char *path, t_command *cmd, char **envp, int *fd, t_exec *test)
-{
-	if (close(fd[1]) == -1)
-		printf("close fd failed write");
-	if (test->final_infile == NULL)
-	{
-		if (dup2(fd[0], 0) == -1)
-			printf("dup2 failed write");
-	}
-	if (close(fd[0]) == -1)
-		printf("close fd failed write");
-	execve(path, cmd->args, envp); //maybe safe path in cmd->path??
-	printf("execve failed\n");
-}
-
-// int	first_cmd(t_list *structi, char **envp, t_exec *test, int *fd)
+// void	pipe_child_read(t_command *cmd, char **envp, int (*fd)[2], t_exec *test)
 // {
-
-// 	else if (pid == 0)
-// 		pipe_child_write(path, current_cmd, envp, test, fd);
-// 	else if (pid > 0)
+// 	if (close(fd[0][1]) == -1)
+// 		printf("close fd failed write");
+// 	if (test->final_infile == NULL)
 // 	{
-// 		waitpid(pid, NULL, 0);
+// 		if (dup2(fd[0][0], 0) == -1)
+// 			printf("dup2 failed write");
 // 	}
-// 	return (0);
+// 	if (close(fd[0][0]) == -1)
+// 		printf("close fd failed write");
+// 	execve(cmd->path, cmd->args, envp);
+// 	printf("execve failed\n");
 // }
 
 int	execute_pipe(char **envp, t_list *structi, t_exec *test)
 {
-	int		fd[2];
-	pid_t	pid1;
-	pid_t	pid2;
-	char	*path;
+	int		fd[test->nbr_pipes][2];
+	pid_t	pid[test->nbr_pipes + 1];
 	t_command	*current_cmd;
+	int		n;
 
-	current_cmd = (t_command*) structi->content;
-	if (handle_stuff(*current_cmd, test))
-		return (1);
-	path = get_check_path(current_cmd->args[0], envp, test);
-	if (!path)
-		return (2);
-	if (pipe(fd) == -1)
-		return (printf("pipe failed!\n")); //errorhandling
-	pid1 = fork();
-	if (pid1 == -1)
-		return (print_error(errno, NULL, test));
-	if (pid1 == 0)
-		pipe_child_write(path, current_cmd, envp, fd, test);
+	n = 0;
+	while (structi != NULL)
+	{
+		printf("%d\n", n);
+		current_cmd = (t_command*) structi->content;
+		current_cmd->id = n;
+		if (handle_stuff(envp, current_cmd, test))
+			return (1);
+		if (n < test->nbr_pipes)
+		{
+			if (pipe(fd[n]) == -1)
+				return (printf("pipe failed!\n")); //errorhandling
+		}
+		pid[n] = fork();
+		if (pid[n] == -1)
+			return (print_error(errno, NULL, test));
+		if (pid[n] == 0)
+			pipe_child_write(current_cmd, envp, fd, test);
+		structi = structi->next;
+		n++;
+	}
 
-	structi = structi->next;
-	current_cmd = (t_command*) structi->content;
-	if (handle_stuff(*current_cmd, test))
-		return (1);
-	// printf("temp\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
-	path = get_check_path(current_cmd->args[0], envp, test);
-	if (!path)
-		return (2);
-	pid2 = fork();
-	if (pid2 == -1)
-		return (print_error(errno, NULL, test));
-	if (pid2 == 0)
-		pipe_child_read(path, current_cmd, envp, fd, test);
-	close(fd[0]);
-	close(fd[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
+	int i = 0;
+	while (i < test->nbr_pipes)
+	{
+		if (close(fd[i][0]) == -1)		//close read
+			printf("close fd failed");
+		if (close(fd[i][1]) == -1)			//close write
+			printf("close fd failed");
+		i++;
+	}
 
-	// pid_t	pid1;
-	// pid_t	pid2;
-	// char **args1 = ft_split("echo david\nis\nhere", ' ');
-	// char **args2 = ft_split("grep i", ' ');
-
-	// pid1 = fork();
-	// if (pid1 < 0)
-	// 	return (printf("forking failed\n"));
-	// if (pid1 == 0)
-	// {
-	// 	close(fd[0]);
-	// 	dup2(fd[1], 1);
-	// 	close(fd[1]);
-	// 	execve("/usr/bin/echo", args1, envp);
-	// 	printf("execve failed\n");
-	// 	exit(1);
-	// }
-	// pid2 = fork();
-	// if (pid2 == -1)
-	// 	return (printf("forking failed\n"));
-	// if (pid2 == 0)
-	// {
-	// 	close(fd[1]);
-	// 	dup2(fd[0], 0);
-	// 	close(fd[0]);
-	// 	execve("/usr/bin/grep", args2, envp);
-	// }
-	// close(fd[0]);
-	// close(fd[1]);
-	// waitpid(pid1, NULL, 0);
-	// waitpid(pid2, NULL, 0);
+	waitpid(pid[0], NULL, 0);
+	waitpid(pid[1], NULL, 0);
 
 	return (0);
 }

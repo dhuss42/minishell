@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/17 12:26:36 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/17 18:04:59 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,14 @@ typedef struct s_command
 	char	**args;
 	char	**filename;
 	char	**red_symbol;
+	char	*path;
+	int		id;
 } t_command;
 
 typedef struct	s_exec
 {
-	int	exit_code;
+	int		exit_code;
+	int		nbr_pipes;
 	char*	final_infile;
 	char*	final_outfile;
 	char*	final_in_red;
@@ -69,7 +72,7 @@ int		exec_redirections(t_command example, t_exec *test);
 void	free_double(char **to_free);
 int		free_all(t_command *example);
 int		execute_pipe(char **envp, t_list *structi, t_exec *test);
-int		handle_stuff(t_command example, t_exec *test);
+int		handle_stuff(char **envp, t_command *example, t_exec *test);
 char	*get_check_path(char *cmd, char **envp, t_exec *test);
 
 #endif

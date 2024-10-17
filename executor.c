@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/17 13:35:04 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/17 18:06:06 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,38 +98,36 @@ char	*get_check_path(char *cmd, char **envp, t_exec *test)
 	return (path);
 }
 
-int	handle_stuff(t_command example, t_exec *test)
+int	handle_stuff(char **envp, t_command *example, t_exec *test)
 {
-
 	// if (is_built_in)
 	// 	ecexute_builtin();
 	// handle heredoc
-	if (check_files(example, test))
+	if (check_files(*example, test))
 		return (1);
-	if (exec_redirections(example, test))
+	if (exec_redirections(*example, test))
 		return (2);
+	example->path = get_check_path(example->args[0], envp, test);
+	if (!example->path)
+		return (3);
 	return (0);
 }
 
-int	execute_single_command(char **envp, t_command example, t_exec *test)
+int	execute_single_command(char **envp, t_command *example, t_exec *test)
 {
 	pid_t	id;
-	char	*path;
 
-	if (handle_stuff(example, test))
+	if (handle_stuff(envp, example, test))
 		return (1);
-	path = get_check_path(example.args[0], envp, test);
-	if (!path)
-		return (2);
 	id = fork();
 	if (id == -1)
 		return (print_error(errno, NULL, test));
 	else if (id == 0)
-		single_child(path, envp, example);
+		single_child(example->path, envp, *example);
 	else if (id > 0)
-		parent_function(id, example.args[0], test);
-	if (path)
-		free (path);
+		parent_function(id, example->args[0], test);
+	if (example->path)
+		free (example->path);	//do this in the end with rest of free table
 	return (test->exit_code);
 }
 
@@ -137,13 +135,14 @@ int	executor(char **envp, t_list *structi, t_exec *test)
 {
 	t_command	*current_cmd;
 
-	if (ft_lstsize(structi) == 1)
+	test->nbr_pipes = ft_lstsize(structi) - 1;
+	if (test->nbr_pipes == 0)
 	{
 		current_cmd = (t_command*) structi->content;
-		if (execute_single_command(envp, *current_cmd, test))
+		if (execute_single_command(envp, current_cmd, test))
 			return (free_all(current_cmd));
 	}
-	else if (ft_lstsize(structi) == 2)
+	else if (test->nbr_pipes > 0)
 	{
 		if (execute_pipe(envp, structi, test))
 			return (free_all(structi->content)); //todo: free list
@@ -159,6 +158,7 @@ t_list	*create_example(char *args, char *files, char* red)
 	ex->args = NULL;
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
+	ex->path = NULL;
 	ex->args = ft_split(args, ' ');
 	ex->filename = ft_split(files, ' ');
 	ex->red_symbol = ft_split(red, ' ');
@@ -174,10 +174,10 @@ int main (int argc, char **argv, char **envp)
 	t_list	*second = NULL;
 	// t_list	*temp = NULL;
 
-	structi = create_example("echo pieps\nund\niiiii", "outiii", ">");
+	structi = create_example("ls -la", "", "");
 	// temp = structi;
 	// structi = structi->next;
-	second = create_example("grep i", "", "");
+	second = create_example("grep libft", "", "");
 	ft_lstadd_back(&structi, second);
 	// current_cmd = (t_command *) temp->content;
 	// printf("temp\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
