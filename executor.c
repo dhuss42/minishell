@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/17 13:07:27 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/17 13:35:04 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,10 +174,10 @@ int main (int argc, char **argv, char **envp)
 	t_list	*second = NULL;
 	// t_list	*temp = NULL;
 
-	structi = create_example("echo pieps\nund\niiiii", "", "");
+	structi = create_example("echo pieps\nund\niiiii", "outiii", ">");
 	// temp = structi;
 	// structi = structi->next;
-	second = create_example("grep i", "executor.h", "<");
+	second = create_example("grep i", "", "");
 	ft_lstadd_back(&structi, second);
 	// current_cmd = (t_command *) temp->content;
 	// printf("temp\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);

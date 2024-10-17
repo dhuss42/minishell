@@ -12,7 +12,7 @@
 
 #include "executor.h"
 
-int	custom_error(int err_no, char *str)
+int	custom_error(int err_no)
 {
 	if (err_no == E_PATH)
 		ft_putstr_fd("function get_path failed\n", 2);
@@ -52,7 +52,7 @@ int	print_error(int err_no, char *str, t_exec *test)
 		write(2, ": ", 2);
 	}
 	if (err_no > 106)
-		test->exit_code = custom_error(err_no, str);
+		test->exit_code = custom_error(err_no);
 	else
 	{
 		perror(NULL);

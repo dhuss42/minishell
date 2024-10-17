@@ -6,31 +6,41 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/17 13:04:00 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/17 13:34:39 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-void	pipe_child_write(char *path, t_command *cmd, char **envp, int *fd)
+void	pipe_child_write(char *path, t_command *cmd, char **envp, int *fd, t_exec *test)
 {
 	if (close(fd[0]) == -1)
 		printf("close fd failed write");
-	if (dup2(fd[1], 1) == -1)
-		printf("dup2 failed write");
+	if (test->final_outfile == NULL)
+	{
+		if (dup2(fd[1], 1) == -1)
+		{
+			exit (print_error(errno, NULL, test));
+			printf("dup2 failed write");
+		}
+	}
 	if (close(fd[1]) == -1)
 		printf("close fd failed write");
+
 	execve(path, cmd->args, envp); //maybe safe path in cmd->path??
 	printf("execve failed\n");
 	exit(1);
 }
 
-void	pipe_child_read(char *path, t_command *cmd, char **envp, int *fd)
+void	pipe_child_read(char *path, t_command *cmd, char **envp, int *fd, t_exec *test)
 {
 	if (close(fd[1]) == -1)
 		printf("close fd failed write");
-	if (dup2(fd[0], 0) == -1)
-		printf("dup2 failed write");
+	if (test->final_infile == NULL)
+	{
+		if (dup2(fd[0], 0) == -1)
+			printf("dup2 failed write");
+	}
 	if (close(fd[0]) == -1)
 		printf("close fd failed write");
 	execve(path, cmd->args, envp); //maybe safe path in cmd->path??
@@ -69,12 +79,13 @@ int	execute_pipe(char **envp, t_list *structi, t_exec *test)
 	if (pid1 == -1)
 		return (print_error(errno, NULL, test));
 	if (pid1 == 0)
-		pipe_child_write(path, current_cmd, envp, fd);
+		pipe_child_write(path, current_cmd, envp, fd, test);
 
 	structi = structi->next;
 	current_cmd = (t_command*) structi->content;
 	if (handle_stuff(*current_cmd, test))
 		return (1);
+	// printf("temp\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
 	path = get_check_path(current_cmd->args[0], envp, test);
 	if (!path)
 		return (2);
@@ -82,7 +93,7 @@ int	execute_pipe(char **envp, t_list *structi, t_exec *test)
 	if (pid2 == -1)
 		return (print_error(errno, NULL, test));
 	if (pid2 == 0)
-		pipe_child_read(path, current_cmd, envp, fd);
+		pipe_child_read(path, current_cmd, envp, fd, test);
 	close(fd[0]);
 	close(fd[1]);
 	waitpid(pid1, NULL, 0);
