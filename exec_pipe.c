@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/17 18:14:27 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/17 18:19:10 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	pipe_child_write(t_command *cmd, char **envp, int (*fd)[2], t_exec *test)
 	// 	printf("close fd failed write");
 
 	i = 0;
-	while (i <= test->nbr_pipes)
+	while (i <= test->nbr_pipes)	//müsste i < nbrpipes sein ???
 	{
 		if (close(fd[i][0]) == -1)		//close read
 			printf("close fd failed write");
