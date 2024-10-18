@@ -36,15 +36,10 @@ int	custom_error(int err_no)
 }
 
 /*
-	errno == 1 when fe cat fails with: cat:stdin: is a directory
+
 */
 int	print_error(int err_no, char *str, t_exec *test)
 {
-	if (err_no == 1)
-	{
-		test->exit_code = err_no;
-		return (1);
-	}
 	ft_putstr_fd("minishell: ", 2);
 	if (str)
 	{

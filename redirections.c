@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:38:08 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/17 13:22:40 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 12:37:42 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int	exec_redirections(t_command example, t_exec *test)
 	}
 	if (test->final_infile && test->final_in_red)
 	{
-		printf("infile: %s\n", test->final_infile);
 		if (redirect_input(test))
 			return (2);
 	}
