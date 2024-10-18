@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/18 16:34:19 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/18 17:13:30 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,38 +16,37 @@
 #include "../minishell_eichhoernchen.h"
 
 
-char	*tmp_dollar(t_command *row, size_t *i, size_t *k)
+char	*tmp_dollar(t_command *row, t_shell *expand)
 {
-	size_t j;
 	char	*tmp;
 
 	printf("TEST3\n");
 	tmp = NULL;
-	printf("pos row->args[*i][*k]: %c\n", row->args[*i][*k]);
-	while (row->args[*i][*k] == '$' || row->args[*i][*k] == '\"')
+	printf("pos row->args[*i][expand->k]: %c\n", row->args[expand->i][expand->k]);
+	while (row->args[expand->i][expand->k] == '$' || row->args[expand->i][expand->k] == '\"')
 	{
-		printf("in while pos row->args[*i][*k]: %c\n", row->args[*i][*k]);
-		(*k)++;
+		printf("in while pos row->args[*i][expand->k]: %c\n", row->args[expand->i][expand->k]);
+		(expand->k)++;
 	}
-	j = *k;
-	printf("in tmp_dollar row->args[*i]: %s\n", row->args[*i]);
-	printf("pos row->args[*i][*k]: %c\n", row->args[*i][*k]);
-	printf("len: %zu\n", ft_strlen(row->args[*i]));
-	while (row->args[*i][j] != '\0' && row->args[*i][j] != '\"' && row->args[*i][j] != '$') // getting len
-		j++;
+	expand->j = expand->k;
+	printf("in tmp_dollar row->args[*i]: %s\n", row->args[expand->i]);
+	printf("pos row->args[*i][expand->k]: %c\n", row->args[expand->i][expand->k]);
+	printf("len: %zu\n", ft_strlen(row->args[expand->i]));
+	while (row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != '\"' && row->args[expand->i][expand->j] != '$') // getting len
+		expand->j++;
 	printf("TEST3.1\n");
-	tmp = malloc(sizeof(char) * (j + 1));
+	tmp = malloc(sizeof(char) * (expand->j + 1));
 	if (!tmp)
 		return (NULL);
-	j = 0;
+	expand->j = 0;
 	printf("TEST3.2\n");
-	while (row->args[*i][*k] != '\0' && row->args[*i][*k] != '\"' && row->args[*i][*k] != '$')
-		tmp[j++] = row->args[*i][(*k)++];
-	tmp[j] = '\0';
+	while (row->args[expand->i][expand->k] != '\0' && row->args[expand->i][expand->k] != '\"' && row->args[expand->i][expand->k] != '$')
+		tmp[expand->j++] = row->args[expand->i][expand->k++];
+	tmp[expand->j] = '\0';
 
 	printf("TEST3.3\n");
-	if (row->args[*i][*k] == '\"')
-		(*k)++;
+	if (row->args[expand->i][expand->k] == '\"')
+		expand->k++;
 	printf("tmp_dollar: %s\n", tmp);
 	// exit(EXIT_SUCCESS);
 	return (tmp);
@@ -65,23 +64,23 @@ bool	contains_dollar(char *str, size_t i)
 	return (false);
 }
 
-void	which_quotes(t_command *row, size_t *i, char **env)
+void	which_quotes(t_command *row, t_shell *expand, char **env)
 {
-	size_t  k;
 	char	*tmp;
 
-	k = 0;
+	expand->k = 0;
 	// size_t round = 0;
 	tmp = NULL;
 	printf("TEST2\n");
-	while (row->args[*i][k] != '\0') // going through string
+	while (row->args[expand->i][expand->k] != '\0') // going through string
 	{
 		// printf("TEST21\n");
-		printf("row->args[*i]: %s\n", row->args[*i]);
-		printf("current char: %c \n", row->args[*i][k]);
-		if (row->args[*i][k] == '\"' && contains_dollar(row->args[*i], k))
+	/* 	printf("row->args[*i]: %s\n", row->args[*i]);
+		printf("current char: %c \n", row->args[*i][k]); */
+		if (row->args[expand->i][expand->k] == '\"' && contains_dollar(row->args[expand->i], expand->k))
 		{
-			printf("IN HERE\n");
+			quotes(row, expand, env);
+			/* printf("IN HERE\n");
 			k++;
 			while (row->args[*i][k] != '\"' && row->args[*i][k] != '\0')
 			{
@@ -114,17 +113,17 @@ void	which_quotes(t_command *row, size_t *i, char **env)
 				if (!(row->args[*i][k] == '$' && ft_isalnum(row->args[*i][k + 1])))
 					k++;
 				// printf(MAGENTA"after end of loop current char: %c \n"WHITE, (row->args[*i][k]));
-			}
+			} */
 		}
-		else if (row->args[*i][k] == '\'' && contains_dollar(row->args[*i], k) && should_expand(row->args[*i], k))
+		else if (row->args[expand->i][expand->k] == '\'' && contains_dollar(row->args[expand->i], expand->k) && should_expand(row->args[expand->i], expand->k))
 		{
 				printf(RED"SINGLEQUOTES\n"WHITE);
-				k++;
+				expand->k++;
 		}
 		else
 		{
 			printf("TEST20\n");
-			k++;
+			expand->k++;
 		}
 	}
 }
@@ -133,22 +132,21 @@ void	which_quotes(t_command *row, size_t *i, char **env)
 
 bool	check_for_quotes(t_list *table, char **env)
 {
-	t_list	  *tmp;
+	t_shell		expand;
 	t_command   *row;
-	size_t	  i;
 
-	tmp = table;
-	while (tmp != NULL) // going trough table row for row
+	expand.tmp = table;
+	while (expand.tmp != NULL) // going trough table row for row
 	{
-		row = (t_command*)tmp->content;
-		i = 0;
-		while (row->args[i] != NULL) // going through double char args
+		row = (t_command*)expand.tmp->content;
+		expand.i = 0;
+		while (row->args[expand.i] != NULL) // going through double char args
 		{
 			// printf("TEST\n");
-			which_quotes(row, &i, env);
-			i++;
+			which_quotes(row, &expand, env);
+			expand.i++;
 		}
-		tmp = tmp->next;
+		expand.tmp = expand.tmp->next;
 	}
 	return (true); // change
 }
@@ -202,11 +200,10 @@ bool	check_for_quotes(t_list *table, char **env)
 //"$PATH$HOME$"
 // --> solved
 //"$PATH$HOME$a"
-// --> works
+// --> does not work
 //"$PATH$HOME$$?"
 // --> works
-//"$PATH$HOME$$?"
-// --> works
+
 //"$?$PATH$$$HOME$?"
 // --> works
 //"$$$PATH$$$HOME$$"
@@ -229,3 +226,5 @@ bool	check_for_quotes(t_list *table, char **env)
 // --> setting exp to "" works
 // "$PATH$a$HOME"
 // --> setting exp to "" works
+
+// allocate the empty string so it can be freed

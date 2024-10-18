@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/18 15:48:43 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/18 17:06:26 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_shell
 {
 	size_t	i;
 	size_t	j;
+	size_t	k;
 	size_t	len;
 	size_t	lines;
 	size_t	words;
@@ -98,9 +99,9 @@ t_list *expansion(t_list *table, char **env);
 bool    check_for_quotes(t_list *table, char **env);
 void    check_for_dollar(t_list *table, char **env);
 // void    get_expanded(char *pos_dollar, char **env, t_command *row, size_t *i);
-void    get_expanded_2(char *pos_dollar, char **env, t_command *row, size_t *i, size_t *k);
-void	quotes(t_command *row, size_t *i, size_t *k, char **env);
-char	*tmp_dollar(t_command *row, size_t *i, size_t *k);
+void	get_expanded_2(char *variable, char **env, t_command *row, t_shell *expand);
+void	quotes(t_command *row, t_shell *expand, char **env);
+char	*tmp_dollar(t_command *row, t_shell *expand);
 bool	should_expand(char *str, size_t k);
 
 //----------------helpers----------------//

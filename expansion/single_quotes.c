@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/18 16:31:17 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/18 17:02:26 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,37 +43,36 @@ bool	should_expand(char *str, size_t k)
 	// if diff 0 and if open and closing % 2 = 0
 	//then true:
 
-void	quotes(t_command *row, size_t *i, size_t *k, char **env)
+void	quotes(t_command *row, t_shell *expand, char **env)
 {
 	char	quote;
 	char	*tmp;
 
 	tmp = NULL;
-	quote = row->args[*i][*k];
-	(*k)++;
-	while (row->args[*i][*k] != quote && row->args[*i][*k] != '\0')
+	quote = row->args[expand->i][expand->k];
+	expand->k++;
+	while (row->args[expand->i][expand->k] != quote && row->args[expand->i][expand->k] != '\0')
 	{
-		if (row->args[*i][*k] == '\0')
+		if (row->args[expand->i][expand->k] == '\0')
 		{
 			printf("TEST19\n");
 			break ;
 		}
-		if (row->args[*i][*k] == '$' && ft_isalnum(row->args[*i][*k + 1]))
+		if (row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1]))
 		{
-			tmp = tmp_dollar(row, i, k);
-			get_expanded_2(tmp, env, row, i, k);
+			tmp = tmp_dollar(row, expand);
+			get_expanded_2(tmp, env, row, expand);
 		}
 		if (tmp)
 		{
 			free(tmp);
 			tmp = NULL;
 		}
-		if (!(row->args[*i][*k] == '$' && ft_isalnum(row->args[*i][*k + 1])))
+		if (!(row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1])))
 		{
-			printf("row->args[*i][k]: %c\n", row->args[*i][*k - 1]);
+			printf("row->args[expand->i][k]: %c\n", row->args[expand->i][expand->k - 1]);
 			printf("TEST20\n");
-			k++;
-			printf("row->args[*i][k]: %c\n", row->args[*i][*k - 1]);
+			expand->k++;
 		}
 	}
 }

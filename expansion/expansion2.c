@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:27 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/18 16:17:05 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/18 17:14:10 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,19 +94,18 @@ size_t  get_len_exp_2(t_command *row, char *exp, size_t *i)
 // in ths function there could be issues for ordinary expansion and single quotes
 // might have to adjust the get_len
 
-void	switcheroo_2(t_command *row, char *exp, size_t *i, size_t *k)
+void	switcheroo_2(t_command *row, char *exp, t_shell *expand)
 {
 	size_t  len;
-	size_t  j;
 	size_t  iterate;
 	size_t  index;
 	char	*tmp;
 
-	j = 0;
+	expand->j = 0;
 	iterate = 0;
 	index = 0;
 	// printf("TEST6\n");
-	len = get_len_exp_2(row, exp, i);
+	len = get_len_exp_2(row, exp, &expand->i);
 	// printf(BLUE"get len: %zu\n"WHITE, len);
 	// printf("TEST1\n");
 	// printf("TEST8\n");
@@ -116,69 +115,64 @@ void	switcheroo_2(t_command *row, char *exp, size_t *i, size_t *k)
 		return ;
 	// printf("TEST2\n");
 	// printf("TEST9\n");
-	while(row->args[*i][j] != '\0' && !(row->args[*i][j] == '$' && ft_isalnum(row->args[*i][j + 1])))
-		tmp[iterate++] = row->args[*i][j++];
+	while(row->args[expand->i][expand->j] != '\0' && !(row->args[expand->i][expand->j] == '$' && ft_isalnum(row->args[expand->i][expand->j + 1])))
+		tmp[iterate++] = row->args[expand->i][expand->j++];
 	// printf(MAGENTA"tmp before exp: %s\n"WHITE, tmp);
-	j++;
+	expand->j++;
 	// printf("TEST10\n");
-	while(row->args[*i][j] != '\0' && row->args[*i][j] != '$' && row->args[*i][j] != '\"' && row->args[*i][j] != '\'')
-		j++;
+	while(row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != '$' && row->args[expand->i][expand->j] != '\"' && row->args[expand->i][expand->j] != '\'')
+		expand->j++;
 	// printf("before inserting expanded tmp: %s\n", tmp);
-	// printf("row->args[i]: %s\n", row->args[*i]);
-	// printf("row->args position[i]: %c\n", row->args[*i][j]);
+	// printf("row->args[i]: %s\n", row->args[expand->i]);
+	// printf("row->args position[i]: %c\n", row->args[expand->i][expand->j]);
 
 
 	printf("TEST11\n");
 	while (exp[index] != '\0')
 		tmp[iterate++] = exp[index++];
-	free(exp);
+	printf("exp address: %p\n", exp);
+	if (exp)
+		free(exp);
 	// printf("after inserting expanded tmp: %s\n", tmp);
 	// printf("strlen: %zu\n", ft_strlen(tmp));
-	*k = iterate;
-	// (*k)++;
-	printf("k: %zu\n", *k);
+	expand->k = iterate;
+	// (expand->k)++;
+	printf("k: %zu\n", expand->k);
 	printf("TEST12\n");
-	printf("row->args[*i][j] char: %c\n", row->args[*i][j]);
-	while (row->args[*i][j] != '\0')
-		tmp[iterate++] = row->args[*i][j++];
+	printf("row->args[expand->i][expand->j] char: %c\n", row->args[expand->i][expand->j]);
+	while (row->args[expand->i][expand->j] != '\0')
+		tmp[iterate++] = row->args[expand->i][expand->j++];
 
 	tmp[iterate] = '\0';
 	printf("tmp: %s\n", tmp);
 	printf(BLUE"strlen tmp: %zu\n"WHITE, ft_strlen(tmp));
 	printf(YELLOW" adress tmp: [%p]\n" WHITE, tmp);
-	printf(YELLOW"adress row->args[*i]: [%p]\n"WHITE, row->args[*i]);
+	printf(YELLOW"adress row->args[expand->i]: [%p]\n"WHITE, row->args[expand->i]);
 	// exit(EXIT_SUCCESS);
 
-	// printf("before args[i]: %s\n", row->args[*i]);
+	// printf("before args[i]: %s\n", row->args[expand->i]);
 	printf("TEST13\n");
-	if (row->args[*i])
+	if (row->args[expand->i])
 	{
 		// printf(RED"Here is an issue\n"WHITE);
-		free(row->args[*i]);
-		row->args[*i] = NULL;
+		free(row->args[expand->i]);
+		row->args[expand->i] = NULL;
 	}
 	// printf("TESTHIER\n");
-	size_t a = 0;
-	while(row->args[a] != NULL)
-	{
-		printf("row->args[%zu]: %s\n", a, row->args[a]);
-		a++;
-	}
 	printf("TEST14\n");
 	printf("tmp: %s\n", tmp);
-	printf("row->args[*i]: %s\n", row->args[*i]);
-	printf("i: [%zu]\n", *i);
-	row->args[*i] = ft_strdup(tmp);
-	if (!row->args[*i])
+	printf("row->args[expand->i]: %s\n", row->args[expand->i]);
+	printf("i: [%zu]\n", expand->i);
+	row->args[expand->i] = ft_strdup(tmp);
+	if (!row->args[expand->i])
 		return ;
-	printf(GREEN"after ft_strdup: row->args[%zu]: %s\n"WHITE, a, row->args[a]);
 	printf("TEST15\n");
 	if (tmp)
 		free(tmp);
 	printf("TEST16\n");
 }
 
-void	get_expanded_2(char *variable, char **env, t_command *row, size_t *i, size_t *k)
+void	get_expanded_2(char *variable, char **env, t_command *row, t_shell *expand)
 {
 	// char	**split_dollar;
 	char	*exp = NULL;
@@ -202,5 +196,5 @@ void	get_expanded_2(char *variable, char **env, t_command *row, size_t *i, size_
 		// return ;
 	}
 
-	switcheroo_2(row, exp, i, k); // reduce variables
+	switcheroo_2(row, exp, expand); // reduce variables
 }
