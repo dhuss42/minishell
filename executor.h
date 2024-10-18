@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 14:16:20 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 16:07:24 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,10 @@ int		print_error(int err_no, char *str, t_exec *test);
 int		check_files(t_command example, t_exec *test);
 int		exec_redirections(t_command example, t_exec *test);
 void	free_double(char **to_free);
-int		free_all(t_command *example);
+int		free_row(t_command *example);
 int		execute_pipechain(char **envp, t_list *structi, t_exec *test);
 int		handle_stuff(char **envp, t_command *example, t_exec *test);
 char	*get_check_path(char *cmd, char **envp, t_exec *test);
+int		free_table(t_list *table);
 
 #endif

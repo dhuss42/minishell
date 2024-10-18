@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 14:43:05 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 16:18:32 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	close_fds(int (*fd)[2], int id, int nbr_pipes)
 	return (0);
 }
 
-void	pipe_child(t_command *cmd, char **envp, int (*fd)[2], t_exec *test)
+void	pipe_child(t_command *cmd, char **envp, int (*fd)[2], t_exec *test, t_list *structi)
 {
 	if (close_fds(fd, cmd->id, test->nbr_pipes))
 		exit (print_error(errno, NULL, test));
@@ -53,7 +53,8 @@ void	pipe_child(t_command *cmd, char **envp, int (*fd)[2], t_exec *test)
 			exit (print_error(errno, NULL, test));
 	}
 	execve(cmd->path, cmd->args, envp);
-	//free
+	free_table(structi);
+	(void)structi;
 	exit (print_error(errno, NULL, test));
 }
 /*
@@ -78,7 +79,7 @@ int	pipechain_loop(char **envp, t_list *structi, pid_t *pid, int (*fd)[2], t_exe
 		if (pid[n] == -1)
 			return (print_error(errno, NULL, test));
 		if (pid[n] == 0)
-			pipe_child(current_cmd, envp, fd, test);
+			pipe_child(current_cmd, envp, fd, test, temp);
 		temp = temp->next;
 		n++;
 	}
@@ -128,8 +129,8 @@ int	execute_pipechain(char **envp, t_list *structi, t_exec *test)
 		n++;
 	}
 	if (pipechain_loop(envp, structi, pid, fd, test))
-		return (2); //close fds? free?
+		return (test->exit_code); //close fds? free?
 
 	pipe_parent(pid, fd, test, structi);
-	return (0);
+	return (test->exit_code);
 }

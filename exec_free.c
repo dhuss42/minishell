@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/10 12:13:46 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 16:08:47 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@ void	free_double(char **to_free)
 	while (to_free[i])
 	{
 		free (to_free[i]);
+		to_free[i] = NULL;
 		i++;
 	}
 	if (to_free)
 		free (to_free);
+	to_free = NULL;
 }
 
 void	free_paths(char **split_paths, char **append)
@@ -34,13 +36,41 @@ void	free_paths(char **split_paths, char **append)
 		free_double(append);
 }
 
-int	free_all(t_command *example)
+int	free_row(t_command *cmd)
 {
-	if (example->args)
-		free_double(example->args);
-	if (example->filename)
-		free_double(example->filename);
-	if (example->red_symbol)
-		free_double(example->red_symbol);
+	if (cmd->args)
+		free_double(cmd->args);
+	if (cmd->filename)
+		free_double(cmd->filename);
+	if (cmd->red_symbol)
+		free_double(cmd->red_symbol);
+	if (cmd->path)
+	{
+		free (cmd->path);
+		cmd->path = NULL;
+	}
+	if (cmd)
+		free (cmd);
+	cmd = NULL;
+	return (1);
+}
+
+int	free_table(t_list *table)
+{
+	t_list	*tmp;
+	t_list	*next;
+	t_command *cmd;
+
+	tmp = table;
+	while (tmp != NULL)
+	{
+		cmd = (t_command*)tmp->content;
+		if (cmd)
+			free_row(cmd);
+		next = tmp->next;
+		free(tmp);
+		tmp = next;
+	}
+	table = NULL;
 	return (1);
 }

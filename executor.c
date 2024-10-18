@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 14:42:53 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 16:19:37 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,7 @@ void	single_child(char *path, char **envp, t_command example)
 {
 	if (execve(path, example.args, envp))
 		{
-			if (path)
-				free (path);	//free with free table
-			free_all(&example);
+			free_row(&example);
 			exit (127);
 		}
 }
@@ -69,8 +67,6 @@ int	execute_single_command(char **envp, t_command *example, t_exec *test)
 		single_child(example->path, envp, *example);
 	else if (id > 0)
 		single_parent(id, example->args[0], test);
-	if (example->path)
-		free (example->path);	//do this in the end with rest of free table
 	return (test->exit_code);
 }
 
@@ -83,12 +79,12 @@ int	executor(char **envp, t_list *structi, t_exec *test)
 	{
 		current_cmd = (t_command*) structi->content;
 		if (execute_single_command(envp, current_cmd, test))
-			return (free_all(current_cmd));
+			return (free_row(current_cmd));
 	}
 	else if (test->nbr_pipes > 0)
 	{
 		if (execute_pipechain(envp, structi, test))
-			return (free_all(structi->content)); //todo: free list
+			return (free_table(structi));
 	}
 	return (test->exit_code);
 }
@@ -133,8 +129,6 @@ int main (int argc, char **argv, char **envp)
 	// current_cmd = (t_command *) structi->content;
 	// printf("structi\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
 	test.exit_code = 0;
-	// structi = temp;
-	// printf("list size: %d\n", ft_lstsize(structi));
 	if (executor (envp, structi, &test))
 		return (test.exit_code);
 	// printf ("[Exit code: %d]\n", test.exit_code);
@@ -142,7 +136,7 @@ int main (int argc, char **argv, char **envp)
 	// printf ("[final outfile: %s]\n", test.final_outfile);
 	// printf ("[final in red: %s]\n", test.final_in_red);
 	// printf ("[final out red: %s]\n", test.final_out_red);
-	// free_all(&example);
+	free_table(structi);
 	return (test.exit_code);
 	(void)argc;
 	(void)argv;
