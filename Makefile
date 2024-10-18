@@ -23,6 +23,7 @@ CFILES = minishell.c\
 	expansion/expansion.c\
 	expansion/check_for_quotes.c\
 	expansion/expansion2.c\
+	expansion/single_quotes.c\
 	print_tokenlist.c\
 	print_table.c
 

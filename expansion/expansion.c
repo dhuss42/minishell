@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansion.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/18 14:41:21 by dhuss             #+#    #+#             */
+/*   Updated: 2024/10/18 14:41:38 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #include "../minishell_eichhoernchen.h"
 
@@ -28,7 +40,7 @@ char    **compare_with_env(char **split_dollar, char **env, char **exp)
     {
         j = 0;
         while (env[j] != NULL)
-        {   
+        {
             // printf("split_dollar: %s\n", split_dollar[i]);
             // printf("len: %zu\n", ft_strlen(split_dollar[i]));
             // printf("env: %s\n", env[j]);
@@ -204,7 +216,7 @@ char    *check_for_dollar_back(char *str, char *back)
 }
 
 void    get_expanded(char *pos_dollar, char **env, t_command *row, size_t *i)
-{   
+{
     char    **split_dollar;
     char    **exp = NULL;
     char    *front = NULL;
@@ -267,7 +279,7 @@ t_list *expansion(t_list *table, char **env) // change to our env
 {
     check_for_quotes(table, env); // cif there are no quotes go into check_for_dollar
     // exit(EXIT_SUCCESS);
-    // check_for_dollar(table, env); 
+    // check_for_dollar(table, env);
     print_table(table);
     return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/10 16:28:16 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/18 15:48:43 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@
 
 
 //----------------colors--------------//
-#define RESET       "\033[0m"          
-#define BLACK       "\033[30m"         
-#define RED         "\033[31m"         
-#define GREEN       "\033[32m"         
-#define YELLOW      "\033[33m"         
-#define BLUE        "\033[34m"         
-#define MAGENTA     "\033[35m"         
-#define CYAN        "\033[36m"         
-#define WHITE       "\033[37m"         
+#define RESET       "\033[0m"
+#define BLACK       "\033[30m"
+#define RED         "\033[31m"
+#define GREEN       "\033[32m"
+#define YELLOW      "\033[33m"
+#define BLUE        "\033[34m"
+#define MAGENTA     "\033[35m"
+#define CYAN        "\033[36m"
+#define WHITE       "\033[37m"
 //----------------structs--------------//
 
 typedef enum
@@ -99,6 +99,9 @@ bool    check_for_quotes(t_list *table, char **env);
 void    check_for_dollar(t_list *table, char **env);
 // void    get_expanded(char *pos_dollar, char **env, t_command *row, size_t *i);
 void    get_expanded_2(char *pos_dollar, char **env, t_command *row, size_t *i, size_t *k);
+void	quotes(t_command *row, size_t *i, size_t *k, char **env);
+char	*tmp_dollar(t_command *row, size_t *i, size_t *k);
+bool	should_expand(char *str, size_t k);
 
 //----------------helpers----------------//
 
