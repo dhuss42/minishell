@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 16:08:47 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 16:21:45 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	free_paths(char **split_paths, char **append)
 		free_double(append);
 }
 
-int	free_row(t_command *cmd)
+int	free_row(t_command *cmd)	//usefull for whole project
 {
 	if (cmd->args)
 		free_double(cmd->args);

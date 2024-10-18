@@ -6,12 +6,15 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 13:42:18 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 16:32:22 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
+/*-------------------------------------------------------------
+check if command is a path f.e.: /bin/ls
+---------------------------------------------------------------*/
 bool	cmd_is_path(char *cmd)
 {
 	if (ft_strchr(cmd, '/') != NULL)
@@ -20,10 +23,9 @@ bool	cmd_is_path(char *cmd)
 		return (false);
 }
 
-/*	when binary file not exists ./"filename"--> "No such file or directory", Errorcode: 127
-	when no permission for binary file--> "Permission denied", Errorcode: 126
-	when command does not exist-->"command not found", errorcode: 127
-*/
+/*-------------------------------------------------------------
+Check if path / command is valid before writing it to path
+---------------------------------------------------------------*/
 char	*get_check_path(char *cmd, char **envp, t_exec *test)
 {
 	char	*path;
@@ -54,6 +56,9 @@ char	*get_check_path(char *cmd, char **envp, t_exec *test)
 	return (path);
 }
 
+/*-------------------------------------------------------------
+Handle everything we need to handle before execve
+---------------------------------------------------------------*/
 int	handle_stuff(char **envp, t_command *example, t_exec *test)
 {
 	// if (is_built_in)

@@ -6,23 +6,18 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 16:19:37 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 16:38:23 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-/*
-	1)	find path -> if not in PATH, maybe path already written in temrinal?
-	2)	error handling (fe "command not found")
-	3)	execve
-*/
-
-/*
-	waitpid() blocks until the child process terminates or until a signal occur
-	WIFEXITED(wstatus) macro checks if the process exited normally
-	WEXITwSTATUS(wstatus) extracts the exit wstatus value from the wstatus argument
-*/
+/*-------------------------------------------------------------
+Handle parent for single command
+waitpid() blocks until the child process terminates or until a signal occurs
+WIFEXITED(wstatus) macro checks if the process exited normally
+WEXITwSTATUS(wstatus) extracts the exit wstatus value from the wstatus argument
+---------------------------------------------------------------*/
 int	single_parent(pid_t id, char* cmd, t_exec *test)
 {
 	int	wstatus;
@@ -40,11 +35,12 @@ int	single_parent(pid_t id, char* cmd, t_exec *test)
 	return (exit_code);
 }
 
-/*
-	if execve fails, its because of command not found (127)
-	child then exits with 127 and the parent will store the exit state
-	if it doesnt fail, exit code is 0
-*/
+/*-------------------------------------------------------------
+Handle child for single command
+if execve fails, its because of command not found (127)
+child then exits with 127 and the parent will store the exit state
+if it doesnt fail, exit code is 0
+---------------------------------------------------------------*/
 void	single_child(char *path, char **envp, t_command example)
 {
 	if (execve(path, example.args, envp))
@@ -54,6 +50,9 @@ void	single_child(char *path, char **envp, t_command example)
 		}
 }
 
+/*-------------------------------------------------------------
+execute single command without pipe
+---------------------------------------------------------------*/
 int	execute_single_command(char **envp, t_command *example, t_exec *test)
 {
 	pid_t	id;
@@ -70,6 +69,9 @@ int	execute_single_command(char **envp, t_command *example, t_exec *test)
 	return (test->exit_code);
 }
 
+/*-------------------------------------------------------------
+Main function for executor
+---------------------------------------------------------------*/
 int	executor(char **envp, t_list *structi, t_exec *test)
 {
 	t_command	*current_cmd;

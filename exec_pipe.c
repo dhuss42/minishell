@@ -6,12 +6,15 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 16:18:32 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 16:29:38 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
+/*-------------------------------------------------------------
+Close all opened filedescriptors from piping, we won't need
+---------------------------------------------------------------*/
 int	close_fds(int (*fd)[2], int id, int nbr_pipes)
 {
 	int	i;
@@ -34,6 +37,10 @@ int	close_fds(int (*fd)[2], int id, int nbr_pipes)
 	return (0);
 }
 
+/*-------------------------------------------------------------
+Child handler for pipechain
+--test, structi and envp will be in one struct
+---------------------------------------------------------------*/
 void	pipe_child(t_command *cmd, char **envp, int (*fd)[2], t_exec *test, t_list *structi)
 {
 	if (close_fds(fd, cmd->id, test->nbr_pipes))
@@ -57,10 +64,12 @@ void	pipe_child(t_command *cmd, char **envp, int (*fd)[2], t_exec *test, t_list 
 	(void)structi;
 	exit (print_error(errno, NULL, test));
 }
-/*
-	test will be	shell->exec
-	structi will be	shell->table
-*/
+
+/*-------------------------------------------------------------
+Loop through all the pipes
+--test will be	shell->exec
+--structi will be	shell->table
+---------------------------------------------------------------*/
 int	pipechain_loop(char **envp, t_list *structi, pid_t *pid, int (*fd)[2], t_exec *test)
 {
 	int		n;
@@ -86,6 +95,9 @@ int	pipechain_loop(char **envp, t_list *structi, pid_t *pid, int (*fd)[2], t_exe
 	return (0);
 }
 
+/*-------------------------------------------------------------
+Parent handler for pipechain
+---------------------------------------------------------------*/
 int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *structi)
 {
 	int	wstatus;
@@ -115,6 +127,9 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *structi)
 	return (exit_code);
 }
 
+/*-------------------------------------------------------------
+Handle pipechain
+---------------------------------------------------------------*/
 int	execute_pipechain(char **envp, t_list *structi, t_exec *test)
 {
 	int		fd[test->nbr_pipes][2];
@@ -125,7 +140,7 @@ int	execute_pipechain(char **envp, t_list *structi, t_exec *test)
 	while (n < test->nbr_pipes)
 	{
 		if (pipe(fd[n]) == -1)
-			return (printf("pipe failed!\n")); //errorhandling
+			return (print_error(errno, NULL, test)); //errorhandling
 		n++;
 	}
 	if (pipechain_loop(envp, structi, pid, fd, test))
