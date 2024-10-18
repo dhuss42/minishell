@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 12:36:59 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 14:32:37 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 	WIFEXITED(wstatus) macro checks if the process exited normally
 	WEXITwSTATUS(wstatus) extracts the exit wstatus value from the wstatus argument
 */
-int	parent_function(pid_t id, char* cmd, t_exec *test)
+int	single_parent(pid_t id, char* cmd, t_exec *test)
 {
 	int	wstatus;
 	int	exit_code;
@@ -31,8 +31,8 @@ int	parent_function(pid_t id, char* cmd, t_exec *test)
 	exit_code = 0;
 	if (waitpid(id, &wstatus, 0) == -1)
 		return (print_error(E_PARENT, NULL, test));
-	if (WIFEXITED(wstatus))	//if programm exited normally
-			exit_code = WEXITSTATUS(wstatus);	//exit_code = value with which the programm exited
+	if (WIFEXITED(wstatus))
+			exit_code = WEXITSTATUS(wstatus);
 	else
 		return (print_error(E_PARENT, NULL, test));
 	if (exit_code != 0)
@@ -50,67 +50,10 @@ void	single_child(char *path, char **envp, t_command example)
 	if (execve(path, example.args, envp))
 		{
 			if (path)
-				free (path);
+				free (path);	//free with free table
 			free_all(&example);
 			exit (127);
 		}
-}
-
-bool	cmd_is_path(char *cmd)
-{
-	if (ft_strchr(cmd, '/') != NULL)
-		return (true);
-	else
-		return (false);
-}
-
-/*	when binary file not exists ./"filename"--> "No such file or directory", Errorcode: 127
-	when no permission for binary file--> "Permission denied", Errorcode: 126
-	when command does not exist-->"command not found", errorcode: 127
-*/
-char	*get_check_path(char *cmd, char **envp, t_exec *test)
-{
-	char	*path;
-
-	path = get_path(cmd, envp);
-	if (!path)
-	{
-		print_error(E_PATH, NULL, test);
-		return (NULL);
-	}
-	else if (access(path, F_OK) != 0)
-	{
-		if (path)
-			free (path);
-		if (cmd_is_path(cmd))
-			print_error(E_FILENOEXIST, cmd, test);
-		else
-			print_error(127, cmd, test);
-		return (NULL);
-	}
-	if (access(path, X_OK) != 0)
-	{
-		if (path)
-			free (path);
-		print_error(E_NOPERMISSION, cmd, test);
-		return (NULL);
-	}
-	return (path);
-}
-
-int	handle_stuff(char **envp, t_command *example, t_exec *test)
-{
-	// if (is_built_in)
-	// 	ecexute_builtin();
-	// handle heredoc
-	if (check_files(*example, test))
-		return (1);
-	if (exec_redirections(*example, test))
-		return (2);
-	example->path = get_check_path(example->args[0], envp, test);
-	if (!example->path)
-		return (3);
-	return (0);
 }
 
 int	execute_single_command(char **envp, t_command *example, t_exec *test)
@@ -125,7 +68,7 @@ int	execute_single_command(char **envp, t_command *example, t_exec *test)
 	else if (id == 0)
 		single_child(example->path, envp, *example);
 	else if (id > 0)
-		parent_function(id, example->args[0], test);
+		single_parent(id, example->args[0], test);
 	if (example->path)
 		free (example->path);	//do this in the end with rest of free table
 	return (test->exit_code);
@@ -144,7 +87,7 @@ int	executor(char **envp, t_list *structi, t_exec *test)
 	}
 	else if (test->nbr_pipes > 0)
 	{
-		if (execute_pipe(envp, structi, test))
+		if (execute_pipechain(envp, structi, test))
 			return (free_all(structi->content)); //todo: free list
 	}
 	return (test->exit_code);
@@ -181,9 +124,9 @@ int main (int argc, char **argv, char **envp)
 	// structi = structi->next;
 	second = create_example("grep o", "", "");
 	ft_lstadd_back(&structi, second);
-	third = create_example("grep exec", "", "");
+	third = create_example("grep exec", "libft", ">");
 	ft_lstadd_back(&structi, third);
-	fourth = create_example("grep free", "libft", "<");
+	fourth = create_example("grep free", "", "");
 	ft_lstadd_back(&structi, fourth);
 	// current_cmd = (t_command *) temp->content;
 	// printf("temp\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);

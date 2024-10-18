@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 12:36:37 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 14:31:17 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,30 +21,14 @@ int	close_fds(int (*fd)[2], int id, int nbr_pipes)
 	{
 		if (id == 0 || i != id - 1)
 		{
-			if (close(fd[i][0]) == - 1)		//close read
-				printf("close fd[%d][0] failed read\n", i);
+			if (close(fd[i][0]) == - 1)
+				return (errno);
 		}
 		if (i != id)
 		{
-			if (close(fd[i][1]) == - 1)			//close write
-				printf("close fd[%d][1] failed write\n", i);
+			if (close(fd[i][1]) == - 1)
+				return (errno);
 		}
-		i++;
-	}
-	return (0);
-}
-
-int	close_fds_parent(int (*fd)[2], int nbr_pipes)
-{
-	int	i;
-
-	i = 0;
-	while (i < nbr_pipes)
-	{
-		if (close(fd[i][0]) == - 1)		//close read
-			printf("close fd[%d][10] failed read\n", i);
-		if (close(fd[i][1]) == - 1)			//close write
-			printf("close fd[%d][1] failed write\n", i);
 		i++;
 	}
 	return (0);
@@ -53,34 +37,87 @@ int	close_fds_parent(int (*fd)[2], int nbr_pipes)
 void	pipe_child(t_command *cmd, char **envp, int (*fd)[2], t_exec *test)
 {
 	if (close_fds(fd, cmd->id, test->nbr_pipes))
-		exit (1);	//todo errno
+		exit (print_error(errno, NULL, test));
 	if (cmd->id != 0 && test->final_infile == NULL)
 	{
 		if (dup2(fd[cmd->id - 1][0], 0) == - 1)
-			printf("dup2 fd[%d][1] failed \n", cmd->id);
-		if (close(fd[cmd->id - 1][0]) == - 1)		//close read
-			printf("close fd[%d][0] failed read\n", cmd->id - 1);
+			exit (print_error(errno, NULL, test));
+		if (close(fd[cmd->id - 1][0]) == - 1)
+			exit (print_error(errno, NULL, test));
 	}
-	if (cmd->id != test->nbr_pipes && test->final_outfile == NULL)		//write
+	if (cmd->id != test->nbr_pipes && test->final_outfile == NULL)
 	{
 		if (dup2(fd[cmd->id][1], 1) == - 1)
-		{
 			exit (print_error(errno, NULL, test));
-			printf("dup2 failed write\n");
-		}
-		if (close(fd[cmd->id][1]) == - 1)			//close write
-			printf("close fd[%d][1] failed write\n", cmd->id);
+		if (close(fd[cmd->id][1]) == - 1)
+			exit (print_error(errno, NULL, test));
 	}
 	execve(cmd->path, cmd->args, envp);
-	printf("execve failed\n");
-	exit(1);
+	//free
+	exit (print_error(errno, NULL, test));
+}
+/*
+	test will be	shell->exec
+	structi will be	shell->table
+*/
+int	pipechain_loop(char **envp, t_list *structi, pid_t *pid, int (*fd)[2], t_exec *test)
+{
+	int		n;
+	t_command	*current_cmd;
+	t_list		*temp;
+
+	n = 0;
+	temp = structi;
+	while (temp != NULL)
+	{
+		current_cmd = (t_command*) temp->content;
+		current_cmd->id = n;
+		if (handle_stuff(envp, current_cmd, test))
+			return (1);
+		pid[n] = fork();
+		if (pid[n] == -1)
+			return (print_error(errno, NULL, test));
+		if (pid[n] == 0)
+			pipe_child(current_cmd, envp, fd, test);
+		temp = temp->next;
+		n++;
+	}
+	return (0);
 }
 
-int	execute_pipe(char **envp, t_list *structi, t_exec *test)
+int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *structi)
+{
+	int	wstatus;
+	int	exit_code;
+	t_list	*temp;
+	t_command	*current_cmd;
+
+	if (close_fds(fd, -1, test->nbr_pipes))
+		exit (print_error(errno, NULL, test));
+	temp = structi;
+	exit_code = 0;
+	int i = 0;
+	while (i <= test->nbr_pipes)
+	{
+		if (waitpid(pid[i], &wstatus, 0) == -1)
+			return (print_error(E_PARENT, NULL, test));
+		if (WIFEXITED(wstatus))
+			exit_code = WEXITSTATUS(wstatus);
+		else
+			return (print_error(E_PARENT, NULL, test));
+		current_cmd = (t_command*) temp->content;
+		if (exit_code != 0)
+			return(print_error(exit_code, current_cmd->args[0], test));
+		temp = temp->next;
+		i++;
+	}
+	return (exit_code);
+}
+
+int	execute_pipechain(char **envp, t_list *structi, t_exec *test)
 {
 	int		fd[test->nbr_pipes][2];
 	pid_t	pid[test->nbr_pipes + 1];
-	t_command	*current_cmd;
 	int		n;
 
 	n = 0;
@@ -90,35 +127,10 @@ int	execute_pipe(char **envp, t_list *structi, t_exec *test)
 			return (printf("pipe failed!\n")); //errorhandling
 		n++;
 	}
-	n = 0;
-	while (structi != NULL)
-	{
-		current_cmd = (t_command*) structi->content;
-		current_cmd->id = n;
-		if (handle_stuff(envp, current_cmd, test))
-			return (1);
-		pid[n] = fork();
-		if (pid[n] == -1)
-			return (print_error(errno, NULL, test));
-		if (pid[n] == 0)
-			pipe_child(current_cmd, envp, fd, test);
-		structi = structi->next;
-		n++;
-	}
-	if (close_fds_parent(fd, test->nbr_pipes))
-		return (1); //todo
-	int i = 0;
-	while (i <= test->nbr_pipes)
-	{
-		waitpid(pid[i], NULL, 0);	//todo: safe exit_code
-		i++;
-	}
+	if (pipechain_loop(envp, structi, pid, fd, test))
+		return (2); //close fds? free?
+
+	// pipe_parent(pid, fd, test, structi)
+
 	return (0);
 }
-
-// int main(int ergc, char **argv, char **envp)
-// {
-// 	execute_pipe(envp, NULL, NULL);
-// 	return (0);
-// }
-

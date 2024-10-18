@@ -31,7 +31,10 @@ int	custom_error(int err_no)
 		return (126);
 	}
 	else if(err_no == E_ISDIRECTORY)
+	{
 		ft_putstr_fd("Is a directory\n", 2);
+		err_no = 1;
+	}
 	return (err_no);
 }
 
