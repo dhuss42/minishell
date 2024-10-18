@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 14:31:17 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 14:43:05 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,6 @@ int	execute_pipechain(char **envp, t_list *structi, t_exec *test)
 	if (pipechain_loop(envp, structi, pid, fd, test))
 		return (2); //close fds? free?
 
-	// pipe_parent(pid, fd, test, structi)
-
+	pipe_parent(pid, fd, test, structi);
 	return (0);
 }

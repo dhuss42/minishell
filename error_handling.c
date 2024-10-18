@@ -43,6 +43,11 @@ int	custom_error(int err_no)
 */
 int	print_error(int err_no, char *str, t_exec *test)
 {
+	if (err_no == 1)
+	{
+		test->exit_code = err_no;
+		return (err_no);
+	}
 	ft_putstr_fd("minishell: ", 2);
 	if (str)
 	{
