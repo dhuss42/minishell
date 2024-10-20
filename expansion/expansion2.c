@@ -187,7 +187,7 @@ void	get_expanded_2(char *variable, char **env, t_command *row, t_shell *expand)
 	printf(YELLOW"address exp: %p\n"WHITE, exp);
 	if (!exp)
 	{
-		exp = "";
+		exp = ft_strdup("");
 		// row->args[*i][*k] = '\0';
 		// ft_bzero(row->args[*i], ft_strlen(row->args[*i])); // should not be setting to zero because of $PATH$a$HOME
 		// free(row->args[*i]);

@@ -66,11 +66,11 @@ bool	contains_dollar(char *str, size_t i)
 
 void	which_quotes(t_command *row, t_shell *expand, char **env)
 {
-	char	*tmp;
+	// char	*tmp;
 
 	expand->k = 0;
 	// size_t round = 0;
-	tmp = NULL;
+	// tmp = NULL;
 	printf("TEST2\n");
 	while (row->args[expand->i][expand->k] != '\0') // going through string
 	{
@@ -80,40 +80,6 @@ void	which_quotes(t_command *row, t_shell *expand, char **env)
 		if (row->args[expand->i][expand->k] == '\"' && contains_dollar(row->args[expand->i], expand->k))
 		{
 			quotes(row, expand, env);
-			/* printf("IN HERE\n");
-			k++;
-			while (row->args[*i][k] != '\"' && row->args[*i][k] != '\0')
-			{
-				// while (row->args[*i][k] != '\0' && row->args[*i][k] != '$')
-				// {
-				// 	printf(MAGENTA"skipping leading $: %c \n"WHITE, (row->args[*i][k]));
-				// 	k++;
-				// }
-				if (row->args[*i][k] == '\0')
-					break ;
-				// printf(MAGENTA"round [%zu]\n"WHITE, round++);
-				// printf(MAGENTA"current char: %c \n"WHITE, (row->args[*i][k]));
-				if (row->args[*i][k] == '$' && ft_isalnum(row->args[*i][k + 1]))
-				{
-					tmp = tmp_dollar(row, i, &k);
-					// printf("tmp_dollar: {%s}\n", tmp);
-					get_expanded_2(tmp, env, row, i, &k);
-					// printf("after get_expanded row->args[*i]: %s\n", row->args[*i]);
-					// printf("TEST18\n");
-				}
-				if (tmp)
-				{
-					// printf("TEST19\n");
-					// printf(YELLOW"address tmp in which_quotes: %p\n"WHITE, tmp);
-					free(tmp);
-					// printf("TEST19.1\n");
-					tmp = NULL;
-				}
-				// printf(MAGENTA"before end of loop current char: %c \n"WHITE, (row->args[*i][k]));
-				if (!(row->args[*i][k] == '$' && ft_isalnum(row->args[*i][k + 1])))
-					k++;
-				// printf(MAGENTA"after end of loop current char: %c \n"WHITE, (row->args[*i][k]));
-			} */
 		}
 		else if (row->args[expand->i][expand->k] == '\'' && contains_dollar(row->args[expand->i], expand->k) && should_expand(row->args[expand->i], expand->k))
 		{
@@ -200,7 +166,7 @@ bool	check_for_quotes(t_list *table, char **env)
 //"$PATH$HOME$"
 // --> solved
 //"$PATH$HOME$a"
-// --> does not work
+// --> works
 //"$PATH$HOME$$?"
 // --> works
 
@@ -208,7 +174,7 @@ bool	check_for_quotes(t_list *table, char **env)
 // --> works
 //"$$$PATH$$$HOME$$"
 // --> works
-//"PATH"
+//$$$PATH$$$HOME$$
 // --> works
 //"$"
 // --> returns empty string
@@ -227,4 +193,3 @@ bool	check_for_quotes(t_list *table, char **env)
 // "$PATH$a$HOME"
 // --> setting exp to "" works
 
-// allocate the empty string so it can be freed
