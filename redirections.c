@@ -6,14 +6,14 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:38:08 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/21 14:55:46 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 16:17:36 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 /*-------------------------------------------------------------
-
+duplicate fd from final infile to stdin
 ---------------------------------------------------------------*/
 int	redirect_input(t_exec *test)
 {
@@ -32,7 +32,7 @@ int	redirect_input(t_exec *test)
 }
 
 /*-------------------------------------------------------------
-
+duplicate fd from final outfile to stdout
 ---------------------------------------------------------------*/
 int	redirect_output(t_exec *test)
 {
@@ -55,11 +55,10 @@ int	redirect_output(t_exec *test)
 }
 
 /*-------------------------------------------------------------
-
+Execute redirections for each row in table
 ---------------------------------------------------------------*/
 int	exec_redirections(t_command example, t_exec *test)
 {
-
 	if (test->final_outfile && test->final_out_red)
 	{
 		if (redirect_output(test))

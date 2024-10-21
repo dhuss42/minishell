@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/21 14:54:50 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 16:24:56 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ bool	cmd_is_path(char *cmd)
 
 /*-------------------------------------------------------------
 Check if path / command is valid before writing it to path
+for each row in table
 ---------------------------------------------------------------*/
 char	*get_check_path(char *cmd, char **envp, t_exec *test)
 {
@@ -71,6 +72,6 @@ int	handle_stuff(char **envp, t_command *example, t_exec *test)
 		return (3);
 	example->path = get_check_path(example->args[0], envp, test);
 	if (!example->path)
-		return (3);
+		return (4);
 	return (0);
 }

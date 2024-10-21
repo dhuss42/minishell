@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/21 15:49:43 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 16:19:12 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	execute_single_command(char **envp, t_command *example, t_exec *test)
 {
 	pid_t	id;
 
-	if (handle_stuff(envp, example, test))
+	if (handle_stuff(envp, example, test))	//rm
 		return (1);
 	id = fork();
 	if (id == -1)
@@ -80,13 +80,14 @@ int	executor(char **envp, t_list *structi, t_exec *test)
 {
 	t_command	*current_cmd;
 
+	//handle stuff(strcuti)
 	test->nbr_pipes = ft_lstsize(structi) - 1;
 	if (test->nbr_pipes == 0)
 	{
 		current_cmd = (t_command*) structi->content;
-		if (execute_single_command(envp, current_cmd, test))
+		if (execute_single_command(envp, current_cmd, test))	//create function for this
 		{
-			if (access("tmp/heredoc_temp", F_OK) == 0)
+			if (access("tmp/heredoc_temp", F_OK) == 0)		//for each row in table
 			{
 				if (unlink("tmp/heredoc_temp"))
 					print_error(errno, NULL, test);

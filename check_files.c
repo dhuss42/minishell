@@ -6,14 +6,14 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/21 15:40:53 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 16:12:02 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 /*-------------------------------------------------------------
-
+create file with read/write permission
 ---------------------------------------------------------------*/
 int	create_file(char *filename, t_exec *test)
 {
@@ -31,7 +31,7 @@ int	create_file(char *filename, t_exec *test)
 }
 
 /*-------------------------------------------------------------
-
+check if infile exists and there is permission to read file
 ---------------------------------------------------------------*/
 int	check_input_files(t_command example, t_exec *test, int i)
 {
@@ -48,7 +48,9 @@ int	check_input_files(t_command example, t_exec *test, int i)
 }
 
 /*-------------------------------------------------------------
-
+check if outfile exists, if not create it
+check if its a directory
+check if there is permission to write into file
 ---------------------------------------------------------------*/
 int	check_output_files(t_command example, t_exec *test, int i)
 {
@@ -70,7 +72,7 @@ int	check_output_files(t_command example, t_exec *test, int i)
 }
 
 /*-------------------------------------------------------------
-
+Check all files for each row in the table
 ---------------------------------------------------------------*/
 int	check_files(t_command example, t_exec *test)
 {

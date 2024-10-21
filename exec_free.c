@@ -6,14 +6,14 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/21 14:56:00 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 16:22:19 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 /*-------------------------------------------------------------
-
+free double-pointer
 ---------------------------------------------------------------*/
 void	free_double(char **to_free)
 {
@@ -32,7 +32,7 @@ void	free_double(char **to_free)
 }
 
 /*-------------------------------------------------------------
-
+Used in find_path
 ---------------------------------------------------------------*/
 void	free_paths(char **split_paths, char **append)
 {
@@ -49,7 +49,7 @@ void	free_paths(char **split_paths, char **append)
 // }
 
 /*-------------------------------------------------------------
-
+free all pointers of a row
 ---------------------------------------------------------------*/
 int	free_row(t_command *cmd)	//usefull for whole project
 {
@@ -70,6 +70,9 @@ int	free_row(t_command *cmd)	//usefull for whole project
 	return (1);
 }
 
+/*-------------------------------------------------------------
+Free and set to NULL all pointers of whole table
+---------------------------------------------------------------*/
 int	free_table(t_list *table)
 {
 	t_list	*tmp;

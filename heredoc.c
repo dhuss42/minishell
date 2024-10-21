@@ -6,12 +6,16 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/21 15:07:37 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 16:15:04 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
+/*-------------------------------------------------------------
+create one temporary file for each row if there is a heredoc
+write until delimiter into file
+---------------------------------------------------------------*/
 static int	handle_heredoc_input(t_exec *test, char *delimiter)
 {
 	char	*line;
@@ -36,6 +40,9 @@ static int	handle_heredoc_input(t_exec *test, char *delimiter)
 	return (0);
 }
 
+/*-------------------------------------------------------------
+Go through table and handle each heredoc in each row
+---------------------------------------------------------------*/
 int	handle_heredoc(t_command cmd, t_exec *test)
 {
 	int		i;
