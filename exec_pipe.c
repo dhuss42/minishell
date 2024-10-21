@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 16:29:38 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:49:30 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int	pipechain_loop(char **envp, t_list *structi, pid_t *pid, int (*fd)[2], t_exe
 
 /*-------------------------------------------------------------
 Parent handler for pipechain
+why extra exit code and not directly test->exit_code??
 ---------------------------------------------------------------*/
 int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *structi)
 {
@@ -119,8 +120,10 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *structi)
 		else
 			return (print_error(E_PARENT, NULL, test));
 		current_cmd = (t_command*) temp->content;
-		if (exit_code != 0)
+		if (exit_code > 0)	//check if right
 			return(print_error(exit_code, current_cmd->args[0], test));
+		if (exit_code == 1)
+			test->exit_code = 1;	//return
 		temp = temp->next;
 		i++;
 	}

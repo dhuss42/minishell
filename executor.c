@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/21 15:12:27 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:49:43 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ Handle parent for single command
 waitpid() blocks until the child process terminates or until a signal occurs
 WIFEXITED(wstatus) macro checks if the process exited normally
 WEXITwSTATUS(wstatus) extracts the exit wstatus value from the wstatus argument
+
+why extra exit code and not directly test->exit_code??
 ---------------------------------------------------------------*/
 int	single_parent(pid_t id, char* cmd, t_exec *test)
 {
@@ -30,8 +32,10 @@ int	single_parent(pid_t id, char* cmd, t_exec *test)
 			exit_code = WEXITSTATUS(wstatus);
 	else
 		return (print_error(E_PARENT, NULL, test));
-	if (exit_code != 0)
+	if (exit_code > 1)	//check if thats right
 		return(print_error(exit_code, cmd, test));
+	if (exit_code == 1)
+		test->exit_code = 1;
 	return (exit_code);
 }
 
@@ -81,12 +85,31 @@ int	executor(char **envp, t_list *structi, t_exec *test)
 	{
 		current_cmd = (t_command*) structi->content;
 		if (execute_single_command(envp, current_cmd, test))
+		{
+			if (access("tmp/heredoc_temp", F_OK) == 0)
+			{
+				if (unlink("tmp/heredoc_temp"))
+					print_error(errno, NULL, test);
+			}
 			return (free_row(current_cmd));
+		}
 	}
 	else if (test->nbr_pipes > 0)
 	{
 		if (execute_pipechain(envp, structi, test))
+		{
+			if (access("tmp/heredoc_temp", F_OK) == 0)
+			{
+				if (unlink("tmp/heredoc_temp"))
+					print_error(errno, NULL, test);
+			}
 			return (free_table(structi));
+		}
+	}
+	if (access("tmp/heredoc_temp", F_OK) == 0)
+	{
+		if (unlink("tmp/heredoc_temp"))
+			print_error(errno, NULL, test);
 	}
 	return (test->exit_code);
 }
@@ -112,14 +135,14 @@ int main (int argc, char **argv, char **envp)
 	t_exec test;
 	// t_command	*current_cmd;
 	t_list	*structi = NULL;
-	t_list	*second = NULL;
+	// t_list	*second = NULL;
 	// t_list	*third = NULL;
 	// t_list	*fourth = NULL;
 	// t_list	*temp = NULL;
 
-	structi = create_example("cat", "<< < <<", "achso temp end");
-	second = create_example("grep o", "", "");
-	ft_lstadd_back(&structi, second);
+	structi = create_example("grep o", "<", "libft");
+	// second = create_example("grep o", "", "");
+	// ft_lstadd_back(&structi, second);
 	// third = create_example("grep exec", "", "");
 	// ft_lstadd_back(&structi, third);
 	// fourth = create_example("grep free", "<", "libft");
