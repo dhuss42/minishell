@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 16:32:22 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 14:54:50 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,12 @@ int	handle_stuff(char **envp, t_command *example, t_exec *test)
 {
 	// if (is_built_in)
 	// 	ecexute_builtin();
-	// handle heredoc
-	if (check_files(*example, test))
+	if (handle_heredoc(*example, test))
 		return (1);
-	if (exec_redirections(*example, test))
+	if (check_files(*example, test))
 		return (2);
+	if (exec_redirections(*example, test))
+		return (3);
 	example->path = get_check_path(example->args[0], envp, test);
 	if (!example->path)
 		return (3);

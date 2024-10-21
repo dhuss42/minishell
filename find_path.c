@@ -6,12 +6,15 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:24:16 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/07 13:54:14 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/18 16:47:38 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
+/*-------------------------------------------------------------
+Allocate memory for double-array
+---------------------------------------------------------------*/
 char	**allocate_append_array(char **split_paths)
 {
 	int		j;
@@ -24,6 +27,9 @@ char	**allocate_append_array(char **split_paths)
 	return (append);
 }
 
+/*-------------------------------------------------------------
+Concatenate path and command
+---------------------------------------------------------------*/
 char	*concatenate_path_cmd(char *path, char *cmd)
 {
 	char	*slash;
@@ -37,10 +43,10 @@ char	*concatenate_path_cmd(char *path, char *cmd)
 	return (full_path);
 }
 
-/*
-	for each possible path in split_paths**:
-	concatinate path + '/' + command --> /usr/bin + '/' + ls = /usr/bin/ls
-*/
+/*-------------------------------------------------------------
+Add slash '/' to each possible path in split_paths**:
+concatinate path + '/' + command --> /usr/bin + '/' + ls = /usr/bin/ls
+---------------------------------------------------------------*/
 char	**add_slash_cmd(char **split_paths, char *cmd)
 {
 	int		i;
@@ -60,11 +66,13 @@ char	**add_slash_cmd(char **split_paths, char *cmd)
 	append[i] = NULL;
 	return (append);
 }
-/*
-	X_OK for execute/search permission
-	F_OK existence test
-	0 sucessful
-*/
+
+/*-------------------------------------------------------------
+check if cmd exists and is executable
+X_OK for execute/search permission
+F_OK existence test
+0 sucessful
+---------------------------------------------------------------*/
 char	*check_cmd(char **cmd)
 {
 	int	i;
@@ -79,11 +87,12 @@ char	*check_cmd(char **cmd)
 	return (NULL);
 }
 
-/*
-	get all env paths where command could be
-	get first '/' and split into small paths between the ':'
-	/usr/local/bin:/usr/bin: --> /usr/local/bin  --  /usr/bin
-*/
+/*-------------------------------------------------------------
+Add path to command
+get all env paths where command could be
+get first '/' and split into small paths between the ':'
+/usr/local/bin:/usr/bin: --> /usr/local/bin  --  /usr/bin
+---------------------------------------------------------------*/
 char	*get_path(char *cmd, char **envp)
 {
 	char	*big_path;

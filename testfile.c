@@ -10,21 +10,33 @@
 
 int main()
 {
+	char *line;
+	char *delimiter;
 	int fd;
-	struct stat sb;
-	char **str = NULL;
 
-	fd = open("out3", O_RDONLY | O_APPEND | O_CREAT, 0000);
-	if (stat("/out", &sb) == -1)
-		return (printf("failed\n"));
-	if (S_ISDIR(sb.st_mode))
-		return (printf("IS DIRECTORY!!!\n"));
-	if (access("out", W_OK) == -1)
-		return (printf("NOPERMITS!\n"));
-	else
-		printf("Amsel\n");
-	dup2(fd, 1);
-	close(fd);
-	printf("I am writing !");
+	fd = open("temp", O_WRONLY | O_CREAT | O_TRUNC, 0640);
+	if (fd == -1)
+		return (printf("error\n"));
+	delimiter = strdup("eof");
+	while (1)
+	{
+		line = readline("> ");
+		if (strcmp(line, delimiter) == 0)
+		{
+			free (line);
+			break ;
+		}
+		else
+		{
+			ft_putstr_fd(line, fd);
+			ft_putstr_fd("\n", fd);
+		}
+	}
+	// fd = open("temp", O_RDONLY);
+	// while (line = get_next_line(fd))
+	// {
+	// 	printf()
+	// }
+
 	return (0);
 }

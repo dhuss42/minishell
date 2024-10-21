@@ -6,12 +6,15 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 16:21:45 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 14:56:00 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
+/*-------------------------------------------------------------
+
+---------------------------------------------------------------*/
 void	free_double(char **to_free)
 {
 	int	i;
@@ -28,6 +31,9 @@ void	free_double(char **to_free)
 	to_free = NULL;
 }
 
+/*-------------------------------------------------------------
+
+---------------------------------------------------------------*/
 void	free_paths(char **split_paths, char **append)
 {
 	if (split_paths)
@@ -36,6 +42,15 @@ void	free_paths(char **split_paths, char **append)
 		free_double(append);
 }
 
+// void	free_exec(t_exec *exec)
+// {
+// 	if (exec->heredoc_del)
+// 		free_double(exec);
+// }
+
+/*-------------------------------------------------------------
+
+---------------------------------------------------------------*/
 int	free_row(t_command *cmd)	//usefull for whole project
 {
 	if (cmd->args)
@@ -71,6 +86,8 @@ int	free_table(t_list *table)
 		free(tmp);
 		tmp = next;
 	}
+	// if (table->exec)
+	// 	free_exec(exec);
 	table = NULL;
 	return (1);
 }

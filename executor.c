@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 16:38:23 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:12:27 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,19 +113,17 @@ int main (int argc, char **argv, char **envp)
 	// t_command	*current_cmd;
 	t_list	*structi = NULL;
 	t_list	*second = NULL;
-	t_list	*third = NULL;
-	t_list	*fourth = NULL;
+	// t_list	*third = NULL;
+	// t_list	*fourth = NULL;
 	// t_list	*temp = NULL;
 
-	structi = create_example("ls", "", "");
-	// temp = structi;
-	// structi = structi->next;
+	structi = create_example("cat", "<< < <<", "achso temp end");
 	second = create_example("grep o", "", "");
 	ft_lstadd_back(&structi, second);
-	third = create_example("grep exec", "", "");
-	ft_lstadd_back(&structi, third);
-	fourth = create_example("grep free", "<", "libft");
-	ft_lstadd_back(&structi, fourth);
+	// third = create_example("grep exec", "", "");
+	// ft_lstadd_back(&structi, third);
+	// fourth = create_example("grep free", "<", "libft");
+	// ft_lstadd_back(&structi, fourth);
 	// current_cmd = (t_command *) temp->content;
 	// printf("temp\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
 	// current_cmd = (t_command *) structi->content;

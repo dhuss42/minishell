@@ -6,12 +6,15 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/16 15:12:40 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:10:54 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
+/*-------------------------------------------------------------
+
+---------------------------------------------------------------*/
 int	create_file(char *filename, t_exec *test)
 {
 	int	fd;
@@ -27,20 +30,26 @@ int	create_file(char *filename, t_exec *test)
 	return (0);
 }
 
+/*-------------------------------------------------------------
+
+---------------------------------------------------------------*/
 int	check_input_files(t_command example, t_exec *test, int i)
 {
-	if (access(example.filename[i], F_OK) == -1)
-		return (print_error(EPERM, example.filename[i], test));
-	else if (access(example.filename[i], R_OK) == -1)
-		return (print_error(EPERM, example.filename[i], test));
-	else
+	if (example.red_symbol[i][1] == '\0')
 	{
-		test->final_infile = example.filename[i];
-		test->final_in_red = example.red_symbol[i];
+		if (access(example.filename[i], F_OK) == -1)
+			return (print_error(EPERM, example.filename[i], test));
+		else if (access(example.filename[i], R_OK) == -1)
+			return (print_error(EPERM, example.filename[i], test));
 	}
+	test->final_infile = example.filename[i];
+	test->final_in_red = example.red_symbol[i];
 	return (0);
 }
 
+/*-------------------------------------------------------------
+
+---------------------------------------------------------------*/
 int	check_output_files(t_command example, t_exec *test, int i)
 {
 	struct stat filestat;
@@ -60,6 +69,9 @@ int	check_output_files(t_command example, t_exec *test, int i)
 	return (0);
 }
 
+/*-------------------------------------------------------------
+
+---------------------------------------------------------------*/
 int	check_files(t_command example, t_exec *test)
 {
 	int	i;
@@ -78,18 +90,10 @@ int	check_files(t_command example, t_exec *test)
 				if (check_output_files(example, test, i))
 					return (1);
 			}
-			else if (example.red_symbol[i] && example.red_symbol[i][0] == '<'
-				&& example.red_symbol[i][1] == '\0')
+			else if (example.red_symbol[i] && example.red_symbol[i][0] == '<')
 			{
 				if (check_input_files(example, test, i))
 					return (2);
-			}
-			else if (example.red_symbol[i] && example.red_symbol[i][0] == '<'
-				&& example.red_symbol[i][1] == '<')
-			{
-				//heredoc implementation
-				printf("Not handeling heredoc yet\n");
-				return (3);
 			}
 			i++;
 		}

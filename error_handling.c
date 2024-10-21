@@ -12,6 +12,9 @@
 
 #include "executor.h"
 
+/*-------------------------------------------------------------
+
+---------------------------------------------------------------*/
 int	custom_error(int err_no)
 {
 	if (err_no == E_PATH)
@@ -38,16 +41,17 @@ int	custom_error(int err_no)
 	return (err_no);
 }
 
-/*
-
-*/
+/*-------------------------------------------------------------
+if binary from command failed, for example for "Is a directory"
+--> how to stop printing "No such file or directory"?!
+---------------------------------------------------------------*/
 int	print_error(int err_no, char *str, t_exec *test)
 {
-	if (err_no == 1)
-	{
-		test->exit_code = err_no;
-		return (err_no);
-	}
+	// if (err_no == 1)
+	// {
+	// 	test->exit_code = err_no;
+	// 	return (err_no);
+	// }
 	ft_putstr_fd("minishell: ", 2);
 	if (str)
 	{

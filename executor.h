@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 16:38:10 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:11:08 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <stdlib.h>
-#include <errno.h>
+# include <errno.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
-#include "./libft/libft.h"
+# include "./libft/libft.h"
 
 typedef enum e_custom_err
 {
@@ -62,15 +64,6 @@ typedef struct s_shell
 	char		**envp;
 } t_shell;
 
-// typedef struct s_get_path
-// {
-// 	char	*big_path;
-// 	char	**split_paths;
-// 	char	**append;
-// 	char	*move;
-// 	// char	*path;
-// }	t_get_path;
-
 char	*get_path(char *cmd, char **envp);
 void	free_paths(char **split_paths, char **append);
 int		print_error(int err_no, char *str, t_exec *test);
@@ -82,5 +75,6 @@ int		execute_pipechain(char **envp, t_list *structi, t_exec *test);
 int		handle_stuff(char **envp, t_command *example, t_exec *test);
 char	*get_check_path(char *cmd, char **envp, t_exec *test);
 int		free_table(t_list *table);
+int		handle_heredoc(t_command cmd, t_exec *test);
 
 #endif
