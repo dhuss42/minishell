@@ -22,5 +22,6 @@ t_list *expansion(t_list *table, char **env) // change to our env
 	return (NULL);
 }
 
-// "$PATH"HOME'$HOME'''$HOME''
-// --> maybe iteration problem
+
+// '$PATH'''$HOME''
+// --> '$PATH' is being replaced by $HOME

@@ -90,16 +90,25 @@ void	switcheroo(t_command *row, char *exp, t_shell *expand)
 	tmp = ft_calloc(len + 1, sizeof(char));
 	if (!tmp)
 		return ;
-
+	printf(YELLOW"[%zu]current char quote: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
 	while(row->args[expand->i][expand->j] != '\0' && !(row->args[expand->i][expand->j] == '$' && ft_isalnum(row->args[expand->i][expand->j + 1])))
+	{
+		printf(MAGENTA"[%zu]current char quote in loop: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
 		tmp[iterate++] = row->args[expand->i][expand->j++];
+	}
 	expand->j++;
-
+	printf(YELLOW"[%zu]current char quote: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
 	while(row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != '$' && !is_quotes(row->args[expand->i][expand->j]))
+	{
+		printf(MAGENTA"[%zu]current char quote in loop: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
 		expand->j++;
-
+	}
+	printf(YELLOW"[%zu]current char quote: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
 	while (exp[index] != '\0')
+	{
+		printf(MAGENTA"[%zu]current char quote in loop: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
 		tmp[iterate++] = exp[index++];
+	}
 
 	if (exp)
 		free(exp);
@@ -107,8 +116,11 @@ void	switcheroo(t_command *row, char *exp, t_shell *expand)
 	expand->k = iterate;
 
 	while (row->args[expand->i][expand->j] != '\0')
+	{
+		printf(MAGENTA"[%zu]current char quote in loop: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
 		tmp[iterate++] = row->args[expand->i][expand->j++];
-
+	}
+	printf(YELLOW"[%zu]current char quote: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
 	tmp[iterate] = '\0';
 	printf("tmp: %s\n", tmp);
 

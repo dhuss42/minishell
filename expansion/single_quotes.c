@@ -50,13 +50,17 @@ void	quotes(t_command *row, t_shell *expand, char **env)
 
 	tmp = NULL;
 	expand->quote = row->args[expand->i][expand->k];
+	printf(YELLOW"[%zu]current char quote: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
 	while (row->args[expand->i][expand->k] == expand->quote && counter != 2)
 	{
+		printf(BLUE"[%zu]current char quote in loop: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
 		expand->k++;
 		counter++;
 	}
+	printf(YELLOW"[%zu]current char quote: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
 	while (row->args[expand->i][expand->k] != expand->quote && row->args[expand->i][expand->k] != '\0' && counter != 2)
 	{
+		printf(BLUE"[%zu]current char quote in loop: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
 		if (row->args[expand->i][expand->k] == '\0')
 			break ;
 		if (row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1]))

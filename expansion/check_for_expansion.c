@@ -14,9 +14,9 @@
 
 bool	is_quotes(char c)
 {
-	if (c == '\"')
-		return (true);
 	if (c == '\'')
+		return (true);
+	if (c == '\"')
 		return (true);
 	return (false);
 }
