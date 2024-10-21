@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/18 17:02:26 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/21 16:00:52 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,37 +45,35 @@ bool	should_expand(char *str, size_t k)
 
 void	quotes(t_command *row, t_shell *expand, char **env)
 {
-	char	quote;
 	char	*tmp;
+	size_t	counter = 0;
 
 	tmp = NULL;
-	quote = row->args[expand->i][expand->k];
-	expand->k++;
-	while (row->args[expand->i][expand->k] != quote && row->args[expand->i][expand->k] != '\0')
+	expand->quote = row->args[expand->i][expand->k];
+	while (row->args[expand->i][expand->k] == expand->quote && counter != 2)
+	{
+		expand->k++;
+		counter++;
+	}
+	while (row->args[expand->i][expand->k] != expand->quote && row->args[expand->i][expand->k] != '\0' && counter != 2)
 	{
 		if (row->args[expand->i][expand->k] == '\0')
-		{
-			printf("TEST19\n");
 			break ;
-		}
 		if (row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1]))
 		{
 			tmp = tmp_dollar(row, expand);
-			get_expanded_2(tmp, env, row, expand);
-		}
-		if (tmp)
-		{
-			free(tmp);
-			tmp = NULL;
+			get_expanded(tmp, env, row, expand);
+			if (tmp)
+			{
+				free(tmp);
+				tmp = NULL;
+				expand->k++;
+				break ;
+			}
 		}
 		if (!(row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1])))
 		{
-			printf("row->args[expand->i][k]: %c\n", row->args[expand->i][expand->k - 1]);
-			printf("TEST20\n");
 			expand->k++;
 		}
 	}
 }
-
-// not implemented yet, need to fix issues with the break loop
-// maybe just use a struct

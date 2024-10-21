@@ -1,7 +1,7 @@
 
 #include "../minishell_eichhoernchen.h"
 
-// ---for-debugging------/ 
+// ---for-debugging------/
 // size_t	get_len(char *str)
 // {
 // 	t_shell	nbr;
@@ -93,7 +93,7 @@
 // 			printf("len: %zu\n", nbr.len);
 // 		}
 // 	}
-// 	return (nbr.len); 
+// 	return (nbr.len);
 // }
 
 
