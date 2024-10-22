@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 11:45:13 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 12:22:14 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	executor(char **envp, t_list *table, t_exec *test)
 	t_command	*current_cmd;
 
 	if (handle_stuff(envp, table, test))
-		return (1);	//free and close function
+		return (1);	//free and close files
 	test->nbr_pipes = ft_lstsize(table) - 1;
 	if (test->nbr_pipes == 0)
 	{
@@ -138,14 +138,14 @@ int main (int argc, char **argv, char **envp)
 	t_shell shell;
 	// t_command	*current_cmd;
 	shell.table = NULL;
-	// t_list	*second = NULL;
+	t_list	*second = NULL;
 	// t_list	*third = NULL;
 	// t_list	*fourth = NULL;
 	// t_list	*temp = NULL;
 
-	shell.table = create_example("cat", "<<", "a");
-	// second = create_example("grep o", "", "");
-	// ft_lstadd_back(&shell.table, second);
+	shell.table = create_example("cat", "<<", "h");
+	second = create_example("grep o", "", "");
+	ft_lstadd_back(&shell.table, second);
 	// third = create_example("grep exec", "", "");
 	// ft_lstadd_back(&shell.table, third);
 	// fourth = create_example("grep free", "<", "libft");

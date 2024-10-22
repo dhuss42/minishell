@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 11:07:57 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 12:21:48 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *table)
 		if (WIFEXITED(wstatus))
 			exit_code = WEXITSTATUS(wstatus);
 		else
-			return (print_error(E_PARENT, NULL, test));
+			return (1);
+			// return (print_error(E_PARENT, NULL, test));
 		row = (t_command*) tmp->content;	//direkt tmp->content->args[0] uebergeben?
 		if (exit_code > 0)	//check if right
 			return(print_error(exit_code, row->args[0], test));
@@ -78,6 +79,7 @@ Child handler for pipechain
 ---------------------------------------------------------------*/
 void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list *table)
 {
+	// printf("%d path: %s\n", row->id, row->path);
 	if (close_fds(fd, row->id, test->nbr_pipes))
 		exit (print_error(errno, NULL, test));
 	if (row->id != 0 && row->final_infile == NULL)
@@ -97,6 +99,7 @@ void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list 
 	execve(row->path, row->args, envp);
 	free_table(table);
 	(void)table;
+	printf("child %d failed\n", row->id);
 	exit (print_error(errno, NULL, test));
 }
 
@@ -116,9 +119,6 @@ int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2], t_exec 
 	while (tmp != NULL)
 	{
 		row = (t_command*) tmp->content;
-		row->id = n;
-		// if (handle_stuff(envp, row, test))	//remove
-		// 	return (1);
 		pid[n] = fork();
 		if (pid[n] == -1)
 			return (print_error(errno, NULL, test));

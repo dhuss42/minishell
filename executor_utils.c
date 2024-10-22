@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 11:59:51 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 12:21:38 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,26 +29,26 @@ for each row in table
 ---------------------------------------------------------------*/
 int	get_check_path(t_list *table, char **envp, t_exec *test)
 {
-	t_list	*tmp;
-	t_command	*current_row;
+	t_list		*tmp;
+	t_command	*row;
 
 	tmp = table;
 	while (tmp)
 	{
-		current_row = (t_command *)table->content;
-		current_row->path = NULL;
-		current_row->path = get_path(current_row->args[0], envp);
-		if (!current_row->path)
+		row = (t_command *)tmp->content;
+		row->path = NULL;
+		row->path = get_path(row->args[0], envp);
+		if (!row->path)
 			return (print_error(E_PATH, NULL, test));
-		else if (access(current_row->path, F_OK) != 0)
+		else if (access(row->path, F_OK) != 0)
 		{
-			if (cmd_is_path(current_row->args[0]))
-				return (print_error(E_FILENOEXIST, current_row->args[0], test));
+			if (cmd_is_path(row->args[0]))
+				return (print_error(E_FILENOEXIST, row->args[0], test));
 			else
-				return (print_error(127, current_row->args[0], test));
+				return (print_error(127, row->args[0], test));
 		}
-		else if (access(current_row->path, X_OK) != 0)
-			return (print_error(E_NOPERMISSION, current_row->args[0], test));
+		else if (access(row->path, X_OK) != 0)
+			return (print_error(E_NOPERMISSION, row->args[0], test));
 		tmp = tmp->next;
 	}
 	return (0);

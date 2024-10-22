@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 11:56:48 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 12:19:20 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,16 @@ Go through table and handle each heredoc in each row
 int	handle_heredoc(t_list *table, t_exec *test)
 {
 	int			i;
+	int			id;
 	t_list		*tmp;
 	t_command	*row;
 
 	tmp = table;
+	id = 0;
 	while(tmp)
 	{
 		row = (t_command *) tmp->content;
+		row->id = id;
 		if (!row->red_symbol || !row->filename)
 			return (1);
 		i = 0;
@@ -81,6 +84,7 @@ int	handle_heredoc(t_list *table, t_exec *test)
 			i++;
 		}
 		tmp = tmp->next;
+		id++;
 	}
 	return (0);
 	// if (cmd.red_symbol && cmd.filename)
