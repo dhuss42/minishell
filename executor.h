@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 09:27:17 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 11:57:16 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@
 # include <readline/history.h>
 
 # include "./libft/libft.h"
+
+# ifndef BASE_PATH
+#  define BASE_PATH "tmp/heredoc_temp"
+# endif
 
 typedef enum e_custom_err
 {
@@ -44,11 +48,12 @@ typedef struct s_command
 	char	**filename;
 	char	**red_symbol;
 	int		id;
-	char	*path;
+	char	*path;				//to free
 	char	*final_infile;
 	char	*final_outfile;
 	char	*final_in_red;
 	char	*final_out_red;
+	char	*heredoc_file_path;	//to free
 } t_command;
 
 typedef struct	s_exec
@@ -71,14 +76,14 @@ typedef struct s_shell
 char	*get_path(char *cmd, char **envp);
 void	free_paths(char **split_paths, char **append);
 int		print_error(int err_no, char *str, t_exec *test);
-int		check_files(t_command example, t_exec *test);
-int		exec_redirections(t_command example, t_exec *test);
+int		check_files(t_list *table, t_exec *test);
+int		exec_redirections(t_list *table, t_exec *test);
 void	free_double(char **to_free);
 int		free_row(t_command *example);
-int		execute_pipechain(char **envp, t_list *structi, t_exec *test);
-int		handle_stuff(char **envp, t_command *example, t_exec *test);
-char	*get_check_path(char *cmd, char **envp, t_exec *test);
+int		execute_pipechain(char **envp, t_list *table, t_exec *test);
+int		handle_stuff(char **envp, t_list *table, t_exec *test);
+int		get_check_path(t_list *table, char **envp, t_exec *test);
 int		free_table(t_list *table);
-int		handle_heredoc(t_command cmd, t_exec *test);
+int		handle_heredoc(t_list *table, t_exec *test);
 
 #endif

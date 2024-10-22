@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 09:20:02 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 11:45:13 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ int	execute_single_command(char **envp, t_command *row, t_exec *test)
 {
 	pid_t	id;
 
-	if (handle_stuff(envp, row, test))	//rm
-		return (1);
+	// if (handle_stuff(envp, row, test))	//rm
+	// 	return (1);
 	id = fork();
 	if (id == -1)
 		return (print_error(errno, NULL, test));
@@ -80,16 +80,17 @@ int	executor(char **envp, t_list *table, t_exec *test)
 {
 	t_command	*current_cmd;
 
-	handle stuff(table)
+	if (handle_stuff(envp, table, test))
+		return (1);	//free and close function
 	test->nbr_pipes = ft_lstsize(table) - 1;
 	if (test->nbr_pipes == 0)
 	{
 		current_cmd = (t_command*) table->content;
 		if (execute_single_command(envp, current_cmd, test))	//create function for this
 		{
-			if (access("tmp/heredoc_temp", F_OK) == 0)		//for each row in table
+			if (access("tmp/heredoc_temp0", F_OK) == 0)		//for each row-id in table
 			{
-				if (unlink("tmp/heredoc_temp"))
+				if (unlink("tmp/heredoc_temp0"))
 					print_error(errno, NULL, test);
 			}
 			return (free_row(current_cmd));
@@ -97,19 +98,19 @@ int	executor(char **envp, t_list *table, t_exec *test)
 	}
 	else if (test->nbr_pipes > 0)
 	{
-		if (execute_pipechain(envp, structi, test))
+		if (execute_pipechain(envp, table, test))
 		{
-			if (access("tmp/heredoc_temp", F_OK) == 0)
+			if (access("tmp/heredoc_temp0", F_OK) == 0)
 			{
-				if (unlink("tmp/heredoc_temp"))
+				if (unlink("tmp/heredoc_temp0"))
 					print_error(errno, NULL, test);
 			}
-			return (free_table(structi));
+			return (free_table(table));
 		}
 	}
-	if (access("tmp/heredoc_temp", F_OK) == 0)
+	if (access("tmp/heredoc_temp0", F_OK) == 0)
 	{
-		if (unlink("tmp/heredoc_temp"))
+		if (unlink("tmp/heredoc_temp0"))
 			print_error(errno, NULL, test);
 	}
 	return (test->exit_code);
@@ -142,7 +143,7 @@ int main (int argc, char **argv, char **envp)
 	// t_list	*fourth = NULL;
 	// t_list	*temp = NULL;
 
-	shell.table = create_example("grep o", "<", "libft");
+	shell.table = create_example("cat", "<<", "a");
 	// second = create_example("grep o", "", "");
 	// ft_lstadd_back(&shell.table, second);
 	// third = create_example("grep exec", "", "");

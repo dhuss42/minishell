@@ -6,22 +6,37 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/21 16:15:04 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 11:56:48 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 /*-------------------------------------------------------------
+create filepath for each heredoc-temp-file
+---------------------------------------------------------------*/
+char*	generate_file_path(int id)
+{
+	char	*full_path;
+	char	*nbr;
+
+	nbr = ft_itoa(id);
+	full_path = ft_strjoin(BASE_PATH, nbr);
+	free (nbr);
+	return (full_path);
+}
+
+/*-------------------------------------------------------------
 create one temporary file for each row if there is a heredoc
 write until delimiter into file
 ---------------------------------------------------------------*/
-static int	handle_heredoc_input(t_exec *test, char *delimiter)
+static int	handle_heredoc_input(t_exec *test, char *delimiter, t_command *row)
 {
 	char	*line;
 	int		fd;
 
-	fd = open("tmp/heredoc_temp", O_RDWR | O_CREAT | O_TRUNC, 0600);
+	row->heredoc_file_path = generate_file_path(row->id);
+	fd = open(row->heredoc_file_path, O_RDWR | O_CREAT | O_TRUNC, 0600);
 	if (fd == -1)
 		return (print_error(errno, NULL, test));
 	while (1)
@@ -43,22 +58,42 @@ static int	handle_heredoc_input(t_exec *test, char *delimiter)
 /*-------------------------------------------------------------
 Go through table and handle each heredoc in each row
 ---------------------------------------------------------------*/
-int	handle_heredoc(t_command cmd, t_exec *test)
+int	handle_heredoc(t_list *table, t_exec *test)
 {
-	int		i;
+	int			i;
+	t_list		*tmp;
+	t_command	*row;
 
-	if (cmd.red_symbol && cmd.filename)
+	tmp = table;
+	while(tmp)
 	{
+		row = (t_command *) tmp->content;
+		if (!row->red_symbol || !row->filename)
+			return (1);
 		i = 0;
-		while(cmd.red_symbol[i] && cmd.filename[i])
+		while(row->red_symbol[i] && row->filename[i])
 		{
-			if (cmd.red_symbol[i][0] == '<' && cmd.red_symbol[i][1] == '<')
+			if (row->red_symbol[i][0] == '<' && row->red_symbol[i][1] == '<')
 			{
-				if (handle_heredoc_input(test, cmd.filename[i]))
-					return (1);
+				if (handle_heredoc_input(test, row->filename[i], row))
+					return (2);
 			}
 			i++;
 		}
+		tmp = tmp->next;
 	}
 	return (0);
+	// if (cmd.red_symbol && cmd.filename)
+	// {
+	// 	i = 0;
+	// 	while(cmd.red_symbol[i] && cmd.filename[i])
+	// 	{
+	// 		if (cmd.red_symbol[i][0] == '<' && cmd.red_symbol[i][1] == '<')
+	// 		{
+	// 			if (handle_heredoc_input(test, cmd.filename[i]))
+	// 				return (1);
+	// 		}
+	// 		i++;
+	// 	}
+	// }
 }

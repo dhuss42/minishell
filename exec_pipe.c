@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/21 16:20:07 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 11:07:57 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,77 +38,19 @@ int	close_fds(int (*fd)[2], int id, int nbr_pipes)
 }
 
 /*-------------------------------------------------------------
-Child handler for pipechain
---test, structi and envp will be in one struct
----------------------------------------------------------------*/
-void	pipe_child(t_command *cmd, char **envp, int (*fd)[2], t_exec *test, t_list *structi)
-{
-	if (close_fds(fd, cmd->id, test->nbr_pipes))
-		exit (print_error(errno, NULL, test));
-	if (cmd->id != 0 && test->final_infile == NULL)
-	{
-		if (dup2(fd[cmd->id - 1][0], 0) == - 1)
-			exit (print_error(errno, NULL, test));
-		if (close(fd[cmd->id - 1][0]) == - 1)
-			exit (print_error(errno, NULL, test));
-	}
-	if (cmd->id != test->nbr_pipes && test->final_outfile == NULL)
-	{
-		if (dup2(fd[cmd->id][1], 1) == - 1)
-			exit (print_error(errno, NULL, test));
-		if (close(fd[cmd->id][1]) == - 1)
-			exit (print_error(errno, NULL, test));
-	}
-	execve(cmd->path, cmd->args, envp);
-	free_table(structi);
-	(void)structi;
-	exit (print_error(errno, NULL, test));
-}
-
-/*-------------------------------------------------------------
-Loop through all the pipes
---test will be	shell->exec
---structi will be	shell->table
----------------------------------------------------------------*/
-int	pipechain_loop(char **envp, t_list *structi, pid_t *pid, int (*fd)[2], t_exec *test)
-{
-	int		n;
-	t_command	*current_cmd;
-	t_list		*temp;
-
-	n = 0;
-	temp = structi;
-	while (temp != NULL)
-	{
-		current_cmd = (t_command*) temp->content;
-		current_cmd->id = n;
-		if (handle_stuff(envp, current_cmd, test))	//remove
-			return (1);
-		pid[n] = fork();
-		if (pid[n] == -1)
-			return (print_error(errno, NULL, test));
-		if (pid[n] == 0)
-			pipe_child(current_cmd, envp, fd, test, temp);
-		temp = temp->next;
-		n++;
-	}
-	return (0);
-}
-
-/*-------------------------------------------------------------
 Parent handler for pipechain
 why extra exit code and not directly test->exit_code??
 ---------------------------------------------------------------*/
-int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *structi)
+int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *table)
 {
 	int	wstatus;
 	int	exit_code;
-	t_list	*temp;
-	t_command	*current_cmd;
+	t_list	*tmp;
+	t_command	*row;
 
 	if (close_fds(fd, -1, test->nbr_pipes))
 		exit (print_error(errno, NULL, test));
-	temp = structi;
+	tmp = table;
 	exit_code = 0;
 	int i = 0;
 	while (i <= test->nbr_pipes)
@@ -119,21 +61,79 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *structi)
 			exit_code = WEXITSTATUS(wstatus);
 		else
 			return (print_error(E_PARENT, NULL, test));
-		current_cmd = (t_command*) temp->content;
+		row = (t_command*) tmp->content;	//direkt tmp->content->args[0] uebergeben?
 		if (exit_code > 0)	//check if right
-			return(print_error(exit_code, current_cmd->args[0], test));
+			return(print_error(exit_code, row->args[0], test));
 		if (exit_code == 1)
 			test->exit_code = 1;	//return
-		temp = temp->next;
+		tmp = tmp->next;
 		i++;
 	}
 	return (exit_code);
 }
 
 /*-------------------------------------------------------------
+Child handler for pipechain
+--test, table and envp will be in one struct
+---------------------------------------------------------------*/
+void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list *table)
+{
+	if (close_fds(fd, row->id, test->nbr_pipes))
+		exit (print_error(errno, NULL, test));
+	if (row->id != 0 && row->final_infile == NULL)
+	{
+		if (dup2(fd[row->id - 1][0], 0) == - 1)
+			exit (print_error(errno, NULL, test));
+		if (close(fd[row->id - 1][0]) == - 1)
+			exit (print_error(errno, NULL, test));
+	}
+	if (row->id != test->nbr_pipes && row->final_outfile == NULL)
+	{
+		if (dup2(fd[row->id][1], 1) == - 1)
+			exit (print_error(errno, NULL, test));
+		if (close(fd[row->id][1]) == - 1)
+			exit (print_error(errno, NULL, test));
+	}
+	execve(row->path, row->args, envp);
+	free_table(table);
+	(void)table;
+	exit (print_error(errno, NULL, test));
+}
+
+/*-------------------------------------------------------------
+Loop through all the pipes
+--test will be	shell->exec
+--table will be	shell->table
+---------------------------------------------------------------*/
+int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2], t_exec *test)
+{
+	int			n;
+	t_command	*row;
+	t_list		*tmp;
+
+	n = 0;
+	tmp = table;
+	while (tmp != NULL)
+	{
+		row = (t_command*) tmp->content;
+		row->id = n;
+		// if (handle_stuff(envp, row, test))	//remove
+		// 	return (1);
+		pid[n] = fork();
+		if (pid[n] == -1)
+			return (print_error(errno, NULL, test));
+		if (pid[n] == 0)
+			pipe_child(row, envp, fd, test, table);	//fd into exec-struct?
+		tmp = tmp->next;
+		n++;
+	}
+	return (0);
+}
+
+/*-------------------------------------------------------------
 Handle pipechain
 ---------------------------------------------------------------*/
-int	execute_pipechain(char **envp, t_list *structi, t_exec *test)
+int	execute_pipechain(char **envp, t_list *table, t_exec *test)
 {
 	int		fd[test->nbr_pipes][2];
 	pid_t	pid[test->nbr_pipes + 1];
@@ -146,9 +146,9 @@ int	execute_pipechain(char **envp, t_list *structi, t_exec *test)
 			return (print_error(errno, NULL, test)); //errorhandling
 		n++;
 	}
-	if (pipechain_loop(envp, structi, pid, fd, test))
+	if (pipechain_loop(envp, table, pid, fd, test))
 		return (test->exit_code); //close fds? free?
 
-	pipe_parent(pid, fd, test, structi);
+	pipe_parent(pid, fd, test, table);
 	return (test->exit_code);
 }
