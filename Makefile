@@ -6,7 +6,7 @@
 #    By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/03 14:24:16 by maustel           #+#    #+#              #
-#    Updated: 2024/10/21 15:06:54 by maustel          ###   ########.fr        #
+#    Updated: 2024/10/22 13:44:02 by maustel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,5 +44,16 @@ fclean: clean
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
+
+#IF READLINE IS NOT INSTALLED INSTALL IT WITH MAKE COMMAND IN MAC
+rl:
+	@brew install readline
+
+#IF READLINE IS NOT INSTALLED INSTALL IT WITH MAKE LINUX (LINUX ONLY)
+linux: readline_linux_install $(NAME)
+
+#COMMAND TO INSTALL READLINE ON LINUX
+readline_linux_install:
+	apt install libreadline-dev
 
 .PHONY: all clean fclean re

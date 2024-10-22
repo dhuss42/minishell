@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 12:28:12 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 13:49:59 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,11 @@ void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list 
 		if (close(fd[row->id][1]) == - 1)
 			exit (print_error(errno, NULL, test));
 	}
-	execve(row->path, row->args, envp);
-	free_table(table);
-	(void)table;
-	printf("child %d failed\n", row->id);
-	exit (print_error(errno, NULL, test));
+	if (execve(row->path, row->args, envp))
+	{
+		free_table(table);
+		exit (print_error(errno, NULL, test));
+	}
 }
 
 /*-------------------------------------------------------------

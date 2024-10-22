@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 12:32:41 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 13:59:11 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,9 @@ void	free_paths(char **split_paths, char **append)
 		free_double(append);
 }
 
-// void	free_exec(t_exec *exec)
-// {
-// 	if (exec->heredoc_del)
-// 		free_double(exec);
-// }
-
+/*-------------------------------------------------------------
+delete all temporary heredoc files
+---------------------------------------------------------------*/
 void	delete_heredoc_files(char *path)
 {
 	if (access(path, F_OK) == 0)
@@ -59,7 +56,6 @@ free all pointers of a row
 ---------------------------------------------------------------*/
 int	free_row(t_command *cmd)	//usefull for whole project
 {
-	delete_heredoc_files(cmd->heredoc_file_path);
 	if (cmd->args)
 		free_double(cmd->args);
 	if (cmd->filename)
@@ -73,6 +69,7 @@ int	free_row(t_command *cmd)	//usefull for whole project
 	}
 	if (cmd->heredoc_file_path)
 	{
+		delete_heredoc_files(cmd->heredoc_file_path);
 		free (cmd->heredoc_file_path);
 		cmd->heredoc_file_path = NULL;
 	}
@@ -103,6 +100,7 @@ int	free_table(t_list *table)
 	}
 	// if (table->exec)
 	// 	free_exec(exec);
+
 	table = NULL;
 	return (1);
 }

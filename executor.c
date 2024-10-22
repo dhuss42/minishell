@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 12:33:18 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 13:45:52 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int main (int argc, char **argv, char **envp)
 	// t_list	*temp = NULL;
 
 	shell.table = create_example("cat", "<<", "h");
-	second = create_example("grep o", "<<", "a");
+	second = create_example("grep o", "", "");
 	ft_lstadd_back(&shell.table, second);
 	// third = create_example("grep exec", "", "");
 	// ft_lstadd_back(&shell.table, third);
