@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/21 15:11:08 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 09:27:17 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,26 +43,30 @@ typedef struct s_command
 	char	**args;
 	char	**filename;
 	char	**red_symbol;
-	char	*path;
 	int		id;
+	char	*path;
+	char	*final_infile;
+	char	*final_outfile;
+	char	*final_in_red;
+	char	*final_out_red;
 } t_command;
 
 typedef struct	s_exec
 {
 	int		exit_code;
 	int		nbr_pipes;
-	char	*final_infile;
-	char	*final_outfile;
-	char	*final_in_red;
-	char	*final_out_red;
+	// char	*final_infile;
+	// char	*final_outfile;
+	// char	*final_in_red;
+	// char	*final_out_red;
 }					t_exec;
 
 typedef struct s_shell
 {
-	t_list		*table;	//content->t_command
+	t_list		*table;	//content->t_command row
 	t_exec		*exec;
 	char		**envp;
-} t_shell;
+}					t_shell;
 
 char	*get_path(char *cmd, char **envp);
 void	free_paths(char **split_paths, char **append);
