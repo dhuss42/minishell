@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/21 16:22:19 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 12:32:41 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,18 @@ void	free_paths(char **split_paths, char **append)
 // 		free_double(exec);
 // }
 
+void	delete_heredoc_files(char *path)
+{
+	if (access(path, F_OK) == 0)
+		unlink(path);
+}
+
 /*-------------------------------------------------------------
 free all pointers of a row
 ---------------------------------------------------------------*/
 int	free_row(t_command *cmd)	//usefull for whole project
 {
+	delete_heredoc_files(cmd->heredoc_file_path);
 	if (cmd->args)
 		free_double(cmd->args);
 	if (cmd->filename)
@@ -63,6 +70,11 @@ int	free_row(t_command *cmd)	//usefull for whole project
 	{
 		free (cmd->path);
 		cmd->path = NULL;
+	}
+	if (cmd->heredoc_file_path)
+	{
+		free (cmd->heredoc_file_path);
+		cmd->heredoc_file_path = NULL;
 	}
 	if (cmd)
 		free (cmd);

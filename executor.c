@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 12:28:22 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 12:33:18 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,33 +86,15 @@ int	executor(char **envp, t_list *table, t_exec *test)
 	if (test->nbr_pipes == 0)
 	{
 		current_cmd = (t_command*) table->content;
-		if (execute_single_command(envp, current_cmd, test))	//create function for this
-		{
-			if (access("tmp/heredoc_temp0", F_OK) == 0)		//for each row-id in table
-			{
-				if (unlink("tmp/heredoc_temp0"))
-					print_error(errno, NULL, test);
-			}
+		if (execute_single_command(envp, current_cmd, test))
 			return (free_row(current_cmd));
-		}
 	}
 	else if (test->nbr_pipes > 0)
 	{
 		if (execute_pipechain(envp, table, test))
-		{
-			if (access("tmp/heredoc_temp0", F_OK) == 0)
-			{
-				if (unlink("tmp/heredoc_temp0"))
-					print_error(errno, NULL, test);
-			}
 			return (free_table(table));
-		}
 	}
-	if (access("tmp/heredoc_temp0", F_OK) == 0)
-	{
-		if (unlink("tmp/heredoc_temp0"))
-			print_error(errno, NULL, test);
-	}
+
 	return (test->exit_code);
 }
 
