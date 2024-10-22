@@ -24,22 +24,25 @@ bool	is_quotes(char c)
 char	*tmp_dollar(t_command *row, t_shell *expand)
 {
 	char	*tmp;
+	size_t	index;
 
 	tmp = NULL;
-	while (row->args[expand->i][expand->k] == '$')
-		expand->k++;
-	expand->j = expand->k;
+	index = expand->k;
+	// don't need to use expand->k
+	while (row->args[expand->i][index] == '$')
+		index++;
+	expand->j = index;
 	while (row->args[expand->i][expand->j] != '\0' && !is_quotes(row->args[expand->i][expand->j]) && row->args[expand->i][expand->j] != '$') // getting len
 		expand->j++;
 	tmp = malloc(sizeof(char) * (expand->j + 1));
 	if (!tmp)
 		return (NULL);
 	expand->j = 0;
-	while (row->args[expand->i][expand->k] != '\0' && row->args[expand->i][expand->k] != '\"' && row->args[expand->i][expand->k] != '\'' && row->args[expand->i][expand->k] != '$')
-		tmp[expand->j++] = row->args[expand->i][expand->k++];
+	while (row->args[expand->i][index] != '\0' && row->args[expand->i][index] != '\"' && row->args[expand->i][index] != '\'' && row->args[expand->i][index] != '$')
+		tmp[expand->j++] = row->args[expand->i][index++];
 	tmp[expand->j] = '\0';
-	if (row->args[expand->i][expand->k] == expand->quote)
-		expand->k++;
+	if (row->args[expand->i][index] == expand->quote)
+		index++;
 	printf("tmp_dollar: %s\n", tmp);
 	return (tmp);
 }
