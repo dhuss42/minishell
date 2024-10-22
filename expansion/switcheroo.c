@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:27 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/21 16:27:09 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/22 15:44:14 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 size_t	strlen_equal(char *str)
 {
-	size_t  i;
+	size_t	i;
 
 	i = 0;
 	while (str[i] != '\0' && str[i] != '=')
@@ -26,7 +26,7 @@ size_t	strlen_equal(char *str)
 char	*compare_with_env(char *variable, char **env, char *exp)
 {
 
-	size_t  j = 0;
+	size_t	j = 0;
 
 		while (env[j] != NULL)
 		{
@@ -54,17 +54,16 @@ size_t  get_len_exp(t_command *row, char *exp, t_shell *expand)
 
 	j = 0;
 	len = 0;
-	printf(GREEN"[%zu] current char at index k: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
-	while(/* row->args[expand->i][j] != '\0' && !(row->args[expand->i][j] == '$' && ft_isalnum(row->args[expand->i][j + 1])) */ j < expand->k) // getting len up to first dollar
+	while(j < expand->k)
 	{
 		len++;
 		j++;
 	}
 	while (row->args[expand->i][j] == '$')
 		j++;
-	while(row->args[expand->i][j] != '\0' && row->args[expand->i][j] != expand->quote && row->args[expand->i][j] != '$') // skipping until closing quote or dollar
+	while(row->args[expand->i][j] != '\0' && !is_quotes(row->args[expand->i][j]) && row->args[expand->i][j] != '$')
 		j++;
-	while(row->args[expand->i][j] != '\0') // getting len of remainder
+	while(row->args[expand->i][j] != '\0')
 	{
 		j++;
 		len++;
@@ -73,80 +72,68 @@ size_t  get_len_exp(t_command *row, char *exp, t_shell *expand)
 	return (len);
 }
 
-// gets the length up until the first dollar sign (aaaa$HOME) --> this could be an issue it should get the length up until the index of the first dollar sign
+// gets the length up until the dollar sign (aaaa$HOME)
 // skipps adjacent $ (aa$$HOME)
 // skipps until closing quote or $ sign ($HOME$)
 // gets the len of the remainder of the string ($HOME$a)
 // adds the length of the expanded string
 
-void	switcheroo(t_command *row, char *exp, t_shell *expand)
+char	*copy_into_tmp(t_command *row, char *exp, t_shell *expand, char *tmp)
 {
-	size_t  len;
-	size_t  iterate;
-	size_t  index;
-	char	*tmp;
+	size_t	iterate;
+	size_t	index;
 
 	expand->j = 0;
 	iterate = 0;
 	index = 0;
-
-	len = get_len_exp(row, exp, expand);
-	tmp = ft_calloc(len + 1, sizeof(char));
-	if (!tmp)
-		return ;
-	printf(YELLOW"[%zu]1. current char quote: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
-	while(/* row->args[expand->i][expand->j] != '\0' && !(row->args[expand->i][expand->j] == '$' && ft_isalnum(row->args[expand->i][expand->j + 1])) */expand->j < expand->k)
-	{
+	while(expand->j < expand->k)
 		tmp[iterate++] = row->args[expand->i][expand->j++];
-		printf(MAGENTA"[%zu]current char quote in loop: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
-	}
 	expand->j++;
-	printf(YELLOW"[%zu]2. current char quote: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
 	while(row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != '$' && !is_quotes(row->args[expand->i][expand->j]))
-	{
 		expand->j++;
-		printf(BLUE"[%zu]current char quote in loop: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
-	}
-	printf(YELLOW"[%zu]3. current char quote: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
 	while (exp[index] != '\0')
-	{
 		tmp[iterate++] = exp[index++];
-		printf(MAGENTA"[%zu]current char quote in loop: %c\n"WHITE, expand->j, row->args[expand->i][expand->j]);
-	}
-
 	if (exp)
 		free(exp);
-
 	expand->k = iterate;
-
-	while (row->args[expand->i][expand->j] != '\0')
+	while (iterate < expand->len)
 	{
-		printf(MAGENTA"[%zu]current char quote in loop: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
-		tmp[iterate++] = row->args[expand->i][expand->j++];
+		tmp[iterate] = row->args[expand->i][expand->j];
+		iterate++;
+		expand->j++;
 	}
-	printf(YELLOW"[%zu]current char quote: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
 	tmp[iterate] = '\0';
-	printf("tmp: %s\n", tmp);
+	return (tmp);
+}
 
+
+
+void	switcheroo(t_command *row, char *exp, t_shell *expand)
+{
+	char	*tmp;
+
+	expand->len = get_len_exp(row, exp, expand);
+	tmp = ft_calloc(expand->len + 1, sizeof(char));
+	if (!tmp)
+		return ;
+	tmp = copy_into_tmp(row, exp, expand, tmp);
 	if (row->args[expand->i])
 	{
 		free(row->args[expand->i]);
 		row->args[expand->i] = NULL;
 	}
-
 	row->args[expand->i] = ft_strdup(tmp);
 	if (!row->args[expand->i])
 		return ;
-
 	if (tmp)
 		free(tmp);
-	printf("finished switcheroo\n");
 }
+
 
 // switcheroo
 // gets len of the complete expanded string
 // allocates the tmp char in which the expanded string will be copied
-// copies everything up until the first dollar sign into the tmp string --> this is where an issue could be, should copy up until expand->k maybe
+// copies everything up until the dollar sign into the tmp string
 // skipps everything up until $ or quote in the og string (skipping $PATH)
 // copies the expanded variable string into tmp (exp -> tmp)
 // frees the expanded variable string
@@ -161,12 +148,18 @@ void	get_expanded(char *variable, char **env, t_command *row, t_shell *expand)
 {
 	char	*exp = NULL;
 
+	variable = tmp_dollar(row, expand);
 	while (*variable == '$')
 		variable++;
 	exp = compare_with_env(variable, env, exp);
 	if (!exp)
 		exp = ft_strdup("");
 	switcheroo(row, exp, expand);
+	if (variable)
+	{
+		free (variable);
+		variable = NULL;
+	}
 }
 
 // moves past the dollar so variable becomes searchable (PATH)

@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/21 16:19:27 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/22 15:59:42 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,10 @@ char	*tmp_dollar(t_command *row, t_shell *expand)
 
 	tmp = NULL;
 	index = expand->k;
-	// don't need to use expand->k
 	while (row->args[expand->i][index] == '$')
 		index++;
 	expand->j = index;
-	while (row->args[expand->i][expand->j] != '\0' && !is_quotes(row->args[expand->i][expand->j]) && row->args[expand->i][expand->j] != '$') // getting len
+	while (row->args[expand->i][expand->j] != '\0' && !is_quotes(row->args[expand->i][expand->j]) && row->args[expand->i][expand->j] != '$')
 		expand->j++;
 	tmp = malloc(sizeof(char) * (expand->j + 1));
 	if (!tmp)
@@ -43,12 +42,12 @@ char	*tmp_dollar(t_command *row, t_shell *expand)
 	tmp[expand->j] = '\0';
 	if (row->args[expand->i][index] == expand->quote)
 		index++;
-	printf("tmp_dollar: %s\n", tmp);
 	return (tmp);
 }
 
 // tmp_dolalr
 // creates a searchable variable name to compare to the env variable list
+// index copies the position of index expand->k this is necessary so that expand-> remembers the starting position of variable for later use
 // skipps adjancent $ ($$PATH)
 // gets the length of the string ($PATH)
 // allocates the tmp string
@@ -57,8 +56,7 @@ char	*tmp_dollar(t_command *row, t_shell *expand)
 
 bool	contains_dollar(char *str, size_t i)
 {
-	// i++;
-	while (str[i] != '\0' /* && str[i] != '\"' */)
+	while (str[i] != '\0')
 	{
 		if (str[i] == '$')
 			return (true);
@@ -67,56 +65,33 @@ bool	contains_dollar(char *str, size_t i)
 	return (false);
 }
 
+void	skip_single_quotes(t_command *row, t_shell *expand)
+{
+	if (row->args[expand->i][expand->k] == '\'')
+		expand->k++;
+	while (row->args[expand->i][expand->k] != '\'' && row->args[expand->i][expand->k] != '\0')
+		expand->k++;
+	if (row->args[expand->i][expand->k] == '\'')
+		expand->k++;
+}
+
 void	check_for_expansion(t_command *row, t_shell *expand, char **env)
 {
 	char	*tmp;
 
 	expand->k = 0;
+	expand->quote = '\0';
 	tmp = NULL;
-	while (row->args[expand->i][expand->k] != '\0') // going through string
+	while (row->args[expand->i][expand->k] != '\0')
 	{
-		printf(CYAN"{{%zu}}\n"WHITE, expand->k);
-		printf("row->args[*i]: %s\n", row->args[expand->i]);
-		printf("current char: %c \n", row->args[expand->i][expand->k]);
 		if (row->args[expand->i][expand->k] == '\"' && contains_dollar(row->args[expand->i], expand->k))
-		{
-			printf(RED"DOUBLEQUOTES\n"WHITE);
 			quotes(row, expand, env);
-		}
-		else if (row->args[expand->i][expand->k] == '\'' && contains_dollar(row->args[expand->i], expand->k) && should_expand(row->args[expand->i], expand->k))
-		{
-				printf(RED"SINGLEQUOTES\n"WHITE);
-				quotes(row, expand, env);
-		}
-		else if (row->args[expand->i][expand->k] == '\'' && contains_dollar(row->args[expand->i], expand->k) && !should_expand(row->args[expand->i], expand->k)) // skipping '''$HOME'''
-		{
-			if (row->args[expand->i][expand->k] == '\'')
-			{
-				printf(YELLOW"[%zu]current char quote: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
-				expand->k++;
-			}
-			while (row->args[expand->i][expand->k] != '\'' && row->args[expand->i][expand->k] != '\0')
-			{
-				printf(GREEN"[%zu]current char in loop: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
-				expand->k++;
-			}
-			if (row->args[expand->i][expand->k] == '\'')
-			{
-				printf(YELLOW"[%zu]current char quote: %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
-				expand->k++;
-			}
-		}
-		else if (row->args[expand->i][expand->k] == '$')
-		{
-			printf(RED"$\n"WHITE);
-			tmp = tmp_dollar(row, expand);
+		else if (row->args[expand->i][expand->k] == '\'')
+			skip_single_quotes(row, expand);
+		else if (row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1]))
 			get_expanded(tmp, env, row, expand);
-		}
 		else
-		{
-			printf("TEST20\n");
 			expand->k++;
-		}
 	}
 }
 
@@ -138,13 +113,12 @@ bool	iterate_table(t_list *table, char **env)
 	t_command	*row;
 
 	expand.tmp = table;
-	while (expand.tmp != NULL) // going trough table row for row
+	while (expand.tmp != NULL)
 	{
 		row = (t_command*)expand.tmp->content;
 		expand.i = 0;
-		while (row->args[expand.i] != NULL) // going through double char args
+		while (row->args[expand.i] != NULL)
 		{
-			printf(RED"{%zu}\n"WHITE, expand.i);
 			check_for_expansion(row, &expand, env);
 			expand.i++;
 		}
@@ -177,9 +151,9 @@ bool	iterate_table(t_list *table, char **env)
 // --> issue creates tmp_dollar PATH$ does not find matching env and returns nullterminated string
 // --> /--- solved ----/
 //"$PATH$HOME$"
-// --> solved
+// --> works /////////
 //"$PATH$HOME$a"
-// --> does not work
+// --> works
 //"$PATH$HOME$$?"
 // --> works
 
@@ -190,7 +164,7 @@ bool	iterate_table(t_list *table, char **env)
 //"PATH"
 // --> works
 //"$"
-// --> returns empty string
+// --> works
 //"hallo"
 // -->works
 //"aaaaa$PATH"
@@ -206,6 +180,49 @@ bool	iterate_table(t_list *table, char **env)
 // "$PATH$a$HOME"
 // --> setting exp to "" works
 
+
+
+// --- single quotes --- //
+//'$PATH'
+//'$PATH''$HOME'
+//!!'$HOME'!!'$PATH'!!
+//'$$PATH'
+//'$PATH$'
+//'$PATH$HOME$'
+//'$PATH$HOME$a'
+//'$PATH$HOME$$?'
+//'$?$PATH$$$HOME$?'
+//'$$$PATH$$$HOME$$'
+//'PATH'
+//'$'
+//'aaaaa$PATH'
+//'$PATHaaaaa'
+//'$PATHaaaaa' '$HOME'
+// '$PATHaaaaa' '$HOME'
+// ''$HOME''
+// '''$HOME'''
+// '$PATH'''$HOME''
+// ''$PATH'''$HOME'
+// '$PATH'''$HOME'''''$SHLVL'''
+
+//-- combi --//
+
 // "'$PATH'"
-// --> problem: pos_dollar: PATH'
-// need to change expansion -> quotes to check if " or '
+// '"$PATH"'
+// '$PATH'"$HOME"$SHLVL
+// --> valgrind 3 errors in 3 contexts
+// "'$PATH'"$HOME"$SHLVL"
+// ''$PATH'"$HOME"$SHLVL'
+// ''$PATH''"$HOME"
+// "'"$SHLVL'"'
+// echo ""$SHLVL""'$PATH"$HOME  "$PATH'
+// $USER'''"$PWD  $SHELL"'"     ls" |'   $LOGNAME'
+
+// need more tests
+
+//-- envs --//
+// $LOGNAME
+// $OLDPWD
+// $USER
+// $SHELL
+// $PWD
