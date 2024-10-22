@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 12:21:48 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 12:28:12 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *table)
 			return (1);
 			// return (print_error(E_PARENT, NULL, test));
 		row = (t_command*) tmp->content;	//direkt tmp->content->args[0] uebergeben?
-		if (exit_code > 0)	//check if right
+		if (exit_code > 1)	//check if right
 			return(print_error(exit_code, row->args[0], test));
 		if (exit_code == 1)
 			test->exit_code = 1;	//return
