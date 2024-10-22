@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 12:21:38 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 14:41:54 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	get_check_path(t_list *table, char **envp, t_exec *test)
 	while (tmp)
 	{
 		row = (t_command *)tmp->content;
-		row->path = NULL;
 		row->path = get_path(row->args[0], envp);
 		if (!row->path)
 			return (print_error(E_PATH, NULL, test));

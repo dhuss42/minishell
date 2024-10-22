@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 13:45:52 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 15:40:28 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,11 @@ int	executor(char **envp, t_list *table, t_exec *test)
 		if (execute_pipechain(envp, table, test))
 			return (free_table(table));
 	}
-
 	return (test->exit_code);
 }
-
+/*
+!!! initialize everyting in beginning before lexer
+*/
 t_list	*create_example(char *args, char* red, char *files)
 {
 	t_list	*new;
@@ -107,6 +108,7 @@ t_list	*create_example(char *args, char* red, char *files)
 	ex->filename = NULL;
 	ex->red_symbol = NULL;
 	ex->path = NULL;
+	ex->heredoc_file_path = NULL;
 	ex->args = ft_split(args, ' ');
 	ex->filename = ft_split(files, ' ');
 	ex->red_symbol = ft_split(red, ' ');
@@ -121,17 +123,16 @@ int main (int argc, char **argv, char **envp)
 	// t_command	*current_cmd;
 	shell.table = NULL;
 	t_list	*second = NULL;
-	// t_list	*third = NULL;
-	// t_list	*fourth = NULL;
-	// t_list	*temp = NULL;
+	t_list	*third = NULL;
+	t_list	*fourth = NULL;
 
-	shell.table = create_example("cat", "<<", "h");
-	second = create_example("grep o", "", "");
+	shell.table = create_example("cat", "<", "libft");
+	second = create_example("grep o", "<", "libft");
 	ft_lstadd_back(&shell.table, second);
-	// third = create_example("grep exec", "", "");
-	// ft_lstadd_back(&shell.table, third);
-	// fourth = create_example("grep free", "<", "libft");
-	// ft_lstadd_back(&shell.table, fourth);
+	third = create_example("grep exec", "", "");
+	ft_lstadd_back(&shell.table, third);
+	fourth = create_example("grep free", "<", "libft");
+	ft_lstadd_back(&shell.table, fourth);
 	// current_cmd = (t_command *) temp->content;
 	// printf("temp\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
 	// current_cmd = (t_command *) shell.table->content;

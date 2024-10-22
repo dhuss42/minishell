@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 13:49:59 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 15:41:15 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,16 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *table)
 			return (print_error(E_PARENT, NULL, test));
 		if (WIFEXITED(wstatus))
 			exit_code = WEXITSTATUS(wstatus);
-		else
-			return (1);
+		// else
+		// 	return (1);
 			// return (print_error(E_PARENT, NULL, test));
 		row = (t_command*) tmp->content;	//direkt tmp->content->args[0] uebergeben?
 		if (exit_code > 1)	//check if right
-			return(print_error(exit_code, row->args[0], test));
+			print_error(exit_code, row->args[0], test);
+			// return(print_error(exit_code, row->args[0], test));
 		if (exit_code == 1)
-			test->exit_code = 1;	//return
+			test->exit_code = 1;
+			// return (test->exit_code = 1);
 		tmp = tmp->next;
 		i++;
 	}

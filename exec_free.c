@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 13:59:11 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 15:38:18 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,19 @@ Free and set to NULL all pointers of whole table
 int	free_table(t_list *table)
 {
 	t_list	*tmp;
-	t_list	*next;
+	t_list	*del;
 	t_command *cmd;
 
 	tmp = table;
 	while (tmp != NULL)
 	{
 		cmd = (t_command*)tmp->content;
+		// printf("ID: %d\n", cmd->id);
 		if (cmd)
 			free_row(cmd);
-		next = tmp->next;
-		free(tmp);
-		tmp = next;
+		del = tmp;
+		tmp = tmp->next;
+		free(del);
 	}
 	// if (table->exec)
 	// 	free_exec(exec);
