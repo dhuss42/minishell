@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 11:58:07 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:08:11 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	check_files(t_list *table, t_exec *test)
 		i = 0;
 		while (row->filename[i])
 		{
+			write (1, "a", 1); //ERROR HERE!
 			if (row->red_symbol[i] && row->red_symbol[i][0] == '>')
 			{
 				if (check_output_files(row, test, i))
