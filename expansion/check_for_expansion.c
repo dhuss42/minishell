@@ -19,13 +19,22 @@ void	double_quotes(t_command *row, t_shell *expand, char **env)
 	tmp = NULL;
 	expand->quote = row->args[expand->i][expand->k];
 	expand->k++;
+	// if (row->args[expand->i][expand->k] == expand->quote)
+	// {
+	// 	printf(YELLOW"[%zu]Next char is closing quote %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
+	// 	expand->k++;
+	// 	return ;
+	// }
 	while (row->args[expand->i][expand->k] != expand->quote && row->args[expand->i][expand->k] != '\0')
 	{
+		printf(BLUE"[%zu]current char in double quotes %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
 		if (row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1]))
 			get_expanded(tmp, env, row, expand);
 		else
 			expand->k++;
 	}
+	if (row->args[expand->i][expand->k] == '\"')
+		expand->k++;
 }
 
 // here
@@ -35,11 +44,20 @@ void	double_quotes(t_command *row, t_shell *expand, char **env)
 void	skip_single_quotes(t_command *row, t_shell *expand)
 {
 	if (row->args[expand->i][expand->k] == '\'')
+	{
+		printf(YELLOW"[%zu] opening quote %c\n", expand->k, row->args[expand->i][expand->k]);
 		expand->k++;
+	}
 	while (row->args[expand->i][expand->k] != '\'' && row->args[expand->i][expand->k] != '\0')
+	{
+		printf(GREEN"[%zu] between quotes %c\n", expand->k, row->args[expand->i][expand->k]);
 		expand->k++;
+	}
 	if (row->args[expand->i][expand->k] == '\'')
+	{
+		printf(YELLOW"[%zu] closing quote %c\n", expand->k, row->args[expand->i][expand->k]);
 		expand->k++;
+	}
 }
 
 void	check_for_expansion(t_command *row, t_shell *expand, char **env)
@@ -51,14 +69,28 @@ void	check_for_expansion(t_command *row, t_shell *expand, char **env)
 	tmp = NULL;
 	while (row->args[expand->i][expand->k] != '\0')
 	{
+
 		if (row->args[expand->i][expand->k] == '\"' && contains_dollar(row->args[expand->i], expand->k))
+		{
+			printf(RED"double quotes {%c} at [%zu]\n"WHITE, row->args[expand->i][expand->k], expand->k);
 			double_quotes(row, expand, env);
+		}
 		else if (row->args[expand->i][expand->k] == '\'')
+		{
+			printf(RED"single quotes {%c} at [%zu]\n"WHITE, row->args[expand->i][expand->k], expand->k);
 			skip_single_quotes(row, expand);
+		}
 		else if (row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1]))
+		{
+			printf(RED"dollar {%c} at [%zu]\n"WHITE,row->args[expand->i][expand->k], expand->k);
 			get_expanded(tmp, env, row, expand);
+		}
 		else
+		{
+			printf(RED"ordinary char {%c} at [%zu]\n"WHITE,row->args[expand->i][expand->k], expand->k);
 			expand->k++;
+		}
+		printf(MAGENTA"current args[%zu]: %s\n", expand->i, row->args[expand->i]);
 	}
 }
 
@@ -203,9 +235,30 @@ bool	iterate_table(t_list *table, char **env)
 // --- solved ---- //
 
 // '$PATH"$HOME"$SHLVL'$USER'""'"$PWD"'"$LOGNAME .            babababababababab"'
-// --> strange thing is happening
+// '$PATH"$HOME"$SHLVL' $USER '""' "$PWD" '"$LOGNAME .            babababababababab"'
+// --> issue with expanding "$LOGNAME"
 // '""'"$PWD"'"$LOGNAME .            babababababababab"'
 // --> splitting process is not working correctly here
 // --> '""' "$PWD" '"$LOGNAME .            babababababababab"'
 // --> not a problem in get_len lexer and insert ws lexer
 // --> might be an issue in the splitting process
+
+// more tests //
+//echo "This is a test" | tr '[:lower:]' '[:upper:]' > output.txt
+//cat input.txt | grep -E "error|warning" | awk '{print $1}' | sort | uniq > results.log
+//VAR1="Hello"; VAR2="World"; echo "$VAR1, $VAR2!" >> greetings.txt
+//cat data.csv | awk -F',' '{print $2}' | grep "active" | wc -l > active_users.txt
+//echo 'My name is "John Doe"' | sed 's/John/Jane/' | tee result.txt | grep "Jane"
+//find . -type f -name "*.sh" | xargs grep "TODO" | tee todos.txt | wc -l
+//ls -lh | grep -v "total" | awk '{print $9}' | while read file; do echo "File: $file"; done
+//echo 'He said, "It\'s time."' | tr ' ' '\n' | sort | uniq -c
+//cat <<EOF > testfile.txt
+//echo "Variable assignment test" && VAR="This is a test" && echo $VAR > var_test.txt
+//diff <(ls -l /dir1) <(ls -l /dir2) | grep "^<" | wc -l
+//echo 'Result of 2 + 2 is:' $(expr 2 + 2) | tee math_result.txt
+//echo "The user's home directory is: $HOME" | sed 's/home/house/'
+//cat 'single_file.txt' | grep "pattern" | awk '{print $3 " " $1}' | sort -r | tee sorted_output.txt
+//cat <<'EOF' | sed 's/foo/bar/g' > replaced.txt
+
+
+//echo "$HOME""'  shit $SHLVL   "'$PATH  '''$PATH"''" | $SHLVL$USER$SHLVL | "" '"' "'" '"' "'" '"' "" "" "" "" "''''''''''$HOME'"

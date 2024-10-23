@@ -26,11 +26,11 @@ void	minishell_loop(t_list *list, t_list *table, char **env)
 			list = lexer(list, input);
 			table = parser(list);
 			print_table(table);
+			// exit(EXIT_SUCCESS);
 			expansion(table, env); // also need to pass env
-			// ft_lstclear(&list, free_token);
+			ft_lstclear(&list, free_token);
 			
 		}
-		// exit(EXIT_SUCCESS);
 	}
 }
 

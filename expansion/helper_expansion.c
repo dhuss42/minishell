@@ -13,7 +13,9 @@ bool	is_quotes(char c)
 
 bool	contains_dollar(char *str, size_t i)
 {
-	while (str[i] != '\0')
+	if (str[i] == '\"')
+		i++;
+	while (str[i] != '\0' && str[i] != '\"')
 	{
 		if (str[i] == '$')
 			return (true);

@@ -155,7 +155,7 @@ void	get_expanded(char *variable, char **env, t_command *row, t_shell *expand)
 	while (*variable == '$') // not sure if I need this here (test later on)
 		variable++;
 	exp = compare_with_env(variable, env, exp);
-	// printf(RED"exp: %s\n", exp);
+	printf(RED"exp: %s\n", exp);
 	if (!exp)
 		exp = ft_strdup("");
 	switcheroo(row, exp, expand);
