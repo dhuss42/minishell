@@ -46,11 +46,11 @@ The Expansion is responsible for handling the expansion of variables both inside
 The function [expansion](expansion/expansion.c) is responsible for coordinating the expansion and the quote removal
 
 In [check_for_expansion](expansion/check_for_expansion.c) follows an iteration through the table, the args double pointer and the individual strings of args.
-While iterating through the individual strings the current character is checked for **"'$**.
-**"** handles the expansion between double quotes
-**'** skips the characters between single quotes
-**$** handles the ordinary expansion
-otherwise the iteration through the string continues. 
+While iterating through the individual strings the current character is checked for **"'$**.  
+**"** handles the expansion between double quotes  
+**'** skips the characters between single quotes  
+**$** handles the ordinary expansion  
+Otherwise the iteration through the string continues. 
 
 [get_expanded](expansion/get_expanded.c) coordinates the exchange of the variable-to-be-expanded (**$SHLVL**) with the actual expanded string (**1**). First, the variable name is obtained. Then, the variable name is compared in [compare_with_env](expansion/compare_with_env.c) to the list of environment variables. If there is a match the string following the **=** is copied, otherwise and empty string is generated. Next, a temporary string is allocated and populated. It contains the contents of the original string up until the variable name, the expanded variable string and the remainder of the original string. In the final step, the original string in args is freed and replaced with the temporary string.
 
