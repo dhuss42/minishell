@@ -43,7 +43,7 @@ It utilizes a command table to separate these tokens into distinct blocks based 
 ### 3.5 Expansion
 The Expansion is responsible for handling the expansion of variables both inside and outside of double quotes while keeping the variables within single quotes in takt. Moreover, it handles the removal of the outer most quote couple.
 
-The function [expansion](expansion/expansion.c) is responsible for coordinating the expansion and the quote removal
+The function [expansion](expansion/expansion.c) is responsible for coordinating the expansion and the quote removal.
 
 In [check_for_expansion](expansion/check_for_expansion.c) follows an iteration through the table, the args double pointer and the individual strings of args.
 While iterating through the individual strings the current character is checked for **"'$**.  
