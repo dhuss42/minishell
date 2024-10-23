@@ -16,13 +16,13 @@ This project was the first team-based assignment at 42, requiring us to collabor
 
 Below is the basic structure of the project, with the names in brackets indicating who was responsible for each part:
 
-1. [Environment Variables](#3.1-Environment-Variables) 
-2. [Builtins](#3.2-Builtins)
-3. [Lexer](#3.3-Lexer) (dhuss)
-4. [Parser](#3.4-Parser) (dhuss)
-5. [Expansion](#3.5-Expansion) (dhuss)
-6. [Heredoc](#3.6-Heredoc) (maustel)
-7. [Executer](#3.7-Executer) (maustel)
+1. [Environment Variables](#31-Environment-Variables) 
+2. [Builtins](#32-Builtins)
+3. [Lexer](#33-Lexer) (dhuss)
+4. [Parser](#34-Parser) (dhuss)
+5. [Expansion](#35-Expansion) (dhuss)
+6. [Heredoc](#36-Heredoc) (maustel)
+7. [Executer](#37-Executer) (maustel)
 
 ## 3. Description of individual steps
 
