@@ -12,58 +12,25 @@
 
 #include "../minishell_eichhoernchen.h"
 
-bool	is_quotes(char c)
-{
-	if (c == '\'')
-		return (true);
-	if (c == '\"')
-		return (true);
-	return (false);
-}
-
-char	*tmp_dollar(t_command *row, t_shell *expand)
+void	double_quotes(t_command *row, t_shell *expand, char **env)
 {
 	char	*tmp;
-	size_t	index;
 
 	tmp = NULL;
-	index = expand->k;
-	while (row->args[expand->i][index] == '$')
-		index++;
-	expand->j = index;
-	while (row->args[expand->i][expand->j] != '\0' && !is_quotes(row->args[expand->i][expand->j]) && row->args[expand->i][expand->j] != '$')
-		expand->j++;
-	tmp = malloc(sizeof(char) * (expand->j + 1));
-	if (!tmp)
-		return (NULL);
-	expand->j = 0;
-	while (row->args[expand->i][index] != '\0' && row->args[expand->i][index] != '\"' && row->args[expand->i][index] != '\'' && row->args[expand->i][index] != '$')
-		tmp[expand->j++] = row->args[expand->i][index++];
-	tmp[expand->j] = '\0';
-	if (row->args[expand->i][index] == expand->quote)
-		index++;
-	return (tmp);
-}
-
-// tmp_dolalr
-// creates a searchable variable name to compare to the env variable list
-// index copies the position of index expand->k this is necessary so that expand-> remembers the starting position of variable for later use
-// skipps adjancent $ ($$PATH)
-// gets the length of the string ($PATH)
-// allocates the tmp string
-// copies into tmp (boraders are " ' $ ($PATH$) and \0)
-// moves og string past closing quote if there is one
-
-bool	contains_dollar(char *str, size_t i)
-{
-	while (str[i] != '\0')
+	expand->quote = row->args[expand->i][expand->k];
+	expand->k++;
+	while (row->args[expand->i][expand->k] != expand->quote && row->args[expand->i][expand->k] != '\0')
 	{
-		if (str[i] == '$')
-			return (true);
-		i++;
+		if (row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1]))
+			get_expanded(tmp, env, row, expand);
+		else
+			expand->k++;
 	}
-	return (false);
 }
+
+// here
+// sets quote to the current quote symbol in the og string
+// iterates through the string until it reaches the end or the matching closing quote
 
 void	skip_single_quotes(t_command *row, t_shell *expand)
 {
@@ -85,7 +52,7 @@ void	check_for_expansion(t_command *row, t_shell *expand, char **env)
 	while (row->args[expand->i][expand->k] != '\0')
 	{
 		if (row->args[expand->i][expand->k] == '\"' && contains_dollar(row->args[expand->i], expand->k))
-			quotes(row, expand, env);
+			double_quotes(row, expand, env);
 		else if (row->args[expand->i][expand->k] == '\'')
 			skip_single_quotes(row, expand);
 		else if (row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1]))
@@ -98,10 +65,10 @@ void	check_for_expansion(t_command *row, t_shell *expand, char **env)
 // check for expansion
 // goes through the single string
 // 1. checks if the current position of the string is a double quote and if the string still contains dollars
-// if yes it goes into quotes with "
-// 2. checks if the current position of the string is a single quote and if it should expand (nbr of consequetive quotes % 2)
-// if yes it goes into quotes with '
-// 3. is the case where single quotes should not expand
+// if yes it goes into double_quotes with "
+// 2. checks if the current position of the string is a single quote and if it should expand (nbr of consequetive double_quotes % 2)
+// if yes it goes into double_quotes with '
+// 3. is the case where single double_quotes should not expand
 // if this is true then it skipps all the chars until the closing quote
 // 4. checks for $
 // if yes it goes into tmp_dollar (creates searchable variable name) and get_expanded (gets the expansion)
@@ -179,10 +146,12 @@ bool	iterate_table(t_list *table, char **env)
 // --> setting exp to "" works
 // "$PATH$a$HOME"
 // --> setting exp to "" works
+//"!   $USER"
+//"$USER    !"
+//"!   $USER !"
 
 
-
-// --- single quotes --- //
+// --- single double_quotes --- //
 //'$PATH'
 //'$PATH''$HOME'
 //!!'$HOME'!!'$PATH'!!
@@ -226,3 +195,17 @@ bool	iterate_table(t_list *table, char **env)
 // $USER
 // $SHELL
 // $PWD
+
+
+//--- tests that do not work --- /
+// "   $USER "
+// --> space after variable is counted as part of the variable
+// --- solved ---- //
+
+// '$PATH"$HOME"$SHLVL'$USER'""'"$PWD"'"$LOGNAME .            babababababababab"'
+// --> strange thing is happening
+// '""'"$PWD"'"$LOGNAME .            babababababababab"'
+// --> splitting process is not working correctly here
+// --> '""' "$PWD" '"$LOGNAME .            babababababababab"'
+// --> not a problem in get_len lexer and insert ws lexer
+// --> might be an issue in the splitting process

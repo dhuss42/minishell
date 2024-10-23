@@ -10,42 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../minishell_eichhoernchen.h"
-
-size_t	strlen_equal(char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] != '\0' && str[i] != '=')
-		i++;
-	return (i);
-}
-
-char	*compare_with_env(char *variable, char **env, char *exp)
-{
-
-	size_t	j = 0;
-
-		while (env[j] != NULL)
-		{
-			if (ft_strlen(variable) - strlen_equal(env[j]) == 0)
-			{
-				if (ft_strncmp(variable, env[j], strlen_equal(env[j])) == 0)
-				{
-					return (exp = ft_substr(env[j], strlen_equal(env[j]) + 1, ft_strlen(env[j]) - strlen_equal(env[j]) - 1));
-				}
-			}
-			j++;
-		}
-	return (exp);
-}
-
-// compares the variable name (PATH) to every string in the env** list
-// env strings are only compared up until the equal sign =
-// all env variables are built like this (PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Users/dhuss/.brew/bin)
-// returns when the variable and the env are equal up until the '=' sign
 
 size_t  get_len_exp(t_command *row, char *exp, t_shell *expand)
 {
@@ -59,16 +24,21 @@ size_t  get_len_exp(t_command *row, char *exp, t_shell *expand)
 		len++;
 		j++;
 	}
+	// printf(BLUE"len up to k: %zu\n"WHITE, len);
 	while (row->args[expand->i][j] == '$')
 		j++;
-	while(row->args[expand->i][j] != '\0' && !is_quotes(row->args[expand->i][j]) && row->args[expand->i][j] != '$')
+	// printf(BLUE"len after $ skip: %zu\n"WHITE, len);
+	while(row->args[expand->i][j] != '\0' && !is_quotes(row->args[expand->i][j]) && row->args[expand->i][j] != '$' && !is_wspace(row->args[expand->i][j]))
 		j++;
+	// printf(BLUE"len after variale name skip: %zu\n"WHITE, len);
 	while(row->args[expand->i][j] != '\0')
 	{
 		j++;
 		len++;
 	}
+	// printf(BLUE"len with remainder: %zu\n"WHITE, len);
 	len += ft_strlen(exp);
+	// printf(BLUE"len with exp: %zu\n"WHITE, len);
 	return (len);
 }
 
@@ -89,7 +59,7 @@ char	*copy_into_tmp(t_command *row, char *exp, t_shell *expand, char *tmp)
 	while(expand->j < expand->k)
 		tmp[iterate++] = row->args[expand->i][expand->j++];
 	expand->j++;
-	while(row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != '$' && !is_quotes(row->args[expand->i][expand->j]))
+	while(row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != '$' && !is_quotes(row->args[expand->i][expand->j]) && !is_wspace(row->args[expand->i][expand->j]))
 		expand->j++;
 	while (exp[index] != '\0')
 		tmp[iterate++] = exp[index++];
@@ -106,7 +76,12 @@ char	*copy_into_tmp(t_command *row, char *exp, t_shell *expand, char *tmp)
 	return (tmp);
 }
 
-
+// copies everything up until the dollar sign into the tmp string
+// skipps everything up until $ or quote in the og string (skipping $PATH)
+// copies the expanded variable string into tmp (exp -> tmp)
+// frees the expanded variable string
+// moves k (the itterater in the 3 while loop) to the end of the exanded string
+// copies the remainder into tmp and null terminates
 
 void	switcheroo(t_command *row, char *exp, t_shell *expand)
 {
@@ -133,25 +108,54 @@ void	switcheroo(t_command *row, char *exp, t_shell *expand)
 // switcheroo
 // gets len of the complete expanded string
 // allocates the tmp char in which the expanded string will be copied
-// copies everything up until the dollar sign into the tmp string
-// skipps everything up until $ or quote in the og string (skipping $PATH)
-// copies the expanded variable string into tmp (exp -> tmp)
-// frees the expanded variable string
-// moves k (the itterater in the 3 while loop) to the end of the exanded string
-// copies the remainder into tmp and null terminates
 // frees the string in args **
 // strdups tmp into the now free position in args **
 // frees tmp
 
+char	*tmp_dollar(t_command *row, t_shell *expand)
+{
+	char	*tmp;
+	size_t	index;
+
+	tmp = NULL;
+	index = expand->k;
+	while (row->args[expand->i][index] == '$' /* || */ /* is_wspace(row->args[expand->i][index]) */) // need to handle when there are chars before the variable in the quote
+		index++;
+	expand->j = index;
+	while (row->args[expand->i][expand->j] != '\0' && !is_quotes(row->args[expand->i][expand->j]) && row->args[expand->i][expand->j] != '$' && !is_wspace(row->args[expand->i][expand->j]))
+		expand->j++;
+	tmp = malloc(sizeof(char) * (expand->j + 1));
+	if (!tmp)
+		return (NULL);
+	expand->j = 0;
+	while (row->args[expand->i][index] != '\0' && row->args[expand->i][index] != '\"' && row->args[expand->i][index] != '\'' && row->args[expand->i][index] != '$' && !is_wspace(row->args[expand->i][index]))
+		tmp[expand->j++] = row->args[expand->i][index++];
+	tmp[expand->j] = '\0';
+	if (row->args[expand->i][index] == expand->quote)
+		index++;
+	// printf(GREEN"tmp: %s\n"WHITE, tmp);
+	// printf(GREEN"len tmp: %zu\n"WHITE, ft_strlen(tmp));
+	return (tmp);
+}
+
+// tmp_dolalr
+// creates a searchable variable name to compare to the env variable list
+// index copies the position of index expand->k this is necessary so that expand-> remembers the starting position of variable for later use
+// skipps adjancent $ ($$PATH)
+// gets the length of the string ($PATH)
+// allocates the tmp string
+// copies into tmp (boraders are " ' $ ($PATH$) and \0)
+// moves og string past closing quote if there is one
 
 void	get_expanded(char *variable, char **env, t_command *row, t_shell *expand)
 {
 	char	*exp = NULL;
 
 	variable = tmp_dollar(row, expand);
-	while (*variable == '$')
+	while (*variable == '$') // not sure if I need this here (test later on)
 		variable++;
 	exp = compare_with_env(variable, env, exp);
+	// printf(RED"exp: %s\n", exp);
 	if (!exp)
 		exp = ft_strdup("");
 	switcheroo(row, exp, expand);

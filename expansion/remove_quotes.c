@@ -12,15 +12,43 @@
 
 #include "../minishell_eichhoernchen.h"
 
+void	get_len_no_quotes(t_command *row, t_shell *expand)
+{
+	expand->quote = '\0';
+	expand->j = 0;
+	expand->len = 0;
+	while (row->args[expand->i][expand->j] != '\0')
+	{
+		if (is_quotes(row->args[expand->i][expand->j]))
+		{
+			expand->quote = row->args[expand->i][expand->j];
+			expand->j++;
+			while (row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != expand->quote)
+			{
+				expand->len++;
+				expand->j++;
+			}
+			expand->j++;
+		}
+		else
+		{
+			expand->len++;
+			expand->j++;
+		}
+	}
+	// printf(MAGENTA"len no quotes: %zu\n"WHITE, expand->len);
+}
+
 void	remove_outer_quotes(t_command *row, t_shell *expand)
 {
-	expand->j = 0;
-	expand->k = 0;
 	char	*no_quotes;
-
-	no_quotes = ft_calloc(7000, sizeof(char)); // need to get the length
+	
+	get_len_no_quotes(row, expand);
+	no_quotes = ft_calloc(expand->len + 1, sizeof(char));
 	if (!no_quotes)
 		return ;
+	expand->j = 0;
+	expand->k = 0;
 	while (row->args[expand->i][expand->j] != '\0')
 	{
 		if (is_quotes(row->args[expand->i][expand->j]))
@@ -37,6 +65,8 @@ void	remove_outer_quotes(t_command *row, t_shell *expand)
 	if (row->args[expand->i])
 		free (row->args[expand->i]);
 	row->args[expand->i] = ft_strdup(no_quotes);
+	if (!row->args[expand->i])
+		return ;
 	if (no_quotes)
 		free(no_quotes);
 }

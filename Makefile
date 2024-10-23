@@ -22,9 +22,10 @@ CFILES = minishell.c\
 	parser/memory_parser.c\
 	expansion/expansion.c\
 	expansion/check_for_expansion.c\
-	expansion/switcheroo.c\
-	expansion/single_quotes.c\
+	expansion/get_expanded.c\
+	expansion/compare_with_env.c\
 	expansion/remove_quotes.c\
+	expansion/helper_expansion.c\
 	print_tokenlist.c\
 	print_table.c
 

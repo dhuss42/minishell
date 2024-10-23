@@ -99,9 +99,7 @@ t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing);
 t_list *expansion(t_list *table, char **env);
 bool	iterate_table(t_list *table, char **env);
 void	get_expanded(char *variable, char **env, t_command *row, t_shell *expand);
-void	quotes(t_command *row, t_shell *expand, char **env);
-char	*tmp_dollar(t_command *row, t_shell *expand);
-bool	should_expand(char *str, size_t k);
+char	*compare_with_env(char *variable, char **env, char *exp);
 void	remove_quotes(t_list *table);
 
 //----------------helpers----------------//
