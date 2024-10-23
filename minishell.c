@@ -14,13 +14,22 @@
 
 void	minishell_loop(t_list *list, t_list *table, char **env)
 {
+	char	*input;
+
 	while(1)
 	{
-		list = lexer(list);
-		table = parser(list);
-		print_table(table);
-		expansion(table, env); // also need to pass env
-		// ft_lstclear(&list, free_token);
+    	input = readline("minishell: ");
+    	if(!input)
+       		return ;
+		if (input[0] != '\0')
+		{
+			list = lexer(list, input);
+			table = parser(list);
+			print_table(table);
+			expansion(table, env); // also need to pass env
+			// ft_lstclear(&list, free_token);
+			
+		}
 		// exit(EXIT_SUCCESS);
 	}
 }

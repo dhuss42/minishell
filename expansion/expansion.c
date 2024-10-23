@@ -14,9 +14,9 @@
 #include "../minishell_eichhoernchen.h"
 
 
-t_list *expansion(t_list *table, char **env) // change to our env
+t_list *expansion(t_list *table, char **env)
 {
-	iterate_table(table, env); // cif there are no quotes go into check_for_dollar
+	iterate_table(table, env);
 	remove_quotes(table);
 	print_table(table);
 	return (NULL);

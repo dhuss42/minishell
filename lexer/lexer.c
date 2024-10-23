@@ -1,22 +1,16 @@
 
 #include "../minishell_eichhoernchen.h"
 
-t_list  *lexer(t_list *list)
+t_list  *lexer(t_list *list, char *input)
 {
 	char	*trim_inpt;
 	char	*res;
-	char	**tokens = NULL;
-    char	*input;
+	char	**tokens;
 
-    input = readline("minishell: ");
-    if(!input)
-        return (NULL);
-
+    tokens = NULL;
     trim_inpt = trim_spaces(input);
     res = ft_strtrim(trim_inpt, " \n\t");
-
     tokens = split_space_quotes(res);
-
     list = tokeniser(tokens);
 
     // printf("\033[32mTOKEN LINKED LIST\n");

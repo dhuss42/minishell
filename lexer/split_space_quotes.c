@@ -23,7 +23,10 @@ size_t count_tokens(char *str)
 	while (str[i] != '\0')
 	{
 		while(str[i] == ' ')
+		{
+			printf(YELLOW"[%zu] SKIPPING SPACE: %c\n"WHITE, i, str[i]);
 			i++;
+		}
 		// if (str[i] == '\'' || str[i] == '\"')
 		// {
 		// 	quotes = str[i++];
@@ -35,13 +38,24 @@ size_t count_tokens(char *str)
 		// }
 		/* else */ if (str[i] != '\0' && str[i] != ' ')
 		{
+			printf(YELLOW"ENTER LOOP\n"WHITE);
 			while (str[i] != '\0' && str[i] != ' ' /* && str[i] != '\"' && str[i] != '\'' */)
+			{
+				printf(GREEN"[%zu] current char: %c\n"WHITE, i, str[i]);
 				i++;
+			}
+			printf(YELLOW"EXIT LOOP\n"WHITE);
 			counter++;
+			printf(RED"update counter {%zu}\n"WHITE, counter);
 		}
 	}
 	return (counter);
 }
+
+// goes through the string
+// skipps spaces
+// if the current position is not space enter loop
+// 
 
 char	*populate_str(char *input, size_t *end)
 {
@@ -110,10 +124,18 @@ char	**split_space_quotes(char *input)
 {
 	char	**tokens;
 
-	// printf("count_tokens: %zu\n", count_tokens(input));
+	printf(RED"inside split_space_quotes\n"WHITE);
+	printf("count_tokens: %zu\n", count_tokens(input));
+	// exit(EXIT_SUCCESS);
 	tokens = malloc(sizeof(char *) * (count_tokens(input) + 1));
 	if (!tokens)
 		return (NULL);
 	tokens = fill_token_list(input, tokens);
+	int i = 0;
+	while (tokens[i] != NULL)
+	{
+		printf(MAGENTA"[%d]TOKEN: %s\n"WHITE, i, tokens[i]);
+		i++;
+	}
 	return (tokens);
 }

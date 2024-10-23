@@ -83,7 +83,7 @@ typedef struct s_shell
 
 
 //-----------------lexer----------------//
-t_list  *lexer(t_list *list);
+t_list  *lexer(t_list *list, char *input);
 char 	*trim_spaces(char *input);
 size_t	get_len(char *str);
 char	**split_space_quotes(char *input);
