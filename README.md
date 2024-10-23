@@ -16,31 +16,31 @@ This project was the first team-based assignment at 42, requiring us to collabor
 
 Below is the basic structure of the project, with the names in brackets indicating who was responsible for each part:
 
-1. [Environment Variables](#Environment-Variables) 
-2. [Builtins](#Builtins)
-3. [Lexer](#Lexer) (dhuss)
-4. [Parser](#Parser) (dhuss)
-5. [Expansion](#Expansion) (dhuss)
-6. [Heredoc](#Heredoc) (maustel)
-7. [Executer](#Executer) (maustel)
+1. [Environment Variables](#3.1-Environment-Variables) 
+2. [Builtins](#3.2-Builtins)
+3. [Lexer](#3.3-Lexer) (dhuss)
+4. [Parser](#3.4-Parser) (dhuss)
+5. [Expansion](#3.5-Expansion) (dhuss)
+6. [Heredoc](#3.6-Heredoc) (maustel)
+7. [Executer](#3.7-Executer) (maustel)
 
 ## 3. Description of individual steps
 
-### Environment Variables
+### 3.1 Environment Variables
 
-### Builtins
+### 3.2 Builtins
 
-### Lexer
+### 3.3 Lexer
 The lexer serves to transform an input string of characters into meaningful tokens. 
 
 It begins by normalizing the input, ensuring that there is a single space between potential tokens, while preserving the integrity of text within single or double quotes. After formatting the string, the lexer splits it into individual components based on spaces, storing these components in a double character array. Each string in the array is then matched with its corresponding token type and stored in a struct, which is added to a linked list for organized access. Finally, the lexer checks the linked list for any syntax errors, ensuring the validity of the parsed input.
 
-### Parser
+### 3.4 Parser
 The parser takes the output from the lexer—a linked list of tokens—and organizes them into meaningful structures. 
 
 It utilizes a command table to separate these tokens into distinct blocks based on the presence of pipes. Each segment to the left of a pipe is treated as a separate row within the table. The command table itself is implemented as another linked list, featuring a different struct that contains three double character arrays: one for arguments, one for filenames, and one for redirection symbols. To maintain the correct order of the tokens, the parser indexes the associated redirection symbols and filenames using the same variable, ensuring they remain linked appropriately during parsing.
 
-### Expansion
+### 3.5 Expansion
 The Expansion is responsible for handling the expansion of variables both inside and outside of double quotes while keeping the variables within single quotes in takt. Moreover, it handles the removal of the outer most quote couple.
 
 The function [expansion](expansion/expansion.c) is responsible for coordinating the expansion and the quote removal
@@ -63,6 +63,6 @@ echo "the current Shell level is $SHLVL !!"
 
 Lastly, [remove_quotes](expansion/remove_quotes.c) removes the outer most quote couple. It obtains the length of the string without quotes and allocates enough memory for a temporary string. It then populates the string skipping the opening and the closing quote couple. Then the string in args is freed and replaced by the contents of the temporary string.
 
-### Heredoc
+### 3.6 Heredoc
 
-### Executer
+### 3.7 Executer
