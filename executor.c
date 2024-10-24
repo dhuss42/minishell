@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 16:07:32 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/24 17:18:06 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ int	execute_single_command(char **envp, t_command *row, t_exec *test)
 {
 	pid_t	id;
 
-	// if (handle_stuff(envp, row, test))	//rm
-	// 	return (1);
+	if (exec_redirections(row, test))
+		return (1);
 	id = fork();
 	if (id == -1)
 		return (print_error(errno, NULL, test));
@@ -123,14 +123,14 @@ int main (int argc, char **argv, char **envp)
 	// t_command	*current_cmd;
 	shell.table = NULL;
 	t_list	*second = NULL;
-	t_list	*third = NULL;
+	// t_list	*third = NULL;
 	// t_list	*fourth = NULL;
 
-	shell.table = create_example("echo ae", "", "");
-	second = create_example("grep o", "<", "out1");
+	shell.table = create_example("cat", "<", "out");
+	second = create_example("cat", "<", "libft");
 	ft_lstadd_back(&shell.table, second);
-	third = create_example("grep i", "<", "out1");
-	ft_lstadd_back(&shell.table, third);
+	// third = create_example("cat", "<", "out");
+	// ft_lstadd_back(&shell.table, third);
 	// fourth = create_example("grep a", "<", "libft");
 	// ft_lstadd_back(&shell.table, fourth);
 	// current_cmd = (t_command *) temp->content;

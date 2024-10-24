@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 16:02:36 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/24 17:24:45 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,14 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *table)
 		else
 			return (1);
 			// return (print_error(E_PARENT, NULL, test));
-		row = (t_command*) tmp->content;	//direkt tmp->content->args[0] uebergeben?
+		row = (t_command*) tmp->content;
 		if (exit_code > 1)	//check if right
 			return(print_error(exit_code, row->args[0], test));
 		if (exit_code == 1)
-			return (test->exit_code = 1);
+		{
+			test->exit_code = 1;
+			return (1);
+		}
 		tmp = tmp->next;
 		i++;
 	}
@@ -79,7 +82,6 @@ Child handler for pipechain
 ---------------------------------------------------------------*/
 void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list *table)
 {
-	// printf("%d path: %s\n", row->id, row->path);
 	if (close_fds(fd, row->id, test->nbr_pipes))
 		exit (print_error(errno, NULL, test));
 	if (row->id != 0 && row->final_infile == NULL)
@@ -89,12 +91,22 @@ void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list 
 		if (close(fd[row->id - 1][0]) == - 1)
 			exit (print_error(errno, NULL, test));
 	}
+	if (row->final_infile)
+	{
+		if (redirect_input(*row, test, &fd[row->id - 1][0]))
+			exit(1);	//exit with exith code
+	}
 	if (row->id != test->nbr_pipes && row->final_outfile == NULL)
 	{
 		if (dup2(fd[row->id][1], 1) == - 1)
 			exit (print_error(errno, NULL, test));
 		if (close(fd[row->id][1]) == - 1)
 			exit (print_error(errno, NULL, test));
+	}
+	if (row->final_outfile)
+	{
+		if (redirect_output(*row, test, &fd[row->id][0]))
+			exit (2);		//exit with exit_code
 	}
 	if (execve(row->path, row->args, envp))
 	{

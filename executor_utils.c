@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 14:41:54 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/24 16:53:29 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int	handle_stuff(char **envp, t_list *table, t_exec *test)
 		return (1);
 	if (check_files(table, test))
 		return (2);
-	if (exec_redirections(table, test))
-		return (3);
+	// if (exec_redirections(table, test))
+	// 	return (3);
 	if (get_check_path(table, envp, test))
 		return (4);
 	return (0);
