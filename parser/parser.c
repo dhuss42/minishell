@@ -12,18 +12,23 @@
 
 #include "../minishell_eichhoernchen.h"
 
-t_list	*parser(t_list *token_list)
+void	parser(t_shell *shell)
 {
-	t_shell	parsing;
+	shell->table = NULL;
+	if (create_table(shell) == -1)
+	{
+		// printf("I return after create table\n");
+		return ;
+	}
+	if (!shell->table)
+	{
+		// printf("I return after check if table is empty\n");
+		return ;
+	}
+	// printf(BLUE"TABLE IN PARSER\n"WHITE);
+	// print_table(shell->table);
 
-	parsing.table = NULL;
-	parsing.table = create_table(token_list, &parsing);
-	if (!parsing.table)
-		return (NULL);
-	// print_table(parsing.table);
-
-	// free_table(&parsing); // just here for leak check
-	return (parsing.table);
+	// free_table(shell); // just here for leak check
 }
 
 // < hello | wc -l | grep a >> outfile >> out

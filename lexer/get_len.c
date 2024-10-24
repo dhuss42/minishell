@@ -123,7 +123,7 @@ void    get_len_quotes(t_shell *nbr, char *str)
 	}
 	if (str[nbr->i] == '\0')
     {
-		printf("ERROR NO CLOSING QUOTES\n");
+		printf("ERROR NO CLOSING QUOTES\n"); // handle properly
         exit(EXIT_FAILURE);
     }
 	if (str[nbr->i] == quotes)
@@ -202,4 +202,4 @@ size_t	get_len(char *str)
 // --> funktioniert wirft syntax error wegen < >
 // test "asd"asd"asds"
 // --> funktioniert
-// "asd" "'    fgd  "t t | sa $TEST $sa echo hallo"welt    "hallo"
+// "asd" "'    fgd  "t t | sa $TEST $sa echo hallo"welt    "hallo""

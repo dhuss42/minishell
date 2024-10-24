@@ -26,16 +26,16 @@ size_t count_tokens(char *str)
 	{
 		while(str[i] == ' ')
 		{
-			printf(YELLOW"[%zu] SKIPPING SPACE: %c\n"WHITE, i, str[i]);
+			// printf(YELLOW"[%zu] SKIPPING SPACE: %c\n"WHITE, i, str[i]);
 			i++;
 		}
 		if (str[i] == '\'' || str[i] == '\"')
 		{
 			quotes = str[i++];
-			printf(YELLOW"[%zu] Found quote: %c\n"WHITE, i - 1, quotes);
+			// printf(YELLOW"[%zu] Found quote: %c\n"WHITE, i - 1, quotes);
 			while(str[i] != '\0' && str[i] != quotes)
 			{
-				printf(GREEN"[%zu] Inside quotes: %c\n"WHITE, i, str[i]);
+				// printf(GREEN"[%zu] Inside quotes: %c\n"WHITE, i, str[i]);
 				i++;
 			}
 			if (str[i] == quotes)
@@ -43,23 +43,23 @@ size_t count_tokens(char *str)
 				if (str[i + 1] == ' ' || str[i + 1] == '\0')
 				{
 					counter++;
-					printf(RED"update counter {%zu}\n"WHITE, counter);
+					// printf(RED"update counter {%zu}\n"WHITE, counter);
 				}
-				printf(YELLOW"[%zu] Closing quote found: %c\n"WHITE, i, str[i]);
+				// printf(YELLOW"[%zu] Closing quote found: %c\n"WHITE, i, str[i]);
 				i++;
 			}
 		}
 		else if (str[i] != '\0' && str[i] != ' ')
 		{
-			printf(YELLOW"ENTER LOOP\n"WHITE);
+			// printf(YELLOW"ENTER LOOP\n"WHITE);
 			while (str[i] != '\0' && str[i] != ' ' && str[i] != '\"' && str[i] != '\'')
 			{
-				printf(GREEN"[%zu] current char: %c\n"WHITE, i, str[i]);
+				// printf(GREEN"[%zu] current char: %c\n"WHITE, i, str[i]);
 				i++;
 			}
-			printf(YELLOW"EXIT LOOP\n"WHITE);
+			// printf(YELLOW"EXIT LOOP\n"WHITE);
 			counter++;
-			printf(RED"update counter {%zu}\n"WHITE, counter);
+			// printf(RED"update counter {%zu}\n"WHITE, counter);
 		}
 	}
 	return (counter);
@@ -125,11 +125,11 @@ char	**fill_token_list(char *input, char **tokens)
 		if (input[end] != ' ' /* && input[end] != '\'' && input[end] != '\"' */)
 		{
 			tokens[i] = populate_str(input, &end);
-			// if (!tokens[i])
-			// {
-			// 	print_error(errno, NULL);
-			// 	return (NULL);
-			// }
+			if (!tokens[i])
+			{
+				// print_error(errno, NULL);
+				return (NULL);
+			}
 
 			// printf(CYAN"[%zu] TOKEN: %s\n"WHITE, i, tokens[i]);
 			i++;
@@ -161,11 +161,11 @@ char	**split_space_quotes(char *input)
 	if (!tokens)
 		return (NULL);
 	// exit(EXIT_SUCCESS); Debugging 
-	// /* int i = 0;
+	// int i = 0;
 	// while (tokens[i] != NULL)
 	// {
 	// 	printf(MAGENTA"[%d]TOKEN: %s\n"WHITE, i, tokens[i]);
 	// 	i++;
-	// } */
+	// }
 	return (tokens);
 }

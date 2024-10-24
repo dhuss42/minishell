@@ -73,6 +73,7 @@ typedef struct s_shell
 	size_t	reds;
 	size_t	filenames;
 	t_list	*tmp;
+	t_list	*list;
 	t_list	*table;
 	bool	isspace;
 	char	*res;
@@ -84,7 +85,7 @@ void    ft_env(char **env);
 void 	pwd();
 
 //-----------------lexer----------------//
-t_list  *lexer(t_list *list, char *input);
+void  	lexer(t_shell *shell, char *input);
 char 	*trim_spaces(char *input);
 size_t	get_len(char *str);
 char	**split_space_quotes(char *input);
@@ -92,15 +93,16 @@ t_list	*tokeniser(char **split_double_array);
 bool	syntax_errors(t_list *token_list);
 
 //----------------parser----------------//
-t_list		*parser(t_list *token_list);
-t_list		*create_table(t_list *token_list, t_shell *parsing);
+void		parser(t_shell *shell);
+int			create_table(t_shell *shell);
 t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing);
 
 //----------------expansion----------------//
-t_list	*expansion(t_list *table, char **env);
+void	expansion(t_shell *shell, char **env);
 int		iterate_table(t_list *table, char **env);
 int		get_expanded(char *variable, char **env, t_command *row, t_shell *expand);
 char	*compare_with_env(char *variable, char **env, char *exp);
+int		get_exit_code(char *tmp, t_command *row, t_shell *expand);
 int		remove_quotes(t_list *table);
 
 //----------------helpers----------------//
@@ -123,6 +125,7 @@ bool	contains_dollar(char *str, size_t i);
 void	free_token(void *content);
 void	clear_all(char **to_clear);
 void	free_table(t_shell *parsing);
+void    free_lexer(char *input, char *trim_inpt, char *res);
 
 //------------extra-shit-----------//
 void	print_token(token *tok);

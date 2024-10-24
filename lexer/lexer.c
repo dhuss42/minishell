@@ -1,45 +1,33 @@
 
 #include "../minishell_eichhoernchen.h"
 
-t_list  *lexer(t_list *list, char *input)
+void  lexer(t_shell *shell, char *input)
 {
 	char	*trim_inpt;
 	char	*res;
 	char	**tokens;
 
+    shell->list = NULL;
     tokens = NULL;
+    res = NULL;
     trim_inpt = trim_spaces(input);
     if (!trim_inpt)
-        return (NULL);
-
+        return (free_lexer(input, trim_inpt, res));
     res = ft_strtrim(trim_inpt, " \n\t");
     if (!res)
     {
-    //     print_error(errno, NULL);
-        return (NULL);
+    //  print_error(errno, NULL);
+        return (free_lexer(input, trim_inpt, res));
     }
-
     tokens = split_space_quotes(res);
     if (!tokens)
-        return (NULL);
-
-    list = tokeniser(tokens);
-    if (!list)
-        return (NULL);
-
-    // printf("\033[32mTOKEN LINKED LIST\n");
-    // print_token_list(list);
-    // printf("\033[0m");
-    if (syntax_errors(list) == true)
-        return (NULL);
-    if (input)
-        free(input);
-    if (trim_inpt)
-        free(trim_inpt);
-    if (res)
-        free(res);
-    // exit(EXIT_SUCCESS); // for debugging
-    return (list);
+        return (free_lexer(input, trim_inpt, res));
+    shell->list = tokeniser(tokens);
+    if (!shell->list)
+        return (free_lexer(input, trim_inpt, res));
+    if (syntax_errors(shell->list) == true)
+        return (free_lexer(input, trim_inpt, res));
+    free_lexer(input, trim_inpt, res);
 }
 
 // problem with echo hallo"welt"hallo

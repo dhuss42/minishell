@@ -12,60 +12,63 @@
 
 #include "../minishell_eichhoernchen.h"
 
-void	populate_red_array(t_shell *parsing, token* current_token, t_command *new_cmd)
+int	populate_red_array(t_shell *parsing, token* current_token, t_command *new_cmd)
 {
-		new_cmd->red_symbol[parsing->i] = malloc(sizeof(char) * (ft_strlen(current_token->input) + 1));
-		if (!new_cmd->red_symbol[parsing->i])
-		{
-			free_table(parsing);
-			// print_error(errno, NULL);
-			return ;
-		}
-		ft_strlcpy(new_cmd->red_symbol[parsing->i], current_token->input, ft_strlen(current_token->input) + 1);
+	new_cmd->red_symbol[parsing->i] = malloc(sizeof(char) * (ft_strlen(current_token->input) + 1));
+	if (!new_cmd->red_symbol[parsing->i])
+	{
+		free_table(parsing);
+		// printf("I return issue populate_red_array\n");
+		// print_error(errno, NULL);
+		return (-1);
+	}
+	ft_strlcpy(new_cmd->red_symbol[parsing->i], current_token->input, ft_strlen(current_token->input) + 1);
+	return (0);
 }
 
-void	populate_filename_array(t_shell *parsing, token* next_token, t_command *new_cmd)
+int	populate_filename_array(t_shell *parsing, token* next_token, t_command *new_cmd)
 {
 	new_cmd->filename[parsing->i] = malloc(sizeof(char) * (ft_strlen(next_token->input) + 1));
 	if (!new_cmd->filename[parsing->i])
 	{
 		free_table(parsing);
+		// printf("I return issue populate_filename_array\n");
 		// print_error(errno, NULL);
-		return ;
+		return (-1);
 	}
 	ft_strlcpy(new_cmd->filename[parsing->i], next_token->input, ft_strlen(next_token->input) + 1);
 	parsing->tmp = parsing->tmp->next;
+	return (0);
 }
 
-void	populate_args_array(t_shell *parsing, token* current_token, t_command *new_cmd)
+int	populate_args_array(t_shell *parsing, token* current_token, t_command *new_cmd)
 {
 	new_cmd->args[parsing->j] = malloc(sizeof(char) * ft_strlen(current_token->input) + 1);
 	if (!new_cmd->args[parsing->j])
 	{
 		free_table(parsing);
+		// printf("I return issue populate_args_array\n");
 		// print_error(errno, NULL);
-		return ;
+		return (-1);
 	}
 	ft_strlcpy(new_cmd->args[parsing->j], current_token->input, ft_strlen(current_token->input) + 1);
 	parsing->j++;
+	return (0);
 }
 
 int	populate_double_arrays(t_shell *parsing, token *current_token, token *next_token, t_command *new_cmd)
 {
 	if (is_redirection(current_token))
 	{
-		populate_red_array(parsing, current_token, new_cmd);
-		if (!new_cmd->red_symbol[parsing->i])
+		if (populate_red_array(parsing, current_token, new_cmd) == -1)
 			return (-1);
-		populate_filename_array(parsing, next_token, new_cmd);
-		if (!new_cmd->filename[parsing->i])
+		if (populate_filename_array(parsing, next_token, new_cmd) == -1)
 			return (-1);
 		parsing->i++;
 	}
 	else
 	{
-		populate_args_array(parsing, current_token, new_cmd);
-		if (!new_cmd->args[parsing->j])
+		if (populate_args_array(parsing, current_token, new_cmd) == -1)
 			return (-1);
 	}
 	return (0);

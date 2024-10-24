@@ -24,9 +24,9 @@ void handle_quotes(t_shell *trim, char *input)
 		trim->res[trim->j++] = input[trim->i++];
 	if (input[trim->i] == quote)
 	{
-		printf("\033[32mTest\n");
-		printf("char trim: %c\n", trim->res[trim->j]);
-		printf("char og: %c\n\033[0m", input[trim->i + 1]);
+		// printf("\033[32mTest\n");
+		// printf("char trim: %c\n", trim->res[trim->j]);
+		// printf("char og: %c\n\033[0m", input[trim->i + 1]);
 		trim->res[trim->j++] = input[trim->i];
 		// if (input[trim->i + 1] != '\0')
 		// 	trim->res[trim->j++] = ' ';
@@ -120,8 +120,9 @@ char *trim_spaces(char *input)
 	trim.len = get_len(trim_inpt);
 
 	trim.res = ft_calloc(sizeof(char), (trim.len + 1));
-	if (!trim_inpt)
+	if (!trim.res)
 	{
+		free(trim_inpt);
 	//  print_error(errno, NULL)
 		return (NULL);
 	}

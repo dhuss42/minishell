@@ -14,14 +14,14 @@
 #include "../minishell_eichhoernchen.h"
 
 
-t_list *expansion(t_list *table, char **env)
+void expansion(t_shell *shell, char **env)
 {
-	if (iterate_table(table, env) == -1)
-		return (NULL);
-	if (remove_quotes(table) == -1)
-		return (NULL);
-	print_table(table);
-	return (NULL);
+	if (iterate_table(shell->table, env) == -1)
+		return ;
+	if (remove_quotes(shell->table) == -1)
+		return ;
 }
 
+// need to handle exit_code stuff like aaa$? and aaa$?aaaa
+// need to get the exit_code in double quotes
 

@@ -36,3 +36,13 @@ void	free_token(void *content)
 		free(tok);
 	}
 }
+
+void    free_lexer(char *input, char *trim_inpt, char *res)
+{
+    if (input)
+        free(input);
+    if (trim_inpt)
+        free(trim_inpt);
+    if (res)
+        free(res);
+}

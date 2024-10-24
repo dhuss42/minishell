@@ -43,17 +43,17 @@ void	skip_single_quotes(t_command *row, t_shell *expand)
 {
 	if (row->args[expand->i][expand->k] == '\'')
 	{
-		printf(YELLOW"[%zu] opening quote %c\n", expand->k, row->args[expand->i][expand->k]);
+		// printf(YELLOW"[%zu] opening quote %c\n", expand->k, row->args[expand->i][expand->k]);
 		expand->k++;
 	}
 	while (row->args[expand->i][expand->k] != '\'' && row->args[expand->i][expand->k] != '\0')
 	{
-		printf(GREEN"[%zu] between quotes %c\n", expand->k, row->args[expand->i][expand->k]);
+		// printf(GREEN"[%zu] between quotes %c\n", expand->k, row->args[expand->i][expand->k]);
 		expand->k++;
 	}
 	if (row->args[expand->i][expand->k] == '\'')
 	{
-		printf(YELLOW"[%zu] closing quote %c\n", expand->k, row->args[expand->i][expand->k]);
+		// printf(YELLOW"[%zu] closing quote %c\n", expand->k, row->args[expand->i][expand->k]);
 		expand->k++;
 	}
 }
@@ -84,12 +84,18 @@ int	check_for_expansion(t_command *row, t_shell *expand, char **env)
 			if (get_expanded(tmp, env, row, expand) == -1)
 				return (-1);
 		}
+		else if (row->args[expand->i][expand->k] == '$' && (row->args[expand->i][expand->k + 1] == '?'))
+		{
+			printf(RED"EXIT CODE {%c} at [%zu]\n"WHITE,row->args[expand->i][expand->k], expand->k);
+			if (get_exit_code(tmp, row, expand) == -1)
+				return (-1);
+		}
 		else
 		{
 			printf(RED"ordinary char {%c} at [%zu]\n"WHITE,row->args[expand->i][expand->k], expand->k);
 			expand->k++;
 		}
-		printf(MAGENTA"current args[%zu]: %s\n", expand->i, row->args[expand->i]);
+		// printf(MAGENTA"current args[%zu]: %s\n", expand->i, row->args[expand->i]);
 	}
 	return (0);
 }

@@ -79,6 +79,7 @@ t_command	*allocate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 	new_cmd->args = malloc(sizeof(char *) * (parsing->words + 1));
 	if (!new_cmd->args)
 	{
+		// printf("I return after new_cmd->args malloc fail\n");
 		free_table(parsing);
 		// print_error(errno, NULL);
 		return (NULL);
@@ -86,6 +87,7 @@ t_command	*allocate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 	new_cmd->red_symbol = malloc(sizeof(char *) * (parsing->reds + 1));
 	if (!new_cmd->red_symbol)
 	{
+		// printf("I return after new_cmd->red_symbol malloc fail\n");
 		free_table(parsing);
 		// print_error(errno, NULL);
 		return (NULL);
@@ -93,47 +95,59 @@ t_command	*allocate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 	new_cmd->filename = malloc (sizeof(char *) * (parsing->filenames + 1));
 	if (!new_cmd->filename)
 	{
+		// printf("I return after new_cmd->filename malloc fail\n");
 		free_table(parsing);
 		// print_error(errno, NULL);
 		return (NULL);
 	}
 	new_cmd = populate_cmd(new_cmd, tl_pos, parsing);
 	if (!new_cmd)
+	{
+		// printf("I return after populate_cmd\n");
 		return (NULL);
+	}
 	return (new_cmd);
 }
 
-t_list	*create_table(t_list *token_list, t_shell *parsing)
+int	create_table(t_shell *shell)
 {
 	t_list		*tmp;
 	t_list		*tmp2;
 	t_list		*new_node;
 	t_command	*new_cmd;
 
-	tmp = token_list;
-	parsing->lines = count_lines_table(token_list);
-	while (parsing->lines > 0 && tmp != NULL)
+	tmp = shell->list;
+	shell->lines = count_lines_table(shell->list);
+	while (shell->lines > 0 && tmp != NULL)
 	{
 		new_cmd = create_cmd_block();
 		if (!new_cmd)
-			return (NULL);
-		new_node = ft_lstnew((void *)new_cmd);
-		if (!new_cmd)
 		{
+			// printf("I return after create_cmd_block\n");
+			return (-1);
+		}
+		new_node = ft_lstnew((void *)new_cmd);
+		if (!new_node)
+		{
+			// printf("I return after ft_lstnew\n");
 			// print_error(errno, NULL);
-			return(NULL);
+			return (-1);
 		}
 		tmp2 = tmp;
-		set_to_zero(parsing);
-		nbr_words_redirections(parsing, &tmp);
-		new_cmd = allocate_cmd(new_cmd, tmp2, parsing);
+		set_to_zero(shell);
+		nbr_words_redirections(shell, &tmp);
+		new_cmd = allocate_cmd(new_cmd, tmp2, shell);
 		if (!new_cmd)
-			return (NULL);
-		ft_lstadd_back(&parsing->table, new_node);
+		{
+			// printf("I return after allocate_cmd\n");
+			return (-1);
+		}
+		ft_lstadd_back(&shell->table, new_node);
 		if (tmp == NULL)
 			break ;
 		tmp = tmp->next;
-		parsing->lines--;
+		shell->lines--;
 	}
-	return (parsing->table);
+	// printf("I return after at the end of function\n");
+	return (0);
 }
