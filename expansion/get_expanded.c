@@ -119,7 +119,7 @@ int	switcheroo(t_command *row, char *exp, t_shell *expand)
 // strdups tmp into the now free position in args **
 // frees tmp
 
-char	*tmp_dollar(t_command *row, t_shell *expand)
+char	*get_key(t_command *row, t_shell *expand)
 {
 	char	*tmp;
 	size_t	index;
@@ -161,7 +161,7 @@ int	get_expanded(char *key, char **env, t_command *row, t_shell *expand)
 {
 	char	*exp = NULL;
 
-	key = tmp_dollar(row, expand);
+	key = get_key(row, expand);
 	if (!key)
 		return (-1);
 	while (*key == '$') // not sure if I need this here (test later on)

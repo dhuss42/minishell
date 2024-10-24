@@ -21,7 +21,3 @@ void expansion(t_shell *shell, char **env)
 	if (remove_quotes(shell->table) == -1)
 		return ;
 }
-
-// need to handle exit_code stuff like aaa$? and aaa$?aaaa
-// need to get the exit_code in double quotes
-

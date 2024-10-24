@@ -27,6 +27,11 @@ int	double_quotes(t_command *row, t_shell *expand, char **env)
 			if (get_expanded(tmp, env, row, expand) == -1)
 				return (-1);
 		}
+		else if (row->args[expand->i][expand->k] == '$' && (row->args[expand->i][expand->k + 1] == '?'))
+		{
+			if (get_exit_code(tmp, row, expand) == -1)
+				return (-1);
+		}
 		else
 			expand->k++;
 	}
