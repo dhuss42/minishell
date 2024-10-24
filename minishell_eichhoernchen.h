@@ -19,7 +19,7 @@
 #include <readline/history.h>
 #include <stdbool.h>
 #include "libft/libft.h"
-#include <string.h>
+#include <stdarg.h>
 
 
 //----------------colors--------------//
@@ -79,8 +79,9 @@ typedef struct s_shell
 	char	quote;
 } t_shell;
 
-//-----------------loop----------------//
-
+//-----------------builtins----------------//
+void    ft_env(char **env);
+void 	pwd();
 
 //-----------------lexer----------------//
 t_list  *lexer(t_list *list, char *input);
@@ -88,7 +89,7 @@ char 	*trim_spaces(char *input);
 size_t	get_len(char *str);
 char	**split_space_quotes(char *input);
 t_list	*tokeniser(char **split_double_array);
-void	syntax_errors(t_list *token_list);
+bool	syntax_errors(t_list *token_list);
 
 //----------------parser----------------//
 t_list		*parser(t_list *token_list);
@@ -96,11 +97,11 @@ t_list		*create_table(t_list *token_list, t_shell *parsing);
 t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing);
 
 //----------------expansion----------------//
-t_list *expansion(t_list *table, char **env);
-bool	iterate_table(t_list *table, char **env);
-void	get_expanded(char *variable, char **env, t_command *row, t_shell *expand);
+t_list	*expansion(t_list *table, char **env);
+int		iterate_table(t_list *table, char **env);
+int		get_expanded(char *variable, char **env, t_command *row, t_shell *expand);
 char	*compare_with_env(char *variable, char **env, char *exp);
-void	remove_quotes(t_list *table);
+int		remove_quotes(t_list *table);
 
 //----------------helpers----------------//
 

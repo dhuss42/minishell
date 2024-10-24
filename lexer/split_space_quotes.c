@@ -77,29 +77,29 @@ char	*populate_str(char *input, size_t *end)
 
 	quotes = '\0';
 	start = *end;
-	printf(RED"INSIDE populate_str\n"WHITE);
+	// printf(RED"INSIDE populate_str\n"WHITE);
 	while (input[*end] != '\0' && input[*end] != ' ' /* && input[*end] != '\'' && input[*end] != '\"' */)
 	{
-		printf(BLUE"[%zu] current char %c\n"WHITE, *end, input[*end]);
+		// printf(BLUE"[%zu] current char %c\n"WHITE, *end, input[*end]);
 		if (input[*end] == '\'' || input[*end] == '\"')
 		{
-			printf(YELLOW"[%zu] opening quote %c\n"WHITE, *end, input[*end]);
+			// printf(YELLOW"[%zu] opening quote %c\n"WHITE, *end, input[*end]);
 			quotes = input[*end];
 				(*end)++;
 			while (input[*end] != '\0' && input[*end] != quotes)
 			{
-				printf(GREEN"[%zu] inside quote %c\n"WHITE, *end, input[*end]);
+				// printf(GREEN"[%zu] inside quote %c\n"WHITE, *end, input[*end]);
 				(*end)++;
 			}
 			if (input[*end] == quotes)
 			{
-				printf(YELLOW"[%zu] closing quote %c\n"WHITE, *end, input[*end]);
+				// printf(YELLOW"[%zu] closing quote %c\n"WHITE, *end, input[*end]);
 				(*end)++;
 			}
 		}
 		else if (input[*end] != '\0' && input[*end] != ' ')
 		{
-			printf(MAGENTA"[%zu] ordinary char %c\n"WHITE, *end, input[*end]);
+			// printf(MAGENTA"[%zu] ordinary char %c\n"WHITE, *end, input[*end]);
 			(*end)++;
 		}
 	}
@@ -109,21 +109,6 @@ char	*populate_str(char *input, size_t *end)
 //goes through string
 //
 
-/* char	*populate_quoted_str(char *input, size_t *end)
-{
-	char	quotes;
-	size_t	start;
-
-	start = *end;
-	quotes = input[start];
-	(*end)++;
-	while (input[*end] != '\0' && input[*end] != quotes)
-		(*end)++;
-	if (input[*end] == quotes)
-		(*end)++;
-	return (ft_substr(input, start, (*end - start)));
-} */
-
 char	**fill_token_list(char *input, char **tokens)
 {
 	size_t	end;
@@ -131,23 +116,24 @@ char	**fill_token_list(char *input, char **tokens)
 
 	i = 0;
 	end = 0;
-	printf(RED"INSIDE fill_token_list\n"WHITE);
+	// printf(RED"INSIDE fill_token_list\n"WHITE);
 	while (input[end] != '\0')
 	{
-		printf(BLUE"[%zu] current char fill_token_list %c\n"WHITE, end, input[end]);
+		// printf(BLUE"[%zu] current char fill_token_list %c\n"WHITE, end, input[end]);
 		while (input[end] == ' ')
 			end++;
 		if (input[end] != ' ' /* && input[end] != '\'' && input[end] != '\"' */)
 		{
 			tokens[i] = populate_str(input, &end);
-			printf(CYAN"[%zu] TOKEN: %s\n"WHITE, i, tokens[i]);
+			// if (!tokens[i])
+			// {
+			// 	print_error(errno, NULL);
+			// 	return (NULL);
+			// }
+
+			// printf(CYAN"[%zu] TOKEN: %s\n"WHITE, i, tokens[i]);
 			i++;
 		}
-
-/* 		else if (input[end] == '\'' || input[end] == '\"')
-		{
-			tokens[i++] = populate_quoted_str(input, &end);
-		} */
 	}
 	tokens[i] = NULL;
 	return (tokens);
@@ -162,18 +148,24 @@ char	**split_space_quotes(char *input)
 {
 	char	**tokens;
 
-	printf(RED"inside split_space_quotes\n"WHITE);
-	printf("count_tokens: %zu\n", count_tokens(input));
+	// printf(RED"inside split_space_quotes\n"WHITE);
+	// printf("count_tokens: %zu\n", count_tokens(input));
 	tokens = malloc(sizeof(char *) * (count_tokens(input) + 1));
 	if (!tokens)
-		return (NULL);
-	tokens = fill_token_list(input, tokens);
-	// exit(EXIT_SUCCESS);
-	int i = 0;
-	while (tokens[i] != NULL)
 	{
-		printf(MAGENTA"[%d]TOKEN: %s\n"WHITE, i, tokens[i]);
-		i++;
+	// 	print_error(errno, NULL);
+		return (NULL);
 	}
+
+	tokens = fill_token_list(input, tokens);
+	if (!tokens)
+		return (NULL);
+	// exit(EXIT_SUCCESS); Debugging 
+	// /* int i = 0;
+	// while (tokens[i] != NULL)
+	// {
+	// 	printf(MAGENTA"[%d]TOKEN: %s\n"WHITE, i, tokens[i]);
+	// 	i++;
+	// } */
 	return (tokens);
 }

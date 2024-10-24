@@ -16,8 +16,10 @@
 
 t_list *expansion(t_list *table, char **env)
 {
-	iterate_table(table, env);
-	remove_quotes(table);
+	if (iterate_table(table, env) == -1)
+		return (NULL);
+	if (remove_quotes(table) == -1)
+		return (NULL);
 	print_table(table);
 	return (NULL);
 }

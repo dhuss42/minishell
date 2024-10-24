@@ -83,14 +83,17 @@ char	*copy_into_tmp(t_command *row, char *exp, t_shell *expand, char *tmp)
 // moves k (the itterater in the 3 while loop) to the end of the exanded string
 // copies the remainder into tmp and null terminates
 
-void	switcheroo(t_command *row, char *exp, t_shell *expand)
+int	switcheroo(t_command *row, char *exp, t_shell *expand)
 {
 	char	*tmp;
 
 	expand->len = get_len_exp(row, exp, expand);
 	tmp = ft_calloc(expand->len + 1, sizeof(char));
 	if (!tmp)
-		return ;
+	{
+		// print_error(errno, NULL);
+		return (-1);
+	}
 	tmp = copy_into_tmp(row, exp, expand, tmp);
 	if (row->args[expand->i])
 	{
@@ -99,9 +102,13 @@ void	switcheroo(t_command *row, char *exp, t_shell *expand)
 	}
 	row->args[expand->i] = ft_strdup(tmp);
 	if (!row->args[expand->i])
-		return ;
+	{
+		// print_error(errno, NULL);
+		return (-1);
+	}
 	if (tmp)
 		free(tmp);
+	return (0);
 }
 
 
@@ -126,7 +133,10 @@ char	*tmp_dollar(t_command *row, t_shell *expand)
 		expand->j++;
 	tmp = malloc(sizeof(char) * (expand->j + 1));
 	if (!tmp)
+	{
+		// print_error(errno, NULL);
 		return (NULL);
+	}
 	expand->j = 0;
 	while (row->args[expand->i][index] != '\0' && row->args[expand->i][index] != '\"' && row->args[expand->i][index] != '\'' && row->args[expand->i][index] != '$' && !is_wspace(row->args[expand->i][index]))
 		tmp[expand->j++] = row->args[expand->i][index++];
@@ -147,23 +157,30 @@ char	*tmp_dollar(t_command *row, t_shell *expand)
 // copies into tmp (boraders are " ' $ ($PATH$) and \0)
 // moves og string past closing quote if there is one
 
-void	get_expanded(char *variable, char **env, t_command *row, t_shell *expand)
+int	get_expanded(char *key, char **env, t_command *row, t_shell *expand)
 {
 	char	*exp = NULL;
 
-	variable = tmp_dollar(row, expand);
-	while (*variable == '$') // not sure if I need this here (test later on)
-		variable++;
-	exp = compare_with_env(variable, env, exp);
+	key = tmp_dollar(row, expand);
+	if (!key)
+		return (-1);
+	while (*key == '$') // not sure if I need this here (test later on)
+		key++;
+	exp = compare_with_env(key, env, exp);
 	printf(RED"exp: %s\n", exp);
 	if (!exp)
-		exp = ft_strdup("");
-	switcheroo(row, exp, expand);
-	if (variable)
 	{
-		free (variable);
-		variable = NULL;
+		// print_error(errno, NULL);
+		return (-1);
 	}
+	if (switcheroo(row, exp, expand) == -1)
+		return (-1);
+	if (key)
+	{
+		free (key);
+		key = NULL;
+	}
+	return (0);
 }
 
 // moves past the dollar so variable becomes searchable (PATH)

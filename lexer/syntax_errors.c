@@ -12,7 +12,7 @@
 
 #include "../minishell_eichhoernchen.h"
 
-void	syntax_error_red(t_list *tl_pos)
+bool	syntax_error_red(t_list *tl_pos)
 {
 	t_list	*tmp;
 	token	*next_token;
@@ -23,8 +23,9 @@ void	syntax_error_red(t_list *tl_pos)
 		next_token = (token *)tmp->next->content;
 		if (is_redirection(next_token) || next_token->type == TOKEN_PIPE)
 		{
+			// print_error(258, NULL);
 			printf("\033[31mSYYYNTAX ERROR! CONSECUTIVE REDIRECTION OR PIPE FOLLOWING REDIRECTION\n\033[0m");
-			exit(EXIT_FAILURE); // change
+			return (true);
 		}
 /* 		if (!is_filename(next_token))
 		{
@@ -34,12 +35,14 @@ void	syntax_error_red(t_list *tl_pos)
 	}
 	else if (tmp->next == NULL)
 	{
+		// print_error(258, NULL);
 		printf("\033[31mSYYYNTAX ERROR! NOTHING AFTER REDIRECTION\n\033[0m");
-		exit(EXIT_FAILURE); // change
+		return (true); // change
 	}
+	return (false);
 }
 
-void	syntax_error_pipe(t_list *tl_pos)
+bool	syntax_error_pipe(t_list *tl_pos)
 {
 	t_list	*tmp;
 	token	*next_token;
@@ -52,16 +55,18 @@ void	syntax_error_pipe(t_list *tl_pos)
 	//	 printf("SYYYNTAX ERROR! NOTHING AFTER PIPE\n");
 		if (next_token->type == TOKEN_PIPE)
 		{
-			printf("\033[31mSYYYNTAX ERROR! CONSECUTIVE PIPES\n\033[0m");
-			exit(EXIT_FAILURE); // change
+			// print_error(258, NULL);
+			// printf("\033[31mSYYYNTAX ERROR! CONSECUTIVE PIPES\n\033[0m");
+			return (true); // change
 		}
 	}
+	return (false);
 }
 
 // commented out section concerns a missing cmd after the Pipe, bash waits for a cmd so not really a syntax error
 
 
-void	syntax_errors(t_list *token_list)
+bool	syntax_errors(t_list *token_list)
 {
 	t_list	*tmp;
 	token	*current_token;
@@ -71,18 +76,26 @@ void	syntax_errors(t_list *token_list)
 	current_token = (token *)tmp->content;
 	if (current_token->type == TOKEN_PIPE)
 	{
+		// print_error(258, NULL); custom_error for syntax
 		printf("\033[31mSYYYNTAX ERROR! NOTHING BEFORE PIPE\n\033[0m");
-		exit(EXIT_FAILURE); // change
+		return (true);
 	}
 	while (tmp != NULL)
 	{
 		current_token = (token *)tmp->content;
 		if (is_redirection(current_token))
-			syntax_error_red(tmp);
+		{
+			if (syntax_error_red(tmp) == true)
+				return (true);
+		}
 		else if (current_token->type == TOKEN_PIPE)
-			syntax_error_pipe(tmp);
+		{
+			if (syntax_error_pipe(tmp) == true)
+				return (true);
+		}
 		tmp = tmp->next;
 	}
+	return (false);
 }
 
 // to do here

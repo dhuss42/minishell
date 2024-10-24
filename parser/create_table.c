@@ -19,7 +19,10 @@ t_command	*create_cmd_block(void)
 	new_cmd = NULL;
 	new_cmd = malloc(sizeof(t_command));
 	if (!new_cmd)
+	{
+		// print_error(errno, NULL);
 		return (NULL);
+	}
 	new_cmd->args = NULL;
 	new_cmd->filename = NULL;
 	new_cmd->red_symbol = NULL;
@@ -77,21 +80,26 @@ t_command	*allocate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 	if (!new_cmd->args)
 	{
 		free_table(parsing);
+		// print_error(errno, NULL);
 		return (NULL);
 	}
 	new_cmd->red_symbol = malloc(sizeof(char *) * (parsing->reds + 1));
 	if (!new_cmd->red_symbol)
 	{
 		free_table(parsing);
+		// print_error(errno, NULL);
 		return (NULL);
 	}
 	new_cmd->filename = malloc (sizeof(char *) * (parsing->filenames + 1));
 	if (!new_cmd->filename)
 	{
 		free_table(parsing);
+		// print_error(errno, NULL);
 		return (NULL);
 	}
 	new_cmd = populate_cmd(new_cmd, tl_pos, parsing);
+	if (!new_cmd)
+		return (NULL);
 	return (new_cmd);
 }
 
@@ -107,11 +115,20 @@ t_list	*create_table(t_list *token_list, t_shell *parsing)
 	while (parsing->lines > 0 && tmp != NULL)
 	{
 		new_cmd = create_cmd_block();
+		if (!new_cmd)
+			return (NULL);
 		new_node = ft_lstnew((void *)new_cmd);
+		if (!new_cmd)
+		{
+			// print_error(errno, NULL);
+			return(NULL);
+		}
 		tmp2 = tmp;
 		set_to_zero(parsing);
 		nbr_words_redirections(parsing, &tmp);
 		new_cmd = allocate_cmd(new_cmd, tmp2, parsing);
+		if (!new_cmd)
+			return (NULL);
 		ft_lstadd_back(&parsing->table, new_node);
 		if (tmp == NULL)
 			break ;

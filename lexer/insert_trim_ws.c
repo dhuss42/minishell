@@ -78,10 +78,10 @@ void	populate_trim_str(t_shell *trim, char *input)
 {
 	trim->j = 0;
 	trim->i = 0;
-	trim->isspace = false; //flag to false
-	while (trim->j < trim->len) // fixed wrong iterater in populate_trim_str
+	trim->isspace = false; 
+	while (trim->j < trim->len)
 	{
-		printf("[%zu] < [%zu]\n", trim->j, trim->len);
+		// printf("[%zu] < [%zu]\n", trim->j, trim->len);
 		if (is_special(input[trim->i]))
 			handle_special(trim, input);
 		else if (is_wspace(input[trim->i])) // checks if there is a ws in input and sets it to one ws
@@ -97,7 +97,7 @@ void	populate_trim_str(t_shell *trim, char *input)
 			trim->res[trim->j++] = input[trim->i];
 			trim->isspace = false;
 		}
-		printf("str: {%s}\n", trim->res);
+		// printf("str: {%s}\n", trim->res);
 		trim->i++;
 	}
 	trim->res[trim->j] = '\0';
@@ -109,23 +109,30 @@ char *trim_spaces(char *input)
 	t_shell	trim;
 	char	*trim_inpt;
 
-	if (!input)
-		return (NULL);
 	trim.res = NULL;
 	trim_inpt = ft_strtrim(input, " \n\t");
-	// trim.len = ft_strlen(trim_inpt); // calculate len properly?
-	trim.len = get_len(trim_inpt);
-	// trim.res = ft_calloc(sizeof(char), (trim.len + 1));
-	trim.res = ft_calloc(sizeof(char), (trim.len + 1));
-	if (!trim.res)
+	if (!trim_inpt)
+	{
+	// 	print_error(errno, NULL);
 		return (NULL);
+	}
+
+	trim.len = get_len(trim_inpt);
+
+	trim.res = ft_calloc(sizeof(char), (trim.len + 1));
+	if (!trim_inpt)
+	{
+	//  print_error(errno, NULL)
+		return (NULL);
+	}
+
 	populate_trim_str(&trim, trim_inpt);
-	printf("\nonly edge trimmed string: [%s]\n", trim_inpt);
-	printf("calculated length: %zu\n\n", trim.len);
-	printf("trim.res: [%s]\n", trim.res);
-	printf("actual result string length: %zu\n", ft_strlen(trim.res));
-	free(trim_inpt);
-	// exit(EXIT_SUCCESS); /* for debugging */
+	// printf("\nonly edge trimmed string: [%s]\n", trim_inpt);
+	// printf("calculated length: %zu\n\n", trim.len);
+	// printf("trim.res: [%s]\n", trim.res);
+	// printf("actual result string length: %zu\n", ft_strlen(trim.res));
+	if(trim_inpt)
+		free(trim_inpt);
 	return (trim.res);
 }
 

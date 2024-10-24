@@ -18,6 +18,7 @@ void	populate_red_array(t_shell *parsing, token* current_token, t_command *new_c
 		if (!new_cmd->red_symbol[parsing->i])
 		{
 			free_table(parsing);
+			// print_error(errno, NULL);
 			return ;
 		}
 		ft_strlcpy(new_cmd->red_symbol[parsing->i], current_token->input, ft_strlen(current_token->input) + 1);
@@ -29,6 +30,7 @@ void	populate_filename_array(t_shell *parsing, token* next_token, t_command *new
 	if (!new_cmd->filename[parsing->i])
 	{
 		free_table(parsing);
+		// print_error(errno, NULL);
 		return ;
 	}
 	ft_strlcpy(new_cmd->filename[parsing->i], next_token->input, ft_strlen(next_token->input) + 1);
@@ -41,27 +43,32 @@ void	populate_args_array(t_shell *parsing, token* current_token, t_command *new_
 	if (!new_cmd->args[parsing->j])
 	{
 		free_table(parsing);
+		// print_error(errno, NULL);
 		return ;
 	}
 	ft_strlcpy(new_cmd->args[parsing->j], current_token->input, ft_strlen(current_token->input) + 1);
 	parsing->j++;
 }
 
-void	populate_double_arrays(t_shell *parsing, token*current_token, token *next_token, t_command *new_cmd)
+int	populate_double_arrays(t_shell *parsing, token *current_token, token *next_token, t_command *new_cmd)
 {
 	if (is_redirection(current_token))
 	{
 		populate_red_array(parsing, current_token, new_cmd);
-		// if (is_filename(next_token))
-		// {
-			populate_filename_array(parsing, next_token, new_cmd);
-		// }
+		if (!new_cmd->red_symbol[parsing->i])
+			return (-1);
+		populate_filename_array(parsing, next_token, new_cmd);
+		if (!new_cmd->filename[parsing->i])
+			return (-1);
 		parsing->i++;
 	}
 	else
 	{
 		populate_args_array(parsing, current_token, new_cmd);
+		if (!new_cmd->args[parsing->j])
+			return (-1);
 	}
+	return (0);
 }
 
 // this function checks if the current node is a redirection symbol and allocates enough memory for it in the struct(table)‚
@@ -85,7 +92,8 @@ t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 			next_token = (token *)parsing->tmp->next->content;
 		if (current_token->type == TOKEN_PIPE)
 			break ;
-		populate_double_arrays(parsing, current_token, next_token, new_cmd);
+		if (populate_double_arrays(parsing, current_token, next_token, new_cmd) == -1)
+			return (NULL);
 		parsing->tmp = parsing->tmp->next;
 	}
 	new_cmd->args[parsing->j] = NULL;

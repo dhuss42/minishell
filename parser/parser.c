@@ -18,6 +18,8 @@ t_list	*parser(t_list *token_list)
 
 	parsing.table = NULL;
 	parsing.table = create_table(token_list, &parsing);
+	if (!parsing.table)
+		return (NULL);
 	// print_table(parsing.table);
 
 	// free_table(&parsing); // just here for leak check

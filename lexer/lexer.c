@@ -9,17 +9,35 @@ t_list  *lexer(t_list *list, char *input)
 
     tokens = NULL;
     trim_inpt = trim_spaces(input);
+    if (!trim_inpt)
+        return (NULL);
+
     res = ft_strtrim(trim_inpt, " \n\t");
+    if (!res)
+    {
+    //     print_error(errno, NULL);
+        return (NULL);
+    }
+
     tokens = split_space_quotes(res);
+    if (!tokens)
+        return (NULL);
+
     list = tokeniser(tokens);
+    if (!list)
+        return (NULL);
 
     // printf("\033[32mTOKEN LINKED LIST\n");
     // print_token_list(list);
     // printf("\033[0m");
-    syntax_errors(list);
-    free(input);
-    free(trim_inpt);
-    free(res);
+    if (syntax_errors(list) == true)
+        return (NULL);
+    if (input)
+        free(input);
+    if (trim_inpt)
+        free(trim_inpt);
+    if (res)
+        free(res);
     // exit(EXIT_SUCCESS); // for debugging
     return (list);
 }

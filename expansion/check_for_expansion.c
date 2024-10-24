@@ -12,29 +12,27 @@
 
 #include "../minishell_eichhoernchen.h"
 
-void	double_quotes(t_command *row, t_shell *expand, char **env)
+int	double_quotes(t_command *row, t_shell *expand, char **env)
 {
 	char	*tmp;
 
 	tmp = NULL;
 	expand->quote = row->args[expand->i][expand->k];
 	expand->k++;
-	// if (row->args[expand->i][expand->k] == expand->quote)
-	// {
-	// 	printf(YELLOW"[%zu]Next char is closing quote %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
-	// 	expand->k++;
-	// 	return ;
-	// }
 	while (row->args[expand->i][expand->k] != expand->quote && row->args[expand->i][expand->k] != '\0')
 	{
-		printf(BLUE"[%zu]current char in double quotes %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
+		// printf(BLUE"[%zu]current char in double quotes %c\n"WHITE, expand->k, row->args[expand->i][expand->k]);
 		if (row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1]))
-			get_expanded(tmp, env, row, expand);
+		{
+			if (get_expanded(tmp, env, row, expand) == -1)
+				return (-1);
+		}
 		else
 			expand->k++;
 	}
 	if (row->args[expand->i][expand->k] == '\"')
 		expand->k++;
+	return (0);
 }
 
 // here
@@ -60,7 +58,7 @@ void	skip_single_quotes(t_command *row, t_shell *expand)
 	}
 }
 
-void	check_for_expansion(t_command *row, t_shell *expand, char **env)
+int	check_for_expansion(t_command *row, t_shell *expand, char **env)
 {
 	char	*tmp;
 
@@ -69,11 +67,11 @@ void	check_for_expansion(t_command *row, t_shell *expand, char **env)
 	tmp = NULL;
 	while (row->args[expand->i][expand->k] != '\0')
 	{
-
 		if (row->args[expand->i][expand->k] == '\"' && contains_dollar(row->args[expand->i], expand->k))
 		{
 			printf(RED"double quotes {%c} at [%zu]\n"WHITE, row->args[expand->i][expand->k], expand->k);
-			double_quotes(row, expand, env);
+			if (double_quotes(row, expand, env) == -1)
+				return (-1);
 		}
 		else if (row->args[expand->i][expand->k] == '\'')
 		{
@@ -83,7 +81,8 @@ void	check_for_expansion(t_command *row, t_shell *expand, char **env)
 		else if (row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1]))
 		{
 			printf(RED"dollar {%c} at [%zu]\n"WHITE,row->args[expand->i][expand->k], expand->k);
-			get_expanded(tmp, env, row, expand);
+			if (get_expanded(tmp, env, row, expand) == -1)
+				return (-1);
 		}
 		else
 		{
@@ -92,6 +91,7 @@ void	check_for_expansion(t_command *row, t_shell *expand, char **env)
 		}
 		printf(MAGENTA"current args[%zu]: %s\n", expand->i, row->args[expand->i]);
 	}
+	return (0);
 }
 
 // check for expansion
@@ -106,7 +106,7 @@ void	check_for_expansion(t_command *row, t_shell *expand, char **env)
 // if yes it goes into tmp_dollar (creates searchable variable name) and get_expanded (gets the expansion)
 // 5. moves the string index if nothing is the case
 
-bool	iterate_table(t_list *table, char **env)
+int	iterate_table(t_list *table, char **env)
 {
 	t_shell		expand;
 	t_command	*row;
@@ -118,12 +118,13 @@ bool	iterate_table(t_list *table, char **env)
 		expand.i = 0;
 		while (row->args[expand.i] != NULL)
 		{
-			check_for_expansion(row, &expand, env);
+			if (check_for_expansion(row, &expand, env) == -1)
+				return (-1);
 			expand.i++;
 		}
 		expand.tmp = expand.tmp->next;
 	}
-	return (true); // change
+	return (0);
 }
 
 // function iterates through the table and the double char

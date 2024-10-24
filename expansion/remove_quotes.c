@@ -39,14 +39,17 @@ void	get_len_no_quotes(t_command *row, t_shell *expand)
 	// printf(MAGENTA"len no quotes: %zu\n"WHITE, expand->len);
 }
 
-void	remove_outer_quotes(t_command *row, t_shell *expand)
+int	remove_outer_quotes(t_command *row, t_shell *expand)
 {
 	char	*no_quotes;
 	
 	get_len_no_quotes(row, expand);
 	no_quotes = ft_calloc(expand->len + 1, sizeof(char));
 	if (!no_quotes)
-		return ;
+	{
+		// print_error(errno, NULL);
+		return (-1);
+	}
 	expand->j = 0;
 	expand->k = 0;
 	while (row->args[expand->i][expand->j] != '\0')
@@ -66,9 +69,13 @@ void	remove_outer_quotes(t_command *row, t_shell *expand)
 		free (row->args[expand->i]);
 	row->args[expand->i] = ft_strdup(no_quotes);
 	if (!row->args[expand->i])
-		return ;
+	{
+		// print_error(errno, NULL);
+		return (-1);
+	}
 	if (no_quotes)
 		free(no_quotes);
+	return (0);
 }
 
 // function allocates memory for a string without quotes
@@ -79,7 +86,7 @@ void	remove_outer_quotes(t_command *row, t_shell *expand)
 // frees the no_quotes string
 
 
-void	remove_quotes(t_list *table)
+int	remove_quotes(t_list *table)
 {
 	t_shell		expand;
 	t_command	*row;
@@ -91,11 +98,13 @@ void	remove_quotes(t_list *table)
 		expand.i = 0;
 		while (row->args[expand.i] != NULL)
 		{
-			remove_outer_quotes(row, &expand);
+			if (remove_outer_quotes(row, &expand) == -1)
+				return (-1);
 			expand.i++;
 		}
 		expand.tmp = expand.tmp->next;
 	}
+	return (0);
 }
 
 // itterates through the table and the char **

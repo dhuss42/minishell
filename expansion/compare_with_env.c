@@ -27,7 +27,9 @@ char	*compare_with_env(char *variable, char **env, char *exp)
 			}
 			j++;
 		}
-	return (exp);
+	if (!exp)
+		return (exp = ft_strdup(""));
+	return (NULL);
 }
 
 // compares the variable name (PATH) to every string in the env** list
