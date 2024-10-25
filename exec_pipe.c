@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/24 17:24:45 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 09:55:15 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +49,24 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *table)
 	t_command	*row;
 
 	if (close_fds(fd, -1, test->nbr_pipes))
-		exit (print_error(errno, NULL, test));
+		exit (print_error(errno, NULL, PRINT));
 	tmp = table;
 	exit_code = 0;
 	int i = 0;
 	while (i <= test->nbr_pipes)
 	{
 		if (waitpid(pid[i], &wstatus, 0) == -1)
-			return (print_error(E_PARENT, NULL, test));
+			return (print_error(E_PARENT, NULL, PRINT));
 		if (WIFEXITED(wstatus))
 			exit_code = WEXITSTATUS(wstatus);
 		else
 			return (1);
-			// return (print_error(E_PARENT, NULL, test));
+			// return (print_error(E_PARENT, NULL, PRINT));
 		row = (t_command*) tmp->content;
-		if (exit_code > 1)	//check if right
-			return(print_error(exit_code, row->args[0], test));
-		if (exit_code == 1)
-		{
-			test->exit_code = 1;
-			return (1);
-		}
+		if (exit_code > 2)	//check if right	or maybe dont print at all here??
+			return(print_error(exit_code, row->args[0], PRINT));
+		if (exit_code == 1 || exit_code == 2)
+			return(print_error(exit_code, row->args[0], NOTPRINT));
 		tmp = tmp->next;
 		i++;
 	}
@@ -83,35 +80,35 @@ Child handler for pipechain
 void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list *table)
 {
 	if (close_fds(fd, row->id, test->nbr_pipes))
-		exit (print_error(errno, NULL, test));
+		exit (print_error(errno, NULL, PRINT));
 	if (row->id != 0 && row->final_infile == NULL)
 	{
 		if (dup2(fd[row->id - 1][0], 0) == - 1)
-			exit (print_error(errno, NULL, test));
+			exit (print_error(errno, NULL, PRINT));
 		if (close(fd[row->id - 1][0]) == - 1)
-			exit (print_error(errno, NULL, test));
+			exit (print_error(errno, NULL, PRINT));
 	}
 	if (row->final_infile)
 	{
-		if (redirect_input(*row, test, &fd[row->id - 1][0]))
-			exit(1);	//exit with exith code
+		if (redirect_input(*row, &fd[row->id - 1][0]))
+			exit(1);	//exit with exit code
 	}
 	if (row->id != test->nbr_pipes && row->final_outfile == NULL)
 	{
 		if (dup2(fd[row->id][1], 1) == - 1)
-			exit (print_error(errno, NULL, test));
+			exit (print_error(errno, NULL, PRINT));
 		if (close(fd[row->id][1]) == - 1)
-			exit (print_error(errno, NULL, test));
+			exit (print_error(errno, NULL, PRINT));
 	}
 	if (row->final_outfile)
 	{
-		if (redirect_output(*row, test, &fd[row->id][0]))
+		if (redirect_output(*row, &fd[row->id][0]))
 			exit (2);		//exit with exit_code
 	}
 	if (execve(row->path, row->args, envp))
 	{
 		free_table(table);
-		exit (print_error(errno, NULL, test));
+		exit (print_error(errno, NULL, PRINT));
 	}
 }
 
@@ -133,7 +130,7 @@ int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2], t_exec 
 		row = (t_command*) tmp->content;
 		pid[n] = fork();
 		if (pid[n] == -1)
-			return (print_error(errno, NULL, test));
+			return (print_error(errno, NULL, PRINT));
 		if (pid[n] == 0)
 			pipe_child(row, envp, fd, test, table);	//fd into exec-struct?
 		tmp = tmp->next;
@@ -155,12 +152,13 @@ int	execute_pipechain(char **envp, t_list *table, t_exec *test)
 	while (n < test->nbr_pipes)
 	{
 		if (pipe(fd[n]) == -1)
-			return (print_error(errno, NULL, test)); //errorhandling
+			return (print_error(errno, NULL, PRINT)); //errorhandling
 		n++;
 	}
 	if (pipechain_loop(envp, table, pid, fd, test))
-		return (test->exit_code); //close fds? free?
+		return (1); //close fds? free?
 
-	pipe_parent(pid, fd, test, table);
-	return (test->exit_code);
+	if (pipe_parent(pid, fd, test, table))
+		return (2);
+	return (0);
 }

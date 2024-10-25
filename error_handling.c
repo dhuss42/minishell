@@ -51,25 +51,35 @@ or grep o doesnt find lines with o
 exit_code has to be static variable (and remove t_exec *test)
 add parameter like PRINT and NOTPRINT int to_print
 ---------------------------------------------------------------*/
-int	print_error(int err_no, char *str, t_exec *test)
+int	print_error(int err_no, char *str, int print)
 {
-	// if (err_no == 1)
-	// {
-	// 	test->exit_code = err_no;
-	// 	return (err_no);
-	// }
-	ft_putstr_fd("minishell: ", 2);
-	if (str)
+	static int	exit_code = 0;
+
+	if (print == NOTPRINT && err_no > 0)
+		exit_code = err_no;
+	else if (print == PRINT && err_no > 0)
 	{
-		ft_putstr_fd(str, 2);
-		write(2, ": ", 2);
+		ft_putstr_fd("minishell: ", 2);
+		if (str)
+		{
+			ft_putstr_fd(str, 2);
+			write(2, ": ", 2);
+		}
+		if (err_no > 106)
+			exit_code = custom_error(err_no);
+		else
+		{
+			perror(NULL);
+			exit_code = err_no;
+		}
 	}
-	if (err_no > 106)
-		test->exit_code = custom_error(err_no);
-	else
-	{
-		perror(NULL);
-		test->exit_code = err_no;
-	}
-	return (err_no);
+	return (exit_code);
 }
+
+// int main()
+// {
+// 	print_error(E_FILENOEXIST, "test", PRINT);
+// 	print_error(5, NULL, NOTPRINT);
+// 	printf("Exit-code:%d\n", print_error(0, NULL, NOTPRINT));
+// 	return (0);
+// }

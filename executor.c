@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/24 17:18:06 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 09:55:37 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,23 @@ Handle parent for single command
 waitpid() blocks until the child process terminates or until a signal occurs
 WIFEXITED(wstatus) macro checks if the process exited normally
 WEXITwSTATUS(wstatus) extracts the exit wstatus value from the wstatus argument
-
-why extra exit code and not directly test->exit_code??
 ---------------------------------------------------------------*/
-int	single_parent(pid_t id, char* cmd, t_exec *test)
+int	single_parent(pid_t id, char* cmd)
 {
 	int	wstatus;
 	int	exit_code;
 
 	exit_code = 0;
 	if (waitpid(id, &wstatus, 0) == -1)
-		return (print_error(E_PARENT, NULL, test));
+		return (print_error(E_PARENT, NULL, PRINT));
 	if (WIFEXITED(wstatus))
 			exit_code = WEXITSTATUS(wstatus);
 	else
-		return (print_error(E_PARENT, NULL, test));
+		return (print_error(E_PARENT, NULL, PRINT));
 	if (exit_code > 1)	//check if thats right
-		return(print_error(exit_code, cmd, test));
+		return(print_error(exit_code, cmd, PRINT));
 	if (exit_code == 1)
-		test->exit_code = 1;
+		return(print_error(exit_code, cmd, NOTPRINT));
 	return (exit_code);
 }
 
@@ -57,20 +55,23 @@ void	single_child(char *path, char **envp, t_command row)
 /*-------------------------------------------------------------
 execute single command without pipe
 ---------------------------------------------------------------*/
-int	execute_single_command(char **envp, t_command *row, t_exec *test)
+int	execute_single_command(char **envp, t_command *row)
 {
 	pid_t	id;
 
-	if (exec_redirections(row, test))
+	if (exec_redirections(row))
 		return (1);
 	id = fork();
 	if (id == -1)
-		return (print_error(errno, NULL, test));
+		return (print_error(errno, NULL, PRINT));
 	else if (id == 0)
 		single_child(row->path, envp, *row);
 	else if (id > 0)
-		single_parent(id, row->args[0], test);
-	return (test->exit_code);
+	{
+		if (single_parent(id, row->args[0]))
+			return (1);
+	}
+	return (0);
 }
 
 /*-------------------------------------------------------------
@@ -80,13 +81,13 @@ int	executor(char **envp, t_list *table, t_exec *test)
 {
 	t_command	*current_cmd;
 
-	if (handle_stuff(envp, table, test))
+	if (handle_stuff(envp, table))
 		return (1);	//free and close files
 	test->nbr_pipes = ft_lstsize(table) - 1;
 	if (test->nbr_pipes == 0)
 	{
 		current_cmd = (t_command*) table->content;
-		if (execute_single_command(envp, current_cmd, test))
+		if (execute_single_command(envp, current_cmd))
 			return (free_row(current_cmd));
 	}
 	else if (test->nbr_pipes > 0)
@@ -94,7 +95,7 @@ int	executor(char **envp, t_list *table, t_exec *test)
 		if (execute_pipechain(envp, table, test))
 			return (free_table(table));
 	}
-	return (test->exit_code);
+	return (0);
 }
 /*
 !!! initialize everyting in beginning before lexer
@@ -119,34 +120,34 @@ t_list	*create_example(char *args, char* red, char *files)
 int main (int argc, char **argv, char **envp)
 {
 	t_exec test;
-	t_shell shell;
+	t_list *table;
 	// t_command	*current_cmd;
-	shell.table = NULL;
+	table = NULL;
 	t_list	*second = NULL;
-	// t_list	*third = NULL;
-	// t_list	*fourth = NULL;
+	t_list	*third = NULL;
+	t_list	*fourth = NULL;
 
-	shell.table = create_example("cat", "<", "out");
-	second = create_example("cat", "<", "libft");
-	ft_lstadd_back(&shell.table, second);
-	// third = create_example("cat", "<", "out");
-	// ft_lstadd_back(&shell.table, third);
-	// fourth = create_example("grep a", "<", "libft");
-	// ft_lstadd_back(&shell.table, fourth);
+	table = create_example("echo outiout", ">", "out");
+	second = create_example("grep a", "<", "libft");
+	ft_lstadd_back(&table, second);
+	third = create_example("cat", "<", "libft");
+	ft_lstadd_back(&table, third);
+	fourth = create_example("grep a", "<", "libft");
+	ft_lstadd_back(&table, fourth);
 	// current_cmd = (t_command *) temp->content;
 	// printf("temp\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
-	// current_cmd = (t_command *) shell.table->content;
-	// printf("shell.table\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
-	test.exit_code = 0;
-	if (executor (envp, shell.table, &test))
-		return (test.exit_code);
+	// current_cmd = (t_command *) table->content;
+	// printf("table\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
+
+	if (executor (envp, table, &test))
+		return (print_error(0, NULL, NOTPRINT));
 	// printf ("[Exit code: %d]\n", test.exit_code);
 	// printf ("[final infile: %s]\n", test.final_infile);
 	// printf ("[final outfile: %s]\n", test.final_outfile);
 	// printf ("[final in red: %s]\n", test.final_in_red);
 	// printf ("[final out red: %s]\n", test.final_out_red);
-	free_table(shell.table);
-	return (test.exit_code);
+	free_table(table);
+	return (print_error(0, NULL, NOTPRINT));
 	(void)argc;
 	(void)argv;
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/24 17:19:28 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 09:38:20 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_command
 
 typedef struct	s_exec
 {
-	int		exit_code;
+	// int		exit_code;
 	int		nbr_pipes;
 	// char	*final_infile;
 	// char	*final_outfile;
@@ -73,26 +73,27 @@ typedef struct	s_exec
 	// char	*final_out_red;
 }					t_exec;
 
-typedef struct s_shell
-{
-	t_list		*table;	//content->t_command row
-	t_exec		*exec;
-	char		**envp;
-}					t_shell;
+// typedef struct s_shell
+// {
+// 	t_list		*table;	//content->t_command row
+// 	t_exec		*exec;
+// 	char		**envp;
+// }					t_shell;
 
 char	*get_path(char *cmd, char **envp);
 void	free_paths(char **split_paths, char **append);
-int		print_error(int err_no, char *str, t_exec *test);
-int		check_files(t_list *table, t_exec *test);
-int		exec_redirections(t_command *row, t_exec *test);
+int		print_error(int err_no, char *str, int print);
+// int		print_error(int err_no, char *str, t_exec *test);
+int		check_files(t_list *table);
+int		exec_redirections(t_command *row);
 void	free_double(char **to_free);
 int		free_row(t_command *example);
 int		execute_pipechain(char **envp, t_list *table, t_exec *test);
-int		handle_stuff(char **envp, t_list *table, t_exec *test);
-int		get_check_path(t_list *table, char **envp, t_exec *test);
+int		handle_stuff(char **envp, t_list *table);
+int		get_check_path(t_list *table, char **envp);
 int		free_table(t_list *table);
-int		handle_heredoc(t_list *table, t_exec *test);
-int		redirect_input(t_command row,t_exec *test, int *fd);
-int		redirect_output(t_command row, t_exec *test, int *fd);
+int		handle_heredoc(t_list *table);
+int		redirect_input(t_command row, int *fd);
+int		redirect_output(t_command row, int *fd);
 
 #endif

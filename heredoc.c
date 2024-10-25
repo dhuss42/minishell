@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/22 15:52:33 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 09:31:04 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ write until delimiter into file
 the funciton readline has memory issues (still reachable)
 see with valgrind --leak-check=full --show-leak-kinds=all
 ---------------------------------------------------------------*/
-static int	handle_heredoc_input(t_exec *test, char *delimiter, t_command *row)
+static int	handle_heredoc_input(char *delimiter, t_command *row)
 {
 	char	*line;
 	int		fd;
@@ -40,7 +40,7 @@ static int	handle_heredoc_input(t_exec *test, char *delimiter, t_command *row)
 	row->heredoc_file_path = generate_file_path(row->id);
 	fd = open(row->heredoc_file_path, O_RDWR | O_CREAT | O_TRUNC, 0600);
 	if (fd == -1)
-		return (print_error(errno, NULL, test));
+		return (print_error(errno, NULL, PRINT));
 	line = NULL;
 	while (1)
 	{
@@ -58,14 +58,14 @@ static int	handle_heredoc_input(t_exec *test, char *delimiter, t_command *row)
 		free (line);
 	}
 	if (close(fd) == -1)
-		return (print_error(errno, NULL, test));
+		return (print_error(errno, NULL, PRINT));
 	return (0);
 }
 
 /*-------------------------------------------------------------
 Go through table and handle each heredoc in each row
 ---------------------------------------------------------------*/
-int	handle_heredoc(t_list *table, t_exec *test)
+int	handle_heredoc(t_list *table)
 {
 	int			i;
 	int			id;
@@ -85,7 +85,7 @@ int	handle_heredoc(t_list *table, t_exec *test)
 		{
 			if (row->red_symbol[i][0] == '<' && row->red_symbol[i][1] == '<')
 			{
-				if (handle_heredoc_input(test, row->filename[i], row))
+				if (handle_heredoc_input(row->filename[i], row))
 					return (2);
 			}
 			i++;
@@ -94,17 +94,4 @@ int	handle_heredoc(t_list *table, t_exec *test)
 		id++;
 	}
 	return (0);
-	// if (cmd.red_symbol && cmd.filename)
-	// {
-	// 	i = 0;
-	// 	while(cmd.red_symbol[i] && cmd.filename[i])
-	// 	{
-	// 		if (cmd.red_symbol[i][0] == '<' && cmd.red_symbol[i][1] == '<')
-	// 		{
-	// 			if (handle_heredoc_input(test, cmd.filename[i]))
-	// 				return (1);
-	// 		}
-	// 		i++;
-	// 	}
-	// }
 }
