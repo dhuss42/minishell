@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 15:31:44 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 16:35:03 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,20 @@ int	close_fds(int (*fd)[2], int id, int nbr_pipes)
 
 /*-------------------------------------------------------------
 Parent handler for pipechain
-why extra exit code and not directly test->exit_code??
 ---------------------------------------------------------------*/
-int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *table)
+int	pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes)
 {
 	int	wstatus;
 	int	exit_code;
 	t_list	*tmp;
 	t_command	*row;
 
-	if (close_fds(fd, -1, test->nbr_pipes))
+	if (close_fds(fd, -1, nbr_pipes))
 		exit (print_error(errno, NULL, PRINT));
 	tmp = table;
 	exit_code = 0;
 	int i = 0;
-	while (i <= test->nbr_pipes)
+	while (i <= nbr_pipes)
 	{
 		if (waitpid(pid[i], &wstatus, 0) == -1)
 			return (print_error(E_PARENT, NULL, PRINT));
@@ -70,14 +69,8 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *table)
 	return (exit_code);
 }
 
-/*-------------------------------------------------------------
-Child handler for pipechain
---test, table and envp will be in one struct
----------------------------------------------------------------*/
-void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list *table)
+int	duplicate_fd(t_command *row, int (*fd)[2], int nbr_pipes)
 {
-	if (close_fds(fd, row->id, test->nbr_pipes))
-		exit (print_error(errno, NULL, PRINT));
 	if (row->id != 0 && row->final_infile == NULL)
 	{
 		if (dup2(fd[row->id - 1][0], 0) == - 1)
@@ -90,7 +83,7 @@ void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list 
 		if (redirect_input(*row, &fd[row->id - 1][0]))
 			exit(errno);	//exit with exit code
 	}
-	if (row->id != test->nbr_pipes && row->final_outfile == NULL)
+	if (row->id != nbr_pipes && row->final_outfile == NULL)
 	{
 		if (dup2(fd[row->id][1], 1) == - 1)
 			exit (print_error(errno, NULL, PRINT));
@@ -99,9 +92,26 @@ void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list 
 	}
 	if (row->final_outfile)
 	{
-		if (redirect_output(*row, &fd[row->id][0]))
+		if (redirect_output(*row, &fd[row->id][1]))
 			exit (errno);		//exit with exit_code
 	}
+	return (0);
+}
+
+/*-------------------------------------------------------------
+Child handler for pipechain
+---------------------------------------------------------------*/
+void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_list *table)
+{
+	int	nbr_pipes;
+
+	nbr_pipes = ft_lstsize(table) - 1;
+	if (close_fds(fd, row->id, nbr_pipes))
+		exit (print_error(errno, NULL, PRINT));
+	if (duplicate_fd(row, fd, nbr_pipes))
+		exit(errno);
+	// if (duplicate_fd(row, &fd[row->id][1], STDOUT_FILENO))
+	// 	exit(errno);
 	if (execve(row->path, row->args, envp))
 	{
 		free_table(table);
@@ -111,10 +121,8 @@ void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list 
 
 /*-------------------------------------------------------------
 Loop through all the pipes
---test will be	shell->exec
---table will be	shell->table
 ---------------------------------------------------------------*/
-int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2], t_exec *test)
+int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2])
 {
 	int			n;
 	t_command	*row;
@@ -131,7 +139,7 @@ int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2], t_exec 
 		if (pid[n] == -1)
 			return (print_error(errno, NULL, PRINT));
 		if (pid[n] == 0)
-			pipe_child(row, envp, fd, test, table);	//fd into exec-struct?
+			pipe_child(row, envp, fd, table);	//fd into exec-struct?
 		tmp = tmp->next;
 		n++;
 	}
@@ -141,23 +149,23 @@ int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2], t_exec 
 /*-------------------------------------------------------------
 Handle pipechain
 ---------------------------------------------------------------*/
-int	execute_pipechain(char **envp, t_list *table, t_exec *test)
+int	execute_pipechain(char **envp, t_list *table, int nbr_pipes)
 {
-	int		fd[test->nbr_pipes][2];
-	pid_t	pid[test->nbr_pipes + 1];
+	int		fd[nbr_pipes][2];
+	pid_t	pid[nbr_pipes + 1];
 	int		n;
 
 	n = 0;
-	while (n < test->nbr_pipes)
+	while (n < nbr_pipes)
 	{
 		if (pipe(fd[n]) == -1)
 			return (print_error(errno, NULL, PRINT)); //errorhandling
 		n++;
 	}
-	if (pipechain_loop(envp, table, pid, fd, test))
+	if (pipechain_loop(envp, table, pid, fd))
 		return (1); //close fds? free?
 
-	if (pipe_parent(pid, fd, test, table))
+	if (pipe_parent(pid, fd, table, nbr_pipes))
 		return (2);
 	return (0);
 }

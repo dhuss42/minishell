@@ -47,9 +47,6 @@ int	custom_error(int err_no)
 if binary from command failed, for example for "Is a directory"
 or grep o doesnt find lines with o
 --> how to stop printing "No such file or directory"?!
-
-exit_code has to be static variable (and remove t_exec *test)
-add parameter like PRINT and NOTPRINT int to_print
 ---------------------------------------------------------------*/
 int	print_error(int err_no, char *str, int print)
 {

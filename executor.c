@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 15:50:07 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 16:07:49 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,8 @@ int	execute_single_command(char **envp, t_command *row)
 {
 	pid_t	id;
 
-	// if (exec_redirections(row))
-	// 	return (1);
 	if (handle_stuff(envp, row))
 		return (1);
-	// if (exec_redirections(row))
-	// 	return (2);
 	id = fork();
 	if (id == -1)
 		return (print_error(errno, NULL, PRINT));
@@ -79,24 +75,23 @@ int	execute_single_command(char **envp, t_command *row)
 /*-------------------------------------------------------------
 Main function for executor
 ---------------------------------------------------------------*/
-int	executor(char **envp, t_list *table, t_exec *test)
+int	executor(char **envp, t_list *table)
 {
 	t_command	*current_cmd;
+	int			nbr_pipes;
 
 	if (handle_heredoc(table))
 		return (free_table(table));
-	// if (handle_stuff(envp, table))	//do this just before forking for each row
-	// 	return (free_table(table));
-	test->nbr_pipes = ft_lstsize(table) - 1;
-	if (test->nbr_pipes == 0)
+	nbr_pipes = ft_lstsize(table) - 1;
+	if (nbr_pipes == 0)
 	{
 		current_cmd = (t_command*) table->content;
 		if (execute_single_command(envp, current_cmd))
 			return (free_row(current_cmd));
 	}
-	else if (test->nbr_pipes > 0)
+	else if (nbr_pipes > 0)
 	{
-		if (execute_pipechain(envp, table, test))
+		if (execute_pipechain(envp, table, nbr_pipes))
 			return (free_table(table));
 	}
 	return (0);

@@ -34,7 +34,6 @@ t_list	*create_example(char *args, char* red, char *files)
 
 int main (int argc, char **argv, char **envp)
 {
-	t_exec test;
 	t_list *table;
 	// t_command	*current_cmd;
 	table = NULL;
@@ -42,8 +41,8 @@ int main (int argc, char **argv, char **envp)
 	// t_list	*third = NULL;
 	// t_list	*fourth = NULL;
 
-	table = create_example("echo outiout", ">", "out");
-	second = create_example("cat", "<", "c");
+	table = create_example("echo outiout", "", "");
+	second = create_example("echo pups", "", "");
 	ft_lstadd_back(&table, second);
 	// third = create_example("cat", "<", "libft");
 	// ft_lstadd_back(&table, third);
@@ -54,13 +53,8 @@ int main (int argc, char **argv, char **envp)
 	// current_cmd = (t_command *) table->content;
 	// printf("table\nargs: %s\nfiles: %s\nsymbol: %s\n\n", current_cmd->args[0], current_cmd->filename[0], current_cmd->red_symbol[0]);
 
-	if (executor (envp, table, &test))
+	if (executor (envp, table))
 		return (print_error(0, NULL, NOTPRINT));
-	// printf ("[Exit code: %d]\n", test.exit_code);
-	// printf ("[final infile: %s]\n", test.final_infile);
-	// printf ("[final outfile: %s]\n", test.final_outfile);
-	// printf ("[final in red: %s]\n", test.final_in_red);
-	// printf ("[final out red: %s]\n", test.final_out_red);
 	free_table(table);
 	return (print_error(0, NULL, NOTPRINT));
 	(void)argc;
