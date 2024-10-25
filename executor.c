@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 10:10:05 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 14:55:30 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	executor(char **envp, t_list *table, t_exec *test)
 	t_command	*current_cmd;
 
 	if (handle_stuff(envp, table))
-		return (1);	//free and close files
+		return (free_table(table));
 	test->nbr_pipes = ft_lstsize(table) - 1;
 	if (test->nbr_pipes == 0)
 	{

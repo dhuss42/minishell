@@ -42,7 +42,7 @@ int main (int argc, char **argv, char **envp)
 	// t_list	*third = NULL;
 	// t_list	*fourth = NULL;
 
-	table = create_example("echo outiout", "<< <", "a amsel");
+	table = create_example("echo outiout", "<< < ", "a amsel");
 	second = create_example("cat", "<<", "b");
 	ft_lstadd_back(&table, second);
 	// third = create_example("cat", "<", "libft");
