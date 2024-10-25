@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 09:55:15 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 10:05:09 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,9 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_exec *test, t_list *table)
 		if (WIFEXITED(wstatus))
 			exit_code = WEXITSTATUS(wstatus);
 		else
-			return (1);
-			// return (print_error(E_PARENT, NULL, PRINT));
+			return (print_error(E_PARENT, NULL, PRINT));
 		row = (t_command*) tmp->content;
-		if (exit_code > 2)	//check if right	or maybe dont print at all here??
-			return(print_error(exit_code, row->args[0], PRINT));
-		if (exit_code == 1 || exit_code == 2)
+		if (exit_code > 0)	//check if right
 			return(print_error(exit_code, row->args[0], NOTPRINT));
 		tmp = tmp->next;
 		i++;
@@ -91,7 +88,7 @@ void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list 
 	if (row->final_infile)
 	{
 		if (redirect_input(*row, &fd[row->id - 1][0]))
-			exit(1);	//exit with exit code
+			exit(errno);	//exit with exit code
 	}
 	if (row->id != test->nbr_pipes && row->final_outfile == NULL)
 	{
@@ -103,7 +100,7 @@ void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_exec *test, t_list 
 	if (row->final_outfile)
 	{
 		if (redirect_output(*row, &fd[row->id][0]))
-			exit (2);		//exit with exit_code
+			exit (errno);		//exit with exit_code
 	}
 	if (execve(row->path, row->args, envp))
 	{

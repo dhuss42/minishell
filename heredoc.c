@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 09:31:04 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 10:33:37 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	handle_heredoc_input(char *delimiter, t_command *row)
 	row->heredoc_file_path = generate_file_path(row->id);
 	fd = open(row->heredoc_file_path, O_RDWR | O_CREAT | O_TRUNC, 0600);
 	if (fd == -1)
-		return (print_error(errno, NULL, PRINT));
+		return (print_error(errno, row->heredoc_file_path, PRINT));
 	line = NULL;
 	while (1)
 	{
@@ -78,8 +78,8 @@ int	handle_heredoc(t_list *table)
 	{
 		row = (t_command *) tmp->content;
 		row->id = id;
-		if (!row->red_symbol || !row->filename)
-			return (1);
+		// if (!row->red_symbol || !row->filename)
+		// 	return (1);
 		i = 0;
 		while(row->red_symbol[i] && row->filename[i])
 		{

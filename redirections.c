@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:38:08 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 09:33:53 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 10:05:30 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@ duplicate fd from final infile to stdin
 ---------------------------------------------------------------*/
 int	redirect_input(t_command row, int *fd)
 {
-	// int	fd;
-
-	// fd = 0;
 	*fd = open(row.final_infile, O_RDONLY);
 	if (dup2(*fd, 0) == -1)
 		return (print_error(errno, NULL, PRINT));
@@ -33,9 +30,6 @@ duplicate fd from final outfile to stdout
 ---------------------------------------------------------------*/
 int	redirect_output(t_command row, int *fd)
 {
-	// int	fd;
-
-	// fd = 0;
 	if (row.final_out_red[1] == '\0')
 		*fd = open(row.final_outfile, O_WRONLY | O_TRUNC);
 	else if (row.final_out_red[1] == '>')
