@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 10:11:46 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 15:15:32 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@ typedef struct	s_exec
 char	*get_path(char *cmd, char **envp);
 void	free_paths(char **split_paths, char **append);
 int		print_error(int err_no, char *str, int print);
-int		check_files(t_list *table);
+int		check_files(t_command *row);
 int		exec_redirections(t_command *row);
 void	free_double(char **to_free);
 int		free_row(t_command *example);
 int		execute_pipechain(char **envp, t_list *table, t_exec *test);
-int		handle_stuff(char **envp, t_list *table);
-int		get_check_path(t_list *table, char **envp);
+int		handle_stuff(char **envp, t_command *row);
+int		get_check_path(t_command *row, char **envp);
 int		free_table(t_list *table);
 int		handle_heredoc(t_list *table);
 int		redirect_input(t_command row, int *fd);

@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 14:55:30 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 15:50:07 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,12 @@ int	execute_single_command(char **envp, t_command *row)
 {
 	pid_t	id;
 
-	if (exec_redirections(row))
+	// if (exec_redirections(row))
+	// 	return (1);
+	if (handle_stuff(envp, row))
 		return (1);
+	// if (exec_redirections(row))
+	// 	return (2);
 	id = fork();
 	if (id == -1)
 		return (print_error(errno, NULL, PRINT));
@@ -67,7 +71,7 @@ int	execute_single_command(char **envp, t_command *row)
 	else if (id > 0)
 	{
 		if (single_parent(id, row->args[0]))
-			return (1);
+			return (2);
 	}
 	return (0);
 }
@@ -79,8 +83,10 @@ int	executor(char **envp, t_list *table, t_exec *test)
 {
 	t_command	*current_cmd;
 
-	if (handle_stuff(envp, table))
+	if (handle_heredoc(table))
 		return (free_table(table));
+	// if (handle_stuff(envp, table))	//do this just before forking for each row
+	// 	return (free_table(table));
 	test->nbr_pipes = ft_lstsize(table) - 1;
 	if (test->nbr_pipes == 0)
 	{

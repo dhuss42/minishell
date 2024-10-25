@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 09:13:05 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/25 15:07:30 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,54 +87,27 @@ void	init_final_red_files(t_command *row)
 /*-------------------------------------------------------------
 Check all files for each row in the table
 ---------------------------------------------------------------*/
-int	check_files(t_list *table)
+int	check_files(t_command *row)
 {
 	int			i;
-	t_list		*tmp;
-	t_command	*row;
 
-	tmp = table;
-	while (tmp)
+	init_final_red_files(row);
+	if (!row->filename || !row->red_symbol)
+		return (0);
+	i = 0;
+	while (row->filename[i])
 	{
-		row = (t_command *)tmp->content;
-		init_final_red_files(row);
-		if (!row->filename || !row->red_symbol)
-			return (1);
-		i = 0;
-		while (row->filename[i])
+		if (row->red_symbol[i] && row->red_symbol[i][0] == '>')
 		{
-			if (row->red_symbol[i] && row->red_symbol[i][0] == '>')
-			{
-				if (check_output_files(row, i))
-					return (2);
-			}
-			else if (row->red_symbol[i] && row->red_symbol[i][0] == '<')
-			{
-				if (check_input_files(row, i))
-					return (3);
-			}
-			i++;
+			if (check_output_files(row, i))
+				return (1);
 		}
-		tmp = tmp->next;
+		else if (row->red_symbol[i] && row->red_symbol[i][0] == '<')
+		{
+			if (check_input_files(row, i))
+				return (2);
+		}
+		i++;
 	}
 	return (0);
-
-	// if (example.filename && example.red_symbol)
-	// {
-	// 	i = 0;
-	// 	while (example.filename[i])
-	// 	{
-	// 		if (example.red_symbol[i] && example.red_symbol[i][0] == '>')
-	// 		{
-	// 			if (check_output_files(example, test, i))
-	// 				return (1);
-	// 		}
-	// 		else if (example.red_symbol[i] && example.red_symbol[i][0] == '<')
-	// 		{
-	// 			if (check_input_files(example, test, i))
-	// 				return (2);
-	// 		}
-	// 		i++;
-	// 	}
-	// }
 }
