@@ -98,16 +98,6 @@ bool	syntax_errors(t_list *token_list)
 	return (false);
 }
 
-// to do here
-//	  change exit failure to something that stores the exit code in struct and procede accordingly
-//	  test this in more detail
-//			infile >
-//			infile <
-//			infile >>
-//			infile <<
-//			| wc -l
-//			two_pipes ||
-//			infile > outfile > > out
-//			infile > outfile < > out
-//			infile > outfile << > out
-//			infile > outfile >> > out
+// handle syntax errors properly
+//	what gets set to print_error
+//	stop the string from moving further in minishell loop

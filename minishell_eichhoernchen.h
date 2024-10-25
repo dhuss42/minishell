@@ -83,7 +83,7 @@ typedef struct s_shell
 } t_shell;
 
 //-------------------main------------------//
-void	copy_env(char **env, t_shell *shell);
+int	copy_env(char **env, t_shell *shell);
 
 //-----------------builtins----------------//
 int 	ft_pwd();
@@ -126,6 +126,7 @@ void	set_to_zero(t_shell *nbr);
 	//--> expansion
 bool	is_quotes(char c);
 bool	contains_dollar(char *str, size_t i);
+size_t	strlen_equal(char *str);
 
 //----------free-stuf------------//
 void	free_token(void *content);
