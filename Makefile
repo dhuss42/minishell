@@ -28,9 +28,14 @@ CFILES = minishell.c\
 	expansion/remove_quotes.c\
 	expansion/helper_expansion.c\
 	print_tokenlist.c\
-	print_table.c
+	print_table.c\
+	builtins/builtins.c\
+	builtins/env.c\
+	builtins/pwd.c\
+	builtins/export.c
 
-# take out functions later such as print_table.c, print_tokenlist.c,
+
+# take out functions later such as print_table.c, print_tokenlist.c, builtins/builtins.c
 OFILES = $(CFILES:.c=.o)
 DEPS = $(OFILES:.o=.d)
 # look into again

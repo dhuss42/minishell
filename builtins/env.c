@@ -1,15 +1,16 @@
 #include <unistd.h>
 #include "minishell_eichhoernchen.h"
 
-void    ft_env(char **env)
+int    ft_env(t_shell *shell)
 {
     size_t i;
 
-    if (env == NULL)
-        return ;
+    if (shell->env == NULL)
+        return (-1);
     i = 0;
-    while (env[i] != NULL)
-        printf("%s\n", env[i++]); // change to ft_printf
+    while (shell->env[i] != NULL)
+        ft_printf("%s\n", shell->env[i++]);
+    return (0);
 }
 
 /* int main(int argc, char *argv[], char **env)

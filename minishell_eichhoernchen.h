@@ -32,9 +32,10 @@
 #define MAGENTA     "\033[35m"
 #define CYAN        "\033[36m"
 #define WHITE       "\033[37m"
+
 //----------------structs--------------//
 
-typedef enum
+typedef enum // change here to e_
 {
 	TOKEN_PIPE,
 	TOKEN_REDIN,
@@ -53,7 +54,7 @@ typedef struct s_token
 {
 	token_type type;
 	char *input;
-} token;
+} token; // change here to t_
 
 typedef struct s_command
 {
@@ -76,13 +77,18 @@ typedef struct s_shell
 	t_list	*list;
 	t_list	*table;
 	bool	isspace;
-	char	*res;
 	char	quote;
+	char	*res;
+	char	**env;
 } t_shell;
 
+//-------------------main------------------//
+void	copy_env(char **env, t_shell *shell);
+
 //-----------------builtins----------------//
-void    ft_env(char **env);
-void 	pwd();
+int 	ft_pwd();
+int    ft_env(t_shell *shell);
+int   	ft_export(t_shell *shell, t_command *row);
 
 //-----------------lexer----------------//
 void  	lexer(t_shell *shell, char *input);
@@ -131,5 +137,6 @@ void    free_lexer(char *input, char *trim_inpt, char *res);
 void	print_token(token *tok);
 void	print_token_list(t_list *list);
 void	print_table(t_list *table);
+void    test_builtins(t_shell *shell);
 
 #endif

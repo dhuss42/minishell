@@ -35,88 +35,91 @@ bool    valid_key_name(const char *str)
     return (true);
 }
 
-void    export(char **env, char *first_var, ...)
+size_t  get_len_new_env(char **env, t_command *row, size_t i)
 {
-    va_list args;
     size_t count;
-    size_t  i;
-    char   **tmp;
 
     count = 0;
-    i = 0;
-    const char *current_var;
-
-    if (first_var == NULL)
-        return ;
-    current_var = first_var;
     while (env[count] != NULL)
         count++;
     printf(YELLOW"count after env: %zu\n"WHITE, count);
-    va_start(args, first_var);
-    while (current_var != NULL)
+    while (row->args[i] != NULL)
     {
-        printf(BLUE"current_var %s\n"WHITE, current_var);
-        if (has_equal(current_var) && valid_key_name(current_var))
+        printf(BLUE"current_var %s\n"WHITE, row->args[i]);
+        if (has_equal(row->args[i]) && valid_key_name(row->args[i]))
         {
             printf(GREEN"export count: %zu\n"WHITE, count);
             count++;
         }
-        current_var = va_arg(args, const char*);
-    }
-    va_end(args);
-    printf(YELLOW"count total: %zu\n"WHITE, count);
-
-    tmp = malloc(sizeof(char *)*(count + 1));
-    if (!tmp)
-        return ;
-
-    while (env[i] != NULL)
-    {
-        tmp[i] = ft_strdup(env[i]);
-        if (!tmp[i])
-            return ;
         i++;
     }
-
-    current_var = first_var;
-    va_start(args, first_var);
-    while (current_var != NULL)
-    {
-        printf(BLUE"current_var %s\n"WHITE, current_var);
-        if (has_equal(current_var) && valid_key_name(current_var))
-        {
-            printf(GREEN"export count: %zu\n"WHITE, count);
-            tmp[i] = ft_strdup(current_var);
-            if (!tmp[i])
-                return ;
-            i++;
-        }
-        current_var = va_arg(args, const char*);
-    }
-    va_end(args);
-    // get len of env
-    // get len of the variables following export
-    //  len++ if the word contains an = and has valid chars before
-    //      valid chars initial position: a-z, A-Z and _
-    //      valid chars following initial: a-z, A-Z, 0-9, _,
-    //      if no char before = then: bash: export: `=': not a valid identifier
-    // allocate tmp ** with enough space for exported variables
-    // copy env into tmp**
-    // free env**
-    // copy the exported variables into tmp (same principle as above)
-    // strdup tmp into env
-    // 
-    // clear_all(env);
-    env = tmp;
-    ft_env(env);
-    va_end(args);
+    printf(YELLOW"count total: %zu\n"WHITE, count);
+    return (count);
 }
 
-int main(int argc, char *argv[], char **env)
+char    **copy_new_envs(char **tmp, t_shell *shell, t_command *row)
 {
-    (void) argc;
-    (void) argv;
-    export(env, "VAR1111111=value1", "hallo=hallo", "22222222=value3", NULL);
-
-    return 0;
+    shell->j = 0;
+    while (shell->env[shell->j] != NULL)
+    {
+        tmp[shell->j] = ft_strdup(shell->env[shell->j]);
+        if (!tmp[shell->j])
+        {
+            clear_all(tmp);
+            //  print_error(errno, NULL);
+            return (NULL);
+        }
+        shell->j++;
+    }
+    while (row->args[shell->i] != NULL)
+    {
+        printf(BLUE"current_var %s\n"WHITE, row->args[shell->i]);
+        if (has_equal(row->args[shell->i]) && valid_key_name(row->args[shell->i]))
+        {
+            printf(GREEN"export count: %zu\n"WHITE, shell->i);
+            tmp[shell->j] = ft_strdup(row->args[shell->i]);
+            if (!tmp[shell->j])
+            {
+                clear_all(tmp);
+                //  print_error(errno, NULL);
+                return (NULL);
+            }
+            shell->j++;
+        }
+        shell->i++;
+    }
+    tmp[shell->j] = NULL;
+    return (tmp);
 }
+
+int    ft_export(t_shell *shell, t_command *row)
+{
+    char   **tmp;
+
+    tmp = NULL;
+    shell->i++;
+    if (row->args[shell->i] == NULL)
+    {
+        // not sure what error str is empty?
+        return (-1);
+    }
+    shell->len = get_len_new_env(shell->env, row, shell->i);
+    tmp = malloc(sizeof(char *) * (shell->len + 1));
+    if (!tmp)
+    {
+    //  print_error(errno, NULL);
+        return (-1);
+    }
+    tmp = copy_new_envs(tmp, shell, row);
+    if (!tmp)
+        return (-1);
+    if (shell->env)
+        clear_all(shell->env);
+    copy_env(tmp, shell); // error handling
+    if (tmp)
+        clear_all(tmp);
+    return (0);
+}
+
+// still have to handle overwriting of a key
+// inhibitor on duplicates

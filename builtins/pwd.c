@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include "minishell_eichhoernchen.h"
 
-void pwd()
+int ft_pwd()
 {
     char *pathname;
 
@@ -10,13 +10,12 @@ void pwd()
     {
         ft_printf("%s\n", pathname);
         free(pathname);
+        return (0);
     }
     else
-        perror("pwd error: \n");
+    {
+        perror("pwd error: \n"); // call error function
+        //  print_error(errno, NULL);
+        return (-1);
+    }
 }
-
-/* int main()
-{
-    pwd();
-    return (0);
-} */

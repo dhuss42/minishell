@@ -12,7 +12,7 @@
 
 #include "minishell_eichhoernchen.h"
 
-void	minishell_loop(t_shell *shell, char **env)
+void	minishell_loop(t_shell *shell)
 {
 	char	*input;
 
@@ -26,8 +26,9 @@ void	minishell_loop(t_shell *shell, char **env)
 			lexer(shell, input);
 			parser(shell);
 			print_table(shell->table);
-			expansion(shell, env); // also need to pass env
+			expansion(shell, shell->env); // also need to pass env
 			print_table(shell->table);
+			test_builtins(shell);
 
 			ft_lstclear(&shell->list, free_token);
 			free_table(shell);
@@ -35,6 +36,31 @@ void	minishell_loop(t_shell *shell, char **env)
 	}
 }
 
+void	copy_env(char **env, t_shell *shell)
+{
+	size_t i;
+	char **new_env;
+
+	i = 0;
+	while (env[i] != NULL)
+		i++;
+	new_env = malloc (sizeof(char *) * (i + 1));
+	if (!new_env)
+		return ;
+	i = 0;
+	while (env[i] != NULL)
+	{
+		new_env[i] = ft_strdup(env[i]);
+		if (!new_env[i])
+		{
+			clear_all(new_env);
+			return ;
+		}
+		i++;
+	}
+	new_env[i] = NULL;
+	shell->env = new_env;
+}
 
 int	main(int argc, char *argv[], char **env)
 {
@@ -42,7 +68,10 @@ int	main(int argc, char *argv[], char **env)
 
 	shell.table = NULL;
 	if (argc == 1)
-		minishell_loop(&shell, env);
+	{
+		copy_env(env, &shell);
+		minishell_loop(&shell);
+	}
 	(void) argv;
 	return (0);
 }
