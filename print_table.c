@@ -48,12 +48,14 @@ void    print_struct_table(t_list *table)
     printf("\033[32m\n|\033[0m");
 }
 
-void    print_table(t_list *table)
+void    print_table(t_shell *shell)
 {
     t_list *tmp;
     size_t  line;
 
-    tmp = table;
+    if (shell->syntax_error == true)
+        return ;
+    tmp = shell->table;
     line = 1;
     while (tmp != NULL)
     {

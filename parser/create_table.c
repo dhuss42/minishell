@@ -33,13 +33,13 @@ size_t	count_lines_table(t_list *token_list)
 {
 	t_list	*tmp;
 	size_t	lines;
-	token	*current_token;
+	t_token	*current_token;
 
 	tmp = token_list;
 	lines = 0;
 	while(tmp != NULL)
 	{
-		current_token = (token *)tmp->content;
+		current_token = (t_token *)tmp->content;
 		if (current_token->type == TOKEN_PIPE)
 			lines++;
 		tmp = tmp->next;
@@ -50,12 +50,12 @@ size_t	count_lines_table(t_list *token_list)
 void	nbr_words_redirections(t_shell *nbr, t_list **token_list)
 {
 	t_list	*tmp;
-	token	*current_token;
+	t_token	*current_token;
 
 	tmp = *token_list;
 	while (tmp != NULL)
 	{
-		current_token = (token *)tmp->content;
+		current_token = (t_token *)tmp->content;
 		if (current_token->type == TOKEN_PIPE)
 			break ;
 		if (is_redirection(current_token))
@@ -126,6 +126,7 @@ int	create_table(t_shell *shell)
 			// printf("I return after create_cmd_block\n");
 			return (-1);
 		}
+		// printf("TEST2\n");
 		new_node = ft_lstnew((void *)new_cmd);
 		if (!new_node)
 		{
@@ -148,6 +149,5 @@ int	create_table(t_shell *shell)
 		tmp = tmp->next;
 		shell->lines--;
 	}
-	// printf("I return after at the end of function\n");
 	return (0);
 }

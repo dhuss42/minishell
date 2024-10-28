@@ -32,7 +32,11 @@ CFILES = minishell.c\
 	builtins/builtins.c\
 	builtins/env.c\
 	builtins/pwd.c\
-	builtins/export.c
+	builtins/export.c\
+	builtins/export_helpers.c\
+	builtins/export_no_args.c\
+	builtins/echo.c\
+	builtins/unset.c
 
 
 # take out functions later such as print_table.c, print_tokenlist.c, builtins/builtins.c

@@ -12,11 +12,11 @@
 
 #include "../minishell_eichhoernchen.h"
 
-token *create_token(token_type type, char *input)
+t_token *create_token(t_token_type type, char *input)
 {
-	token *new;
+	t_token *new;
 
-	new = malloc(sizeof(token));
+	new = malloc(sizeof(t_token));
 	if(!new)
 	{
 		// print_error(errno, NULL);
@@ -32,21 +32,9 @@ token *create_token(token_type type, char *input)
 //	assigns the type based on the given input
 //	saves the input string that corresponds to the token in question
 
-// token	*quote_tokens(char *str)
-// {
-// 	token	*tok;
-
-// 	tok = NULL;
-// 	if (str[0] == '\'')
-// 		tok = create_token(TOKEN_SQUOTES, str);
-// 	else if (str[0] == '\"')
-// 		tok = create_token(TOKEN_DQUOTES, str);
-// 	return (tok);
-// }
-
-token	*which_token(char *str)
+t_token	*which_token(char *str)
 {
-	token	*tok;
+	t_token	*tok;
 
 	tok = NULL;
 	if (str[0] == '|')
@@ -69,7 +57,7 @@ token	*which_token(char *str)
 
 t_list	*tokeniser(char **split_double_array)
 {
-	token	*tok;
+	t_token	*tok;
 	t_list	*head;
 	t_list	*new;
 	size_t	i;

@@ -16,6 +16,8 @@
 
 void expansion(t_shell *shell, char **env)
 {
+	if (shell->syntax_error == true)
+		return ;
 	if (iterate_table(shell->table, env) == -1)
 		return ;
 	if (remove_quotes(shell->table) == -1)

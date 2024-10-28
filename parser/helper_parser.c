@@ -12,7 +12,7 @@
 
 #include "../minishell_eichhoernchen.h"
 
-int	is_redirection(token *current_token)
+int	is_redirection(t_token *current_token)
 {
 	if (current_token->type == TOKEN_REDIN || current_token->type == TOKEN_REDOUT
 		|| current_token->type == TOKEN_REDAPPEND || current_token->type == TOKEN_HEREDOC)
@@ -21,7 +21,7 @@ int	is_redirection(token *current_token)
 		return (0);
 }
 
-int	is_filename(token *current_token)
+int	is_filename(t_token *current_token)
 {
 	if (current_token->type == TOKEN_WORD || current_token->type == TOKEN_SQUOTES
 		|| current_token->type == TOKEN_DQUOTES || current_token->type == TOKEN_ARGS

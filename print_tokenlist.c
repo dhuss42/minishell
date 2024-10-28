@@ -1,7 +1,7 @@
 
 #include "minishell_eichhoernchen.h"
 
-void	print_token(token *tok)
+void	print_token(t_token *tok)
 {
 	char *token_str;
 
@@ -16,7 +16,7 @@ void	print_token(token *tok)
 		token_str = "HEREDOC";
 	else if (tok->type == TOKEN_REDAPPEND)
 		token_str = "REDIRECTION APPEND";
-	else if (tok->type == TOKEN_SQUOTES)
+/* 	else if (tok->type == TOKEN_SQUOTES)
 		token_str = "SINGLE QUOTES";
 	else if (tok->type == TOKEN_DQUOTES)
 		token_str = "DOUBLE QUOTES";
@@ -25,7 +25,7 @@ void	print_token(token *tok)
 	else if (tok->type == TOKEN_EXITSTATUS)
 		token_str = "EXIT STATUS";
 	else if (tok->type == TOKEN_ARGS)
-		token_str = "ARGUMENTS";
+		token_str = "ARGUMENTS"; */
 	else if (tok->type == TOKEN_WORD)
 		token_str = "WORD";
 	printf("Token\n Type: %s\n Value: %s\n\n", token_str, tok->input);
@@ -40,7 +40,7 @@ void	print_token_list(t_list *list)
 
 	while (current != NULL)
 	{
-		token *tok = (token *)(current->content);
+		t_token *tok = (t_token *)(current->content);
 		print_token(tok);
 		current = current->next;
 	}

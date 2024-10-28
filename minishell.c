@@ -25,9 +25,9 @@ void	minishell_loop(t_shell *shell)
 		{
 			lexer(shell, input);
 			parser(shell);
-			print_table(shell->table);
-			expansion(shell, shell->env); // also need to pass env
-			print_table(shell->table);
+			print_table(shell);
+			expansion(shell, shell->env);
+			print_table(shell);
 			test_builtins(shell);
 
 			ft_lstclear(&shell->list, free_token);

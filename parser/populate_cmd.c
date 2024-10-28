@@ -12,23 +12,26 @@
 
 #include "../minishell_eichhoernchen.h"
 
-int	populate_red_array(t_shell *parsing, token* current_token, t_command *new_cmd)
+int	populate_red_array(t_shell *parsing, t_token *current_token, t_command *new_cmd)
 {
 	new_cmd->red_symbol[parsing->i] = malloc(sizeof(char) * (ft_strlen(current_token->input) + 1));
 	if (!new_cmd->red_symbol[parsing->i])
 	{
 		free_table(parsing);
-		// printf("I return issue populate_red_array\n");
+		printf("I return issue populate_red_array\n");
 		// print_error(errno, NULL);
 		return (-1);
 	}
 	ft_strlcpy(new_cmd->red_symbol[parsing->i], current_token->input, ft_strlen(current_token->input) + 1);
+	printf("I return from populat red array normally\n");
 	return (0);
 }
 
-int	populate_filename_array(t_shell *parsing, token* next_token, t_command *new_cmd)
+int	populate_filename_array(t_shell *parsing, t_token *next_token, t_command *new_cmd)
 {
+	printf("in populate filename\n");
 	new_cmd->filename[parsing->i] = malloc(sizeof(char) * (ft_strlen(next_token->input) + 1));
+	printf("in populate filename2\n");
 	if (!new_cmd->filename[parsing->i])
 	{
 		free_table(parsing);
@@ -41,7 +44,7 @@ int	populate_filename_array(t_shell *parsing, token* next_token, t_command *new_
 	return (0);
 }
 
-int	populate_args_array(t_shell *parsing, token* current_token, t_command *new_cmd)
+int	populate_args_array(t_shell *parsing, t_token *current_token, t_command *new_cmd)
 {
 	new_cmd->args[parsing->j] = malloc(sizeof(char) * ft_strlen(current_token->input) + 1);
 	if (!new_cmd->args[parsing->j])
@@ -56,14 +59,18 @@ int	populate_args_array(t_shell *parsing, token* current_token, t_command *new_c
 	return (0);
 }
 
-int	populate_double_arrays(t_shell *parsing, token *current_token, token *next_token, t_command *new_cmd)
+int	populate_double_arrays(t_shell *parsing, t_token *current_token, t_token *next_token, t_command *new_cmd)
 {
 	if (is_redirection(current_token))
 	{
+		// printf("in populate_double arrays\n");
 		if (populate_red_array(parsing, current_token, new_cmd) == -1)
 			return (-1);
-		if (populate_filename_array(parsing, next_token, new_cmd) == -1)
-			return (-1);
+		if (is_filename(next_token)) // not sure at the moment
+		{
+			if (populate_filename_array(parsing, next_token, new_cmd) == -1)
+				return (-1);
+		}		
 		parsing->i++;
 	}
 	else
@@ -71,6 +78,7 @@ int	populate_double_arrays(t_shell *parsing, token *current_token, token *next_t
 		if (populate_args_array(parsing, current_token, new_cmd) == -1)
 			return (-1);
 	}
+	// printf("i return from populate_double arrays normally\n");
 	return (0);
 }
 
@@ -82,17 +90,18 @@ int	populate_double_arrays(t_shell *parsing, token *current_token, token *next_t
 
 t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 {
-	token	*current_token;
-	token	*next_token;
+	t_token	*current_token;
+	t_token	*next_token;
 
 	parsing->i = 0;
 	parsing->j = 0;
 	parsing->tmp = tl_pos;
+	// printf("in populate cmd\n");
 	while(parsing->tmp != NULL)
 	{
-		current_token = (token *)parsing->tmp->content;
+		current_token = (t_token *)parsing->tmp->content;
 		if (parsing->tmp->next != NULL)
-			next_token = (token *)parsing->tmp->next->content;
+			next_token = (t_token *)parsing->tmp->next->content;
 		if (current_token->type == TOKEN_PIPE)
 			break ;
 		if (populate_double_arrays(parsing, current_token, next_token, new_cmd) == -1)

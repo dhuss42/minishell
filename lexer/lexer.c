@@ -25,8 +25,7 @@ void  lexer(t_shell *shell, char *input)
     shell->list = tokeniser(tokens);
     if (!shell->list)
         return (free_lexer(input, trim_inpt, res));
-    if (syntax_errors(shell->list) == true)
-        return (free_lexer(input, trim_inpt, res));
+    shell->syntax_error = syntax_errors(shell->list);
     free_lexer(input, trim_inpt, res);
 }
 

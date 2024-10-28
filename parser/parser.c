@@ -14,6 +14,8 @@
 
 void	parser(t_shell *shell)
 {
+	if (shell->syntax_error == true)
+		return ;
 	shell->table = NULL;
 	if (create_table(shell) == -1)
 	{

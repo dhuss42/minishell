@@ -35,7 +35,7 @@
 
 //----------------structs--------------//
 
-typedef enum // change here to e_
+typedef enum e_token_type// change here to e_
 {
 	TOKEN_PIPE,
 	TOKEN_REDIN,
@@ -44,17 +44,16 @@ typedef enum // change here to e_
 	TOKEN_REDAPPEND,
 	TOKEN_SQUOTES,
 	TOKEN_DQUOTES,
-	TOKEN_ENVVAR,
-	TOKEN_EXITSTATUS,
 	TOKEN_ARGS,
+	TOKEN_EXITSTATUS,
 	TOKEN_WORD,
-} token_type;
+} t_token_type;
 
 typedef struct s_token
 {
-	token_type type;
+	t_token_type type;
 	char *input;
-} token; // change here to t_
+} t_token; // change here to t_
 
 typedef struct s_command
 {
@@ -77,6 +76,7 @@ typedef struct s_shell
 	t_list	*list;
 	t_list	*table;
 	bool	isspace;
+	bool	syntax_error;
 	char	quote;
 	char	*res;
 	char	**env;
@@ -87,8 +87,11 @@ int	copy_env(char **env, t_shell *shell);
 
 //-----------------builtins----------------//
 int 	ft_pwd();
-int    ft_env(t_shell *shell);
+int    	ft_env(t_shell *shell);
 int   	ft_export(t_shell *shell, t_command *row);
+void    export_no_argument(t_shell *shell);
+void    ft_echo(t_shell *shell, t_command *row);
+int ft_unset(t_shell *shell, t_command *row);
 
 //-----------------lexer----------------//
 void  	lexer(t_shell *shell, char *input);
@@ -113,14 +116,20 @@ int		remove_quotes(t_list *table);
 
 //----------------helpers----------------//
 
+	//--> builtins
+bool    has_equal(const char *str);
+bool    valid_key_name(const char *str);
+int    key_exists(char **env, char *key);
+size_t  get_len_new_env(char **env, t_command *row, size_t i);
+
 	//--> lexer
 bool	is_special(char input);
 bool	is_special_no_quotes(char input);
 bool	is_wspace(char input);
 
 	//--> parser
-int		is_filename(token *current_token);
-int		is_redirection(token *current_token);
+int		is_filename(t_token *current_token);
+int		is_redirection(t_token *current_token);
 void	set_to_zero(t_shell *nbr);
 
 	//--> expansion
@@ -135,9 +144,9 @@ void	free_table(t_shell *parsing);
 void    free_lexer(char *input, char *trim_inpt, char *res);
 
 //------------extra-shit-----------//
-void	print_token(token *tok);
+void	print_token(t_token *tok);
 void	print_token_list(t_list *list);
-void	print_table(t_list *table);
+void	print_table(t_shell *shell);
 void    test_builtins(t_shell *shell);
 
 #endif

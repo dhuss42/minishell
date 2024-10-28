@@ -29,7 +29,7 @@ void	clear_all(char **to_clear)
 
 void	free_token(void *content)
 {
-	token *tok = (token *)content;
+	t_token *tok = (t_token *)content;
 	if (tok)
 	{
 		free(tok->input);
