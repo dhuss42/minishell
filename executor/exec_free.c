@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/29 13:10:57 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 14:22:01 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,6 @@ int	free_table(t_list *table)
 		tmp = tmp->next;
 		free(del);
 	}
-	// if (table->exec)
-	// 	free_exec(exec);
-
 	table = NULL;
 	return (1);
 }

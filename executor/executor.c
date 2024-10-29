@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/29 13:06:23 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 14:20:52 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,13 @@ if execve fails, its because of command not found (127)
 child then exits with 127 and the parent will store the exit state
 if it doesnt fail, exit code is 0
 ---------------------------------------------------------------*/
-void	single_child(char *path, char **envp, t_command row)
+void	single_child(char *path, char **envp, t_command *row)
 {
-	if (execve(path, row.args, envp))
+	if (exec_redirections(row))
+		exit (2);
+	if (execve(path, row->args, envp))
 		{
-			free_row(&row);
+			free_row(row);
 			exit (127);
 		}
 }
@@ -82,15 +84,15 @@ int	execute_single_command(char **envp, t_command *row)
 
 	if (handle_stuff(envp, row))
 		return (1);
-	if (exec_redirections(row))
-		return (2);
+	// if (exec_redirections(row))
+	// 	return (2);
 	if (row->args[0])
 	{
 		id = fork();
 		if (id == -1)
 			return (print_error(errno, NULL, PRINT));
 		else if (id == 0)
-			single_child(row->path, envp, *row);
+			single_child(row->path, envp, row);
 		else if (id > 0)
 		{
 			if (single_parent(id, row->args[0]))

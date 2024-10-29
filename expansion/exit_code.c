@@ -30,7 +30,7 @@ int	get_exit_code(char *tmp, t_command *row, t_shell *expand)
 
 	tmp_ec = NULL;
 	index = 0;
-	exit_code = print_error(0, NULL, NOTPRINT);
+	exit_code = print_error(-1, NULL, NOTPRINT);
 	// exit_code = 106; // change here
 	len = get_int_length(exit_code);
 	tmp_ec = malloc(sizeof(char) * (len + 1));

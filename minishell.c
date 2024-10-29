@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/29 13:15:20 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 14:29:17 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,12 @@ void	minishell_loop(t_shell *shell)
 			parser(shell);
 			// print_table(shell);
 			expansion(shell, shell->env);
+			print_error(0, NULL, NOTPRINT);
 			// print_table(shell);
 			executor(shell->env, shell->table, shell);
 			// test_builtins(shell);
 			// ft_lstclear(&shell->list, free_token);
+
 			free_table(shell->table);
 		}
 	}
@@ -67,6 +69,7 @@ int	main(int argc, char *argv[], char **env)
 {
 	t_shell	shell;
 
+	printf("minisehll started\n");
 	shell.table = NULL;
 	if (argc == 1)
 	{

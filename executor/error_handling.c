@@ -52,7 +52,7 @@ int	print_error(int err_no, char *str, int print)
 {
 	static int	exit_code = 0;
 
-	if (print == NOTPRINT && err_no > 0)
+	if (print == NOTPRINT && err_no >= 0)
 		exit_code = err_no;
 	else if (print == PRINT && err_no > 0)
 	{
