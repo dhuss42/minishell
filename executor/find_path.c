@@ -6,11 +6,11 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:24:16 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/18 16:47:38 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 10:30:44 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
+#include "../executor.h"
 
 /*-------------------------------------------------------------
 Allocate memory for double-array

@@ -6,11 +6,11 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/29 09:59:32 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 10:30:30 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
+#include "../executor.h"
 
 /*-------------------------------------------------------------
 Close all opened filedescriptors from piping, we won't need
