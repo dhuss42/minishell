@@ -91,7 +91,9 @@ int    	ft_env(t_shell *shell);
 int   	ft_export(t_shell *shell, t_command *row);
 void    export_no_argument(t_shell *shell);
 void    ft_echo(t_shell *shell, t_command *row);
-int ft_unset(t_shell *shell, t_command *row);
+int 	ft_unset(t_shell *shell, t_command *row);
+void    ft_exit(t_command *row);
+int		ft_cd(t_command *row);
 
 //-----------------lexer----------------//
 void  	lexer(t_shell *shell, char *input);

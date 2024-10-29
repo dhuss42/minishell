@@ -38,6 +38,15 @@ void    test_builtins(t_shell *shell)
                 if (ft_unset(shell, row) == -1)
                     return ;
             }
+            else if (ft_strncmp(row->args[shell->i], "exit", ft_strlen(row->args[shell->i])) == 0)
+            {
+                ft_exit(row);
+            }
+            else if (ft_strncmp(row->args[shell->i], "cd", ft_strlen(row->args[shell->i])) == 0)
+            {
+                if (ft_cd(row) == -1)
+                    return ;
+            }
             // if (row->args[shell->i] == NULL)
                 break ;
             shell->i++;
