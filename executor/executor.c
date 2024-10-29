@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/29 10:30:39 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 13:06:23 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,18 @@ int	execute_single_command(char **envp, t_command *row)
 		return (1);
 	if (exec_redirections(row))
 		return (2);
-	id = fork();
-	if (id == -1)
-		return (print_error(errno, NULL, PRINT));
-	else if (id == 0)
-		single_child(row->path, envp, *row);
-	else if (id > 0)
+	if (row->args[0])
 	{
-		if (single_parent(id, row->args[0]))
-			return (2);
+		id = fork();
+		if (id == -1)
+			return (print_error(errno, NULL, PRINT));
+		else if (id == 0)
+			single_child(row->path, envp, *row);
+		else if (id > 0)
+		{
+			if (single_parent(id, row->args[0]))
+				return (2);
+		}
 	}
 	return (0);
 }
@@ -100,24 +103,30 @@ int	execute_single_command(char **envp, t_command *row)
 /*-------------------------------------------------------------
 Main function for executor
 ---------------------------------------------------------------*/
-int	executor(char **envp, t_list *table)
+int	executor(char **envp, t_list *table, t_shell *shell)
 {
 	t_command	*current_cmd;
 	int			nbr_pipes;
 
+	// print_table(shell);
+	if (shell->syntax_error == true)
+		return (1);
 	if (handle_heredoc(table))
-		return (free_table(table));
+		return (2);
+		// return (free_table(table));
 	nbr_pipes = ft_lstsize(table) - 1;
 	if (nbr_pipes == 0)
 	{
 		current_cmd = (t_command*) table->content;
 		if (execute_single_command(envp, current_cmd))
-			return (free_row(current_cmd));
+			return (3);
+			// return (free_row(current_cmd));
 	}
 	else if (nbr_pipes > 0)
 	{
 		if (execute_pipechain(envp, table, nbr_pipes))
-			return (free_table(table));
+			return (4);
+			// return (free_table(table));
 	}
 	return (0);
 }

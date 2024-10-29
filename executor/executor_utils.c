@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/29 10:30:35 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 13:02:17 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,13 @@ for each row
 ---------------------------------------------------------------*/
 int	get_check_path(t_command *row, char **envp)
 {
+	row->path = NULL;
+	if (!row->args[0])
+		return (0);
 	row->path = get_path(row->args[0], envp);
 	if (!row->path)
 		return (print_error(E_PATH, NULL, PRINT));
-	else if (access(row->path, F_OK) != 0)
+	if (access(row->path, F_OK) != 0)
 	{
 		if (cmd_is_path(row->args[0]))
 			return (print_error(E_FILENOEXIST, row->args[0], PRINT));

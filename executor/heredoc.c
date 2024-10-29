@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/29 10:30:50 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 12:42:35 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int	handle_heredoc(t_list *table)
 	{
 		row = (t_command *) tmp->content;
 		row->id = id;
+		row->heredoc_file_path = NULL;
 		if (row->red_symbol && row->filename)
 		{
 			if (go_through_heredoc_files(row))
