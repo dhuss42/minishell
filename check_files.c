@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 15:07:30 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 10:06:14 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	init_final_red_files(t_command *row)
 }
 
 /*-------------------------------------------------------------
-Check all files for each row in the table
+Check all files of the row
 ---------------------------------------------------------------*/
 int	check_files(t_command *row)
 {

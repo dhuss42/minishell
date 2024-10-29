@@ -6,11 +6,34 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 16:07:49 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 09:57:46 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+
+/*-------------------------------------------------------------
+Handle pipechain
+---------------------------------------------------------------*/
+int	execute_pipechain(char **envp, t_list *table, int nbr_pipes)
+{
+	int		fd[nbr_pipes][2];
+	pid_t	pid[nbr_pipes + 1];
+	int		n;
+
+	n = 0;
+	while (n < nbr_pipes)
+	{
+		if (pipe(fd[n]) == -1)
+			return (print_error(errno, NULL, PRINT));
+		n++;
+	}
+	if (pipechain_loop(envp, table, pid, fd))
+		return (1);
+	if (pipe_parent(pid, fd, table, nbr_pipes))
+		return (2);
+	return (0);
+}
 
 /*-------------------------------------------------------------
 Handle parent for single command
@@ -59,6 +82,8 @@ int	execute_single_command(char **envp, t_command *row)
 
 	if (handle_stuff(envp, row))
 		return (1);
+	if (exec_redirections(row))
+		return (2);
 	id = fork();
 	if (id == -1)
 		return (print_error(errno, NULL, PRINT));

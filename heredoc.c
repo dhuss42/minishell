@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 10:33:37 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 10:14:07 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,30 @@ static int	handle_heredoc_input(char *delimiter, t_command *row)
 }
 
 /*-------------------------------------------------------------
+check if symbol is heredoc, then handle heredoc input
+---------------------------------------------------------------*/
+static int go_through_heredoc_files(t_command *row)
+{
+	int	i;
+
+	i = 0;
+	while(row->red_symbol[i] && row->filename[i])
+	{
+		if (row->red_symbol[i][0] == '<' && row->red_symbol[i][1] == '<')
+		{
+			if (handle_heredoc_input(row->filename[i], row))
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+/*-------------------------------------------------------------
 Go through table and handle each heredoc in each row
 ---------------------------------------------------------------*/
 int	handle_heredoc(t_list *table)
 {
-	int			i;
 	int			id;
 	t_list		*tmp;
 	t_command	*row;
@@ -78,17 +97,10 @@ int	handle_heredoc(t_list *table)
 	{
 		row = (t_command *) tmp->content;
 		row->id = id;
-		// if (!row->red_symbol || !row->filename)
-		// 	return (1);
-		i = 0;
-		while(row->red_symbol[i] && row->filename[i])
+		if (row->red_symbol && row->filename)
 		{
-			if (row->red_symbol[i][0] == '<' && row->red_symbol[i][1] == '<')
-			{
-				if (handle_heredoc_input(row->filename[i], row))
-					return (2);
-			}
-			i++;
+			if (go_through_heredoc_files(row))
+				return (1);
 		}
 		tmp = tmp->next;
 		id++;

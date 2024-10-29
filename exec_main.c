@@ -38,14 +38,14 @@ int main (int argc, char **argv, char **envp)
 	// t_command	*current_cmd;
 	table = NULL;
 	t_list	*second = NULL;
-	// t_list	*third = NULL;
+	t_list	*third = NULL;
 	// t_list	*fourth = NULL;
 
-	table = create_example("echo outiout", "", "");
-	second = create_example("echo pups", "", "");
+	table = create_example("echo pupsi", "", "");
+	second = create_example("cat", "<< >", "a a");
 	ft_lstadd_back(&table, second);
-	// third = create_example("cat", "<", "libft");
-	// ft_lstadd_back(&table, third);
+	third = create_example("cat", "<<", "b");
+	ft_lstadd_back(&table, third);
 	// fourth = create_example("grep a", "<", "libft");
 	// ft_lstadd_back(&table, fourth);
 	// current_cmd = (t_command *) temp->content;

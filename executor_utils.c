@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/25 15:49:32 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/29 09:52:40 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ int	handle_stuff(char **envp, t_command *row)
 {
 	if (check_files(row))
 		return (1);
-	if (exec_redirections(row))
-		return (2);
 	if (get_check_path(row, envp))
 		return (3);
 	// if (is_built_in)
