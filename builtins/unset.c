@@ -1,19 +1,6 @@
 
 #include "../minishell_eichhoernchen.h"
 
-// can take multiple args
-// check if key exists 
-// if not return 
-
-// get length of tmp double char*
-// if key exists skip in counter
-
-// go through the envs and copy them into a tmp double char**
-// if existing key is found
-// skip it
-
-// duplicate tmp double char ** into shell->env
-
 void get_len_unset(t_shell *shell, t_command *row)
 {
     size_t j;
@@ -44,6 +31,8 @@ int ft_unset(t_shell *shell, t_command *row)
     char    **tmp;
     size_t  j;
     size_t  k;
+    size_t unset_index;
+    bool    should_copy;
 
     get_len_unset(shell, row);
     printf("shell->len: %zu\n", shell->len);
@@ -56,32 +45,40 @@ int ft_unset(t_shell *shell, t_command *row)
     j = 0;
     k = 0;
     printf("TEST\n");
-    while (row->args[shell->i] != NULL)
+    while (shell->env[k] != NULL)
     {
-        while (shell->env[k] != NULL)
+        should_copy = true;
+        unset_index = shell->i;
+        while (row->args[unset_index] != NULL)
         {
-            if (ft_strncmp(row->args[shell->i], shell->env[k], strlen_equal(shell->env[k])) != 0)
+            if (ft_strncmp(row->args[unset_index], shell->env[k], strlen_equal(shell->env[k])) == 0)
             {
-                tmp[j] = ft_strdup(shell->env[k]);
-                if (!tmp[j])
-                {
-                    clear_all(tmp);
-                    return (-1);
-                }
-                j++;
+                should_copy = false;
+                break;
             }
-            k++;
+            unset_index++;
         }
-        shell->i++;
+        if (should_copy == true)
+        {
+            tmp[j] = ft_strdup(shell->env[k]);
+            if (!tmp[j])
+            {
+                clear_all(tmp);
+                return (-1);
+            }
+            j++;
+        }
+        k++;
     }
+    tmp[j] = NULL;
+
     if (shell->env)
         clear_all(shell->env);
+
     copy_env(tmp, shell);
     if (!shell->env)
         return (-1);
-    if (tmp)
-        clear_all(tmp);
+
+    clear_all(tmp);
     return (0);
 }
-
-// not working at the moment

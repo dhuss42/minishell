@@ -19,6 +19,8 @@ void	get_len_no_quotes(t_command *row, t_shell *expand)
 	expand->len = 0;
 	while (row->args[expand->i][expand->j] != '\0')
 	{
+		if (row->args[expand->i][expand->j] == '$' && is_quotes(row->args[expand->i][expand->j + 1]))
+			expand->j++;
 		if (is_quotes(row->args[expand->i][expand->j]))
 		{
 			expand->quote = row->args[expand->i][expand->j];
@@ -54,6 +56,8 @@ int	remove_outer_quotes(t_command *row, t_shell *expand)
 	expand->k = 0;
 	while (row->args[expand->i][expand->j] != '\0')
 	{
+		if (row->args[expand->i][expand->j] == '$' && is_quotes(row->args[expand->i][expand->j + 1]))
+			expand->j++;
 		if (is_quotes(row->args[expand->i][expand->j]))
 		{
 			expand->quote = row->args[expand->i][expand->j];

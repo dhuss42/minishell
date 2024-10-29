@@ -50,6 +50,8 @@ int    key_exists(char **env, char *key)
 }
 
 // checks if the current key already exists in the og envs
+// returns index when match is found
+// returns -1 when they don't match
 
 size_t  get_len_new_env(char **env, t_command *row, size_t i)
 {
