@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/29 13:02:17 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/30 15:26:29 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,12 @@ for each row
 ---------------------------------------------------------------*/
 int	get_check_path(t_command *row, char **envp)
 {
+	struct stat filestat;
+
 	row->path = NULL;
+	stat(row->args[0], &filestat);
+	if (S_ISDIR(filestat.st_mode))
+		return (print_error(E_CMD_ISDIRECTORY, row->args[0], PRINT));
 	if (!row->args[0])
 		return (0);
 	row->path = get_path(row->args[0], envp);

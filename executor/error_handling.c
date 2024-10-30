@@ -33,10 +33,15 @@ int	custom_error(int err_no)
 		ft_putstr_fd("Permission denied\n", 2);
 		return (126);
 	}
-	else if(err_no == E_ISDIRECTORY)
+	else if(err_no == E_FILE_ISDIRECTORY)
 	{
-		ft_putstr_fd("Is a directory\n", 2);
-		err_no = 1;
+		ft_putstr_fd("is a directory\n", 2);
+		return (1);
+	}
+	else if(err_no == E_CMD_ISDIRECTORY)
+	{
+		ft_putstr_fd("is a directory\n", 2);
+		return (126);
 	}
 	else if (err_no == E_TOOMANYARG)
 	{

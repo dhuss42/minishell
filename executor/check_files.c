@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/29 11:34:03 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/30 15:26:22 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	check_output_files(t_command *row, int i)
 	}
 	stat(row->filename[i], &filestat);
 	if (S_ISDIR(filestat.st_mode))
-		return (print_error(E_ISDIRECTORY, row->filename[i], PRINT));
+		return (print_error(E_FILE_ISDIRECTORY, row->filename[i], PRINT));
 	if (access(row->filename[i], W_OK) == -1)
 		return (print_error(E_NOPERMISSION, row->filename[i], PRINT));
 	row->final_outfile = row->filename[i];

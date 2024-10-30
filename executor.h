@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/30 14:40:53 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/30 15:25:58 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ typedef enum e_custom_err
 	E_PARENT,
 	E_FILENOEXIST,
 	E_NOPERMISSION,
-	E_ISDIRECTORY,
+	E_CMD_ISDIRECTORY,
+	E_FILE_ISDIRECTORY,
 	E_TOOMANYARG,
 	E_NUMERICARG = 255,
 	E_SYNTAXERROR = 258
