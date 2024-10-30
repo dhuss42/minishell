@@ -38,6 +38,17 @@ int	custom_error(int err_no)
 		ft_putstr_fd("Is a directory\n", 2);
 		err_no = 1;
 	}
+	else if (err_no == E_TOOMANYARG)
+	{
+		ft_putstr_fd("exit: too many arguments\n", 2);
+		err_no = 1;
+	}
+	else if (err_no == E_NUMERICARG)
+	{
+		ft_putstr_fd("exit: ", 2);
+		// ft_printf("%s", str);
+		ft_putstr_fd("numeric argument required\n", 2);
+	}
 	else if (err_no == E_SYNTAXERROR)
 		ft_putstr_fd("syntax error near unexpected token\n", 2);
 	return (err_no);

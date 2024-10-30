@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/30 14:06:50 by dhuss             #+#    #+#             */
+/*   Updated: 2024/10/30 14:13:19 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../minishell_eichhoernchen.h"
 
@@ -126,7 +136,7 @@ int    ft_export(t_shell *shell, t_command *row)
 
 // gets length of the new double char array that will hold all the keys=variables
 // allocates that double char array (tmp)
-// checks if the keys typed by User exist and replaces them in the og envs 
+// checks if the keys typed by User exist and replaces them in the og envs
 // copies these envs into tmp & appends the user's input if its valid
 // frees original envs
 // copies tmp into envs
