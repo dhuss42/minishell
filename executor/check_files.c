@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/30 15:26:22 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/30 15:42:52 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@ int	check_output_files(t_command *row, int i)
 /*-------------------------------------------------------------
 initialize final files and redirection symbols to NULL
 ---------------------------------------------------------------*/
-void	init_final_red_files(t_command *row)
-{
-	row->final_infile = NULL;
-	row->final_outfile = NULL;
-	row->final_in_red = NULL;
-	row->final_out_red = NULL;
-}
+// void	init_final_red_files(t_command *row)
+// {
+// 	row->final_infile = NULL;
+// 	row->final_outfile = NULL;
+// 	row->final_in_red = NULL;
+// 	row->final_out_red = NULL;
+// }
 
 /*-------------------------------------------------------------
 Check all files of the row
@@ -91,7 +91,7 @@ int	check_files(t_command *row)
 {
 	int			i;
 
-	init_final_red_files(row);
+	// init_final_red_files(row);
 	if (!row->filename || !row->red_symbol)
 		return (0);
 	i = 0;

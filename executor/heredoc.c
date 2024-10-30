@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/30 14:46:53 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/30 15:49:49 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,16 @@ static int go_through_heredoc_files(t_command *row)
 	return (0);
 }
 
+void init_content(t_command *row)
+{
+	row->heredoc_file_path = NULL;
+	row->path = NULL;
+	row->final_infile = NULL;
+	row->final_outfile = NULL;
+	row->final_in_red = NULL;
+	row->final_out_red = NULL;
+}
+
 /*-------------------------------------------------------------
 Go through table and handle each heredoc in each row
 ---------------------------------------------------------------*/
@@ -97,7 +107,7 @@ int	handle_heredoc(t_list *table)
 	{
 		row = (t_command *) tmp->content;
 		row->id = id;
-		row->heredoc_file_path = NULL;
+		init_content(row);
 		if (row->red_symbol && row->filename)
 		{
 			if (go_through_heredoc_files(row))

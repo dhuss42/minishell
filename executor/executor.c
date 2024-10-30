@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/29 14:20:52 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/30 15:50:49 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ int	execute_single_command(char **envp, t_command *row)
 
 	if (handle_stuff(envp, row))
 		return (1);
-	// if (exec_redirections(row))
-	// 	return (2);
 	if (row->args[0])
 	{
 		id = fork();
@@ -110,25 +108,21 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 	t_command	*current_cmd;
 	int			nbr_pipes;
 
-	// print_table(shell);
 	if (shell->syntax_error == true)
 		return (1);
 	if (handle_heredoc(table))
 		return (2);
-		// return (free_table(table));
 	nbr_pipes = ft_lstsize(table) - 1;
 	if (nbr_pipes == 0)
 	{
 		current_cmd = (t_command*) table->content;
 		if (execute_single_command(envp, current_cmd))
 			return (3);
-			// return (free_row(current_cmd));
 	}
 	else if (nbr_pipes > 0)
 	{
 		if (execute_pipechain(envp, table, nbr_pipes))
 			return (4);
-			// return (free_table(table));
 	}
 	return (0);
 }
