@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_unsigned.c                               :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 12:08:32 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/03 14:45:24 by maustel          ###   ########.fr       */
+/*   Created: 2024/03/18 09:30:28 by dhuss             #+#    #+#             */
+/*   Updated: 2024/04/23 08:57:47 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_putnbr_unsigned(unsigned int n, int *counter)
+void	ft_putchar(char c, int *counter)
 {
-	if (n >= 10)
+	if (write(1, &c, 1) == -1)
 	{
-		ft_putnbr_unsigned(n / 10, counter);
-		if (*counter == -1)
-			return ;
+		*counter = -1;
+		return ;
 	}
-	ft_putchar(n % 10 + 48, counter);
+	(*counter)++;
 }

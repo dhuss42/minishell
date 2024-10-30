@@ -1,24 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_unsigned.c                               :+:      :+:    :+:   */
+/*   ft_putnbr_base.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 12:08:32 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/03 14:45:24 by maustel          ###   ########.fr       */
+/*   Created: 2024/04/15 14:04:39 by dhuss             #+#    #+#             */
+/*   Updated: 2024/10/03 14:45:13 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_putnbr_unsigned(unsigned int n, int *counter)
+static void	ft_putchar_base(unsigned int hex_digit, int *counter)
 {
-	if (n >= 10)
+	char	*str;
+
+	str = "0123456789ABCDEF";
+	if (write (1, &str[hex_digit], 1) == -1)
 	{
-		ft_putnbr_unsigned(n / 10, counter);
+		*counter = -1;
+		return ;
+	}
+	(*counter)++;
+}
+
+void	ft_putnbr_base(unsigned int n, int *counter)
+{
+	if (n >= 16)
+	{
+		ft_putnbr_base(n / 16, counter);
 		if (*counter == -1)
 			return ;
 	}
-	ft_putchar(n % 10 + 48, counter);
+	ft_putchar_base(n % 16, counter);
 }

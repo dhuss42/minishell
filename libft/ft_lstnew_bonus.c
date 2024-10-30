@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_unsigned.c                               :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 12:08:32 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/03 14:45:24 by maustel          ###   ########.fr       */
+/*   Created: 2024/03/22 12:36:51 by dhuss             #+#    #+#             */
+/*   Updated: 2024/03/22 15:53:34 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-void	ft_putnbr_unsigned(unsigned int n, int *counter)
+t_list	*ft_lstnew(void *content)
 {
-	if (n >= 10)
-	{
-		ft_putnbr_unsigned(n / 10, counter);
-		if (*counter == -1)
-			return ;
-	}
-	ft_putchar(n % 10 + 48, counter);
+	t_list	*node;
+
+	node = malloc(sizeof(t_list));
+	if (node == NULL)
+		return (NULL);
+	node->content = content;
+	node->next = NULL;
+	return (node);
 }

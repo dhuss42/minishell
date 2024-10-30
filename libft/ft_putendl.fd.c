@@ -1,24 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_unsigned.c                               :+:      :+:    :+:   */
+/*   ft_putendl.fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 12:08:32 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/03 14:45:24 by maustel          ###   ########.fr       */
+/*   Created: 2024/03/18 10:21:14 by dhuss             #+#    #+#             */
+/*   Updated: 2024/03/18 10:25:30 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
+#include <unistd.h>
 
-void	ft_putnbr_unsigned(unsigned int n, int *counter)
+void	ft_putendl_fd(char *s, int fd)
 {
-	if (n >= 10)
+	while (*s)
 	{
-		ft_putnbr_unsigned(n / 10, counter);
-		if (*counter == -1)
-			return ;
+		write (fd, s, 1);
+		s++;
 	}
-	ft_putchar(n % 10 + 48, counter);
+	write (fd, "\n", 1);
 }
+
+/* int	main(void)
+{
+	char	*s;
+	int		fd;
+
+	s = "hello";
+	fd = 1;
+	ft_putendl_fd(s, fd);
+	return (0);
+} */

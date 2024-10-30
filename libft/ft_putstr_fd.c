@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_unsigned.c                               :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 12:08:32 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/03 14:45:24 by maustel          ###   ########.fr       */
+/*   Created: 2024/03/18 09:48:35 by dhuss             #+#    #+#             */
+/*   Updated: 2024/03/18 09:56:30 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
+#include <unistd.h>
 
-void	ft_putnbr_unsigned(unsigned int n, int *counter)
+void	ft_putstr_fd(char *s, int fd)
 {
-	if (n >= 10)
+	while (*s)
 	{
-		ft_putnbr_unsigned(n / 10, counter);
-		if (*counter == -1)
-			return ;
+		write (fd, s, 1);
+		s++;
 	}
-	ft_putchar(n % 10 + 48, counter);
 }
+
+/* int	main(void)
+{
+	char	*s;
+	int		fd;
+
+	s = "Hello";
+	fd = 1;
+	ft_putstr_fd(s, fd);
+	return (0);
+} */

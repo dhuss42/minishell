@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_unsigned.c                               :+:      :+:    :+:   */
+/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 12:08:32 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/03 14:45:24 by maustel          ###   ########.fr       */
+/*   Created: 2024/03/27 09:59:39 by dhuss             #+#    #+#             */
+/*   Updated: 2024/03/27 11:27:32 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-void	ft_putnbr_unsigned(unsigned int n, int *counter)
+void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-	if (n >= 10)
+	t_list	*temp;
+
+	if (!lst)
+		return ;
+	temp = lst;
+	while (temp)
 	{
-		ft_putnbr_unsigned(n / 10, counter);
-		if (*counter == -1)
-			return ;
+		(*f)(temp->content);
+		temp = temp->next;
 	}
-	ft_putchar(n % 10 + 48, counter);
 }

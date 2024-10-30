@@ -1,40 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/27 09:19:10 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/17 13:00:16 by maustel          ###   ########.fr       */
+/*   Created: 2024/03/22 15:39:17 by dhuss             #+#    #+#             */
+/*   Updated: 2024/03/27 11:05:46 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+t_list	*ft_lstlast(t_list *lst)
 {
 	t_list	*temp;
 
-	if (!*lst)
-	{
-		*lst = new;
-		return ;
-	}
-	temp = *lst;
+	if (!lst)
+		return (NULL);
+	temp = lst;
 	while (temp->next)
 		temp = temp->next;
-	temp->next = new;
+	return (temp);
 }
-/* int	main(void)
+/*
+#include <stdio.h>
+
+int main(void)
 {
-	t_list	*head = ft_lstnew("First Element");
+	t_list	*head = ft_lstnew("Zero");
+	t_list	*one = ft_lstnew("First Element");
 	t_list	*two = ft_lstnew("Second Element");
 	t_list	*three = ft_lstnew("Third Element");
 	t_list	*last;
-	ft_lstadd_back(&head, three);
-	ft_lstadd_back(&head, two);
+	ft_lstadd_front(&head, three);
+	ft_lstadd_front(&head, two);
+	ft_lstadd_front(&head, one);
 	last = ft_lstlast(head);
-	printf("%s\n", (char *)last->content);
+	if (last != NULL)
+		printf("Last element of the list: %s\n", (char *)last->content);
+	else
+		printf("List is empty");
 	return (0);
 } */

@@ -5,24 +5,36 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/27 11:03:44 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/30 10:59:37 by maustel          ###   ########.fr       */
+/*   Created: 2024/10/10 11:21:11 by dhuss             #+#    #+#             */
+/*   Updated: 2024/10/29 11:09:58 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell_eichhoernchen.h"
 
-int	ft_lstsize(t_list *lst)
+void	free_table_parser(t_shell *parsing)
 {
 	t_list	*tmp;
-	int		i;
+	t_list	*next;
+	t_command *cmd;
 
-	tmp = lst;
-	i = 0;
-	while (tmp)
+	tmp = parsing->table;
+	while (tmp != NULL)
 	{
-		tmp = tmp->next;
-		i++;
+		cmd = (t_command*)tmp->content;
+		if (cmd)
+		{
+			if (cmd->args)
+				clear_all(cmd->args);
+			if (cmd->filename)
+				clear_all(cmd->filename);
+			if (cmd->red_symbol)
+				clear_all(cmd->red_symbol);
+			free(cmd);
+		}
+		next = tmp->next;
+		free(tmp);
+		tmp = next;
 	}
-	return (i);
+	parsing->table = NULL;
 }
