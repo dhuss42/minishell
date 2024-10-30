@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/18 16:04:51 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/30 11:03:03 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_eichhoernchen.h"
+#include "executor.h"
 
 void	minishell_loop(t_shell *shell)
 {
@@ -19,19 +19,21 @@ void	minishell_loop(t_shell *shell)
 	while(1)
 	{
     	input = readline("minishell: ");
-    	if(!input)
-       		return ;
+    	// if(!input)
+       	// 	return ;
 		if (input[0] != '\0')
 		{
 			lexer(shell, input);
 			parser(shell);
-			print_table(shell);
+			// print_table(shell);
 			expansion(shell, shell->env);
-			print_table(shell);
-			test_builtins(shell);
+			print_error(0, NULL, NOTPRINT);
+			// print_table(shell);
+			executor(shell->env, shell->table, shell);
+			// test_builtins(shell);
+			// ft_lstclear(&shell->list, free_token);
 
-			ft_lstclear(&shell->list, free_token);
-			free_table(shell);
+			free_table(shell->table);
 		}
 	}
 }
@@ -67,6 +69,7 @@ int	main(int argc, char *argv[], char **env)
 {
 	t_shell	shell;
 
+	printf("minisehll started\n");
 	shell.table = NULL;
 	if (argc == 1)
 	{

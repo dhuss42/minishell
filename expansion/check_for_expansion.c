@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_for_expansion.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/22 15:59:42 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/30 11:00:55 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,30 +74,30 @@ int	check_for_expansion(t_command *row, t_shell *expand, char **env)
 	{
 		if (row->args[expand->i][expand->k] == '\"' && contains_dollar(row->args[expand->i], expand->k))
 		{
-			printf(RED"double quotes {%c} at [%zu]\n"WHITE, row->args[expand->i][expand->k], expand->k);
+			// printf(RED"double quotes {%c} at [%zu]\n"WHITE, row->args[expand->i][expand->k], expand->k);
 			if (double_quotes(row, expand, env) == -1)
 				return (-1);
 		}
 		else if (row->args[expand->i][expand->k] == '\'')
 		{
-			printf(RED"single quotes {%c} at [%zu]\n"WHITE, row->args[expand->i][expand->k], expand->k);
+			// printf(RED"single quotes {%c} at [%zu]\n"WHITE, row->args[expand->i][expand->k], expand->k);
 			skip_single_quotes(row, expand);
 		}
 		else if (row->args[expand->i][expand->k] == '$' && ft_isalnum(row->args[expand->i][expand->k + 1]))
 		{
-			printf(RED"dollar {%c} at [%zu]\n"WHITE,row->args[expand->i][expand->k], expand->k);
+			// printf(RED"dollar {%c} at [%zu]\n"WHITE,row->args[expand->i][expand->k], expand->k);
 			if (get_expanded(tmp, env, row, expand) == -1)
 				return (-1);
 		}
 		else if (row->args[expand->i][expand->k] == '$' && (row->args[expand->i][expand->k + 1] == '?'))
 		{
-			printf(RED"EXIT CODE {%c} at [%zu]\n"WHITE,row->args[expand->i][expand->k], expand->k);
+			// printf(RED"EXIT CODE {%c} at [%zu]\n"WHITE,row->args[expand->i][expand->k], expand->k);
 			if (get_exit_code(tmp, row, expand) == -1)
 				return (-1);
 		}
 		else
 		{
-			printf(RED"ordinary char {%c} at [%zu]\n"WHITE,row->args[expand->i][expand->k], expand->k);
+			// printf(RED"ordinary char {%c} at [%zu]\n"WHITE,row->args[expand->i][expand->k], expand->k);
 			expand->k++;
 		}
 		// printf(MAGENTA"current args[%zu]: %s\n", expand->i, row->args[expand->i]);

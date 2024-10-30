@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   memory_parser.c                                    :+:      :+:    :+:   */
+/*   ft_putnbr_unsigned.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/27 11:03:44 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/30 10:59:37 by maustel          ###   ########.fr       */
+/*   Created: 2024/04/15 12:08:32 by dhuss             #+#    #+#             */
+/*   Updated: 2024/10/30 11:02:34 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-int	ft_lstsize(t_list *lst)
+void	ft_putnbr_unsigned(unsigned int n, int *counter)
 {
-	t_list	*tmp;
-	int		i;
-
-	tmp = lst;
-	i = 0;
-	while (tmp)
+	if (n >= 10)
 	{
-		tmp = tmp->next;
-		i++;
+		ft_putnbr_unsigned(n / 10, counter);
+		if (*counter == -1)
+			return ;
 	}
-	return (i);
+	ft_putchar(n % 10 + 48, counter);
 }

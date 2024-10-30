@@ -1,5 +1,5 @@
 
-#include "../minishell_eichhoernchen.h"
+#include "../executor.h"
 
 int	get_int_length(int num)
 {
@@ -30,8 +30,8 @@ int	get_exit_code(char *tmp, t_command *row, t_shell *expand)
 
 	tmp_ec = NULL;
 	index = 0;
-	// exit_code = print_error(0, NULL);
-	exit_code = 106; // change here
+	exit_code = print_error(-1, NULL, NOTPRINT);
+	// exit_code = 106; // change here
 	len = get_int_length(exit_code);
 	tmp_ec = malloc(sizeof(char) * (len + 1));
 	if (!tmp_ec)
@@ -48,27 +48,27 @@ int	get_exit_code(char *tmp, t_command *row, t_shell *expand)
 		//  print_error(errno, NULL);
 		return (-1);
 	}
-	printf("[%zu]expand->k: %c\n", expand->k, row->args[expand->i][expand->k]);
+	// printf("[%zu]expand->k: %c\n", expand->k, row->args[expand->i][expand->k]);
 	len = 0;
 	expand->j = 0;
 	while (expand->j < expand->k)
 		tmp[len++] = row->args[expand->i][expand->j++];
 	expand->j += 2;
-	printf(MAGENTA"tmp before exit code: %s\n"WHITE, tmp);
+	// printf(MAGENTA"tmp before exit code: %s\n"WHITE, tmp);
 
 	tmp_ec = ft_itoa(exit_code);
 	expand->k += ft_strlen(tmp_ec);
-	printf(RED"exit_code tmp_ec: %s\n"WHITE, tmp_ec);
+	// printf(RED"exit_code tmp_ec: %s\n"WHITE, tmp_ec);
 
 	while(tmp_ec[index] != '\0')
 		tmp[len++] = tmp_ec[index++];
-	printf(MAGENTA"tmp after copying exitcode: %s\n"WHITE, tmp);
+	// printf(MAGENTA"tmp after copying exitcode: %s\n"WHITE, tmp);
 	if (tmp_ec)
 		free(tmp_ec);
 
 	while (row->args[expand->i][expand->j] != '\0')
 		tmp[len++] = row->args[expand->i][expand->j++];
-	printf(MAGENTA"tmp after copying remainder: %s\n"WHITE, tmp);
+	// printf(MAGENTA"tmp after copying remainder: %s\n"WHITE, tmp);
 	tmp[len] = '\0';
 	if (row->args[expand->i])
 		free(row->args[expand->i]);
@@ -79,7 +79,7 @@ int	get_exit_code(char *tmp, t_command *row, t_shell *expand)
 		//  print_error(errno, NULL);
 		return (-1);
 	}
-	printf("tmp: %s\n", tmp);
+	// printf("tmp: %s\n", tmp);
 	if (tmp)
 	{
 		free(tmp);

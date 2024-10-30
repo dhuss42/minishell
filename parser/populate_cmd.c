@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   populate_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:03:35 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/10 11:07:06 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/30 10:58:59 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,24 @@ int	populate_red_array(t_shell *parsing, t_token *current_token, t_command *new_
 	new_cmd->red_symbol[parsing->i] = malloc(sizeof(char) * (ft_strlen(current_token->input) + 1));
 	if (!new_cmd->red_symbol[parsing->i])
 	{
-		free_table(parsing);
-		printf("I return issue populate_red_array\n");
+		free_table_parser(parsing);
+		// printf("I return issue populate_red_array\n");
 		// print_error(errno, NULL);
 		return (-1);
 	}
 	ft_strlcpy(new_cmd->red_symbol[parsing->i], current_token->input, ft_strlen(current_token->input) + 1);
-	printf("I return from populat red array normally\n");
+	// printf("I return from populat red array normally\n");
 	return (0);
 }
 
 int	populate_filename_array(t_shell *parsing, t_token *next_token, t_command *new_cmd)
 {
-	printf("in populate filename\n");
+	// printf("in populate filename\n");
 	new_cmd->filename[parsing->i] = malloc(sizeof(char) * (ft_strlen(next_token->input) + 1));
-	printf("in populate filename2\n");
+	// printf("in populate filename2\n");
 	if (!new_cmd->filename[parsing->i])
 	{
-		free_table(parsing);
+		free_table_parser(parsing);
 		// printf("I return issue populate_filename_array\n");
 		// print_error(errno, NULL);
 		return (-1);
@@ -49,7 +49,7 @@ int	populate_args_array(t_shell *parsing, t_token *current_token, t_command *new
 	new_cmd->args[parsing->j] = malloc(sizeof(char) * ft_strlen(current_token->input) + 1);
 	if (!new_cmd->args[parsing->j])
 	{
-		free_table(parsing);
+		free_table_parser(parsing);
 		// printf("I return issue populate_args_array\n");
 		// print_error(errno, NULL);
 		return (-1);
@@ -70,7 +70,7 @@ int	populate_double_arrays(t_shell *parsing, t_token *current_token, t_token *ne
 		{
 			if (populate_filename_array(parsing, next_token, new_cmd) == -1)
 				return (-1);
-		}		
+		}
 		parsing->i++;
 	}
 	else

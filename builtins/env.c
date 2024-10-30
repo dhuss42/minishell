@@ -1,5 +1,4 @@
-#include <unistd.h>
-#include "minishell_eichhoernchen.h"
+#include "../minishell_eichhoernchen.h"
 
 int    ft_env(t_shell *shell)
 {

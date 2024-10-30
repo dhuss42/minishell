@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_table.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:00:48 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/10 11:06:38 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/30 10:59:50 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_command	*allocate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 	if (!new_cmd->args)
 	{
 		// printf("I return after new_cmd->args malloc fail\n");
-		free_table(parsing);
+		free_table_parser(parsing);
 		// print_error(errno, NULL);
 		return (NULL);
 	}
@@ -88,7 +88,7 @@ t_command	*allocate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 	if (!new_cmd->red_symbol)
 	{
 		// printf("I return after new_cmd->red_symbol malloc fail\n");
-		free_table(parsing);
+		free_table_parser(parsing);
 		// print_error(errno, NULL);
 		return (NULL);
 	}
@@ -96,7 +96,7 @@ t_command	*allocate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 	if (!new_cmd->filename)
 	{
 		// printf("I return after new_cmd->filename malloc fail\n");
-		free_table(parsing);
+		free_table_parser(parsing);
 		// print_error(errno, NULL);
 		return (NULL);
 	}

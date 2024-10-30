@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_eichhoernchen.h                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/21 15:59:14 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/30 11:03:09 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include <stdbool.h>
 #include "libft/libft.h"
 #include <stdarg.h>
-
 
 //----------------colors--------------//
 #define RESET       "\033[0m"
@@ -55,11 +54,25 @@ typedef struct s_token
 	char *input;
 } t_token; // change here to t_
 
+// typedef struct s_command
+// {
+// 	char	**args;
+// 	char	**filename;
+// 	char	**red_symbol;
+// } t_command;
+
 typedef struct s_command
 {
 	char	**args;
 	char	**filename;
 	char	**red_symbol;
+	int		id;
+	char	*path;				//to free
+	char	*final_infile;
+	char	*final_outfile;
+	char	*final_in_red;
+	char	*final_out_red;
+	char	*heredoc_file_path;	//to free
 } t_command;
 
 typedef struct s_shell
@@ -91,9 +104,7 @@ int    	ft_env(t_shell *shell);
 int   	ft_export(t_shell *shell, t_command *row);
 void    export_no_argument(t_shell *shell);
 void    ft_echo(t_shell *shell, t_command *row);
-int 	ft_unset(t_shell *shell, t_command *row);
-void    ft_exit(t_command *row);
-int		ft_cd(t_command *row);
+int ft_unset(t_shell *shell, t_command *row);
 
 //-----------------lexer----------------//
 void  	lexer(t_shell *shell, char *input);
@@ -142,8 +153,9 @@ size_t	strlen_equal(char *str);
 //----------free-stuf------------//
 void	free_token(void *content);
 void	clear_all(char **to_clear);
-void	free_table(t_shell *parsing);
+void	free_table_parser(t_shell *parsing);
 void    free_lexer(char *input, char *trim_inpt, char *res);
+int		print_error(int err_no, char *str, int print);
 
 //------------extra-shit-----------//
 void	print_token(t_token *tok);

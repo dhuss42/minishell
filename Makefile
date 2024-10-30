@@ -37,8 +37,15 @@ CFILES = minishell.c\
 	builtins/export_no_args.c\
 	builtins/echo.c\
 	builtins/unset.c\
-	builtins/exit.c\
-	builtins/cd.c
+	executor/check_files.c\
+	executor/error_handling.c\
+	executor/exec_free.c\
+	executor/exec_pipe.c\
+	executor/executor_utils.c\
+	executor/executor.c\
+	executor/find_path.c\
+	executor/heredoc.c\
+	executor/redirections.c
 
 
 # take out functions later such as print_table.c, print_tokenlist.c, builtins/builtins.c

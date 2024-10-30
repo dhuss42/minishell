@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   switcheroo.c                                       :+:      :+:    :+:   */
+/*   get_expanded.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:27 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/22 15:44:14 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/10/30 11:00:36 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int	get_expanded(char *key, char **env, t_command *row, t_shell *expand)
 	while (*key == '$') // not sure if I need this here (test later on)
 		key++;
 	exp = compare_with_env(key, env, exp);
-	printf(RED"exp: %s\n", exp);
+	// printf(RED"exp: %s\n", exp);
 	if (!exp)
 	{
 		// print_error(errno, NULL);
