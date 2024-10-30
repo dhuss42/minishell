@@ -21,10 +21,12 @@ int		ft_cd(t_command *row)
     //  check for errors
     //  print the path
 
-    // update oldpwd 
+    // update oldpwd
     // update PWD
 
 
+
+//a
 
     return (0);
 }
