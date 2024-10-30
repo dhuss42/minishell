@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/30 15:50:49 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/30 16:06:09 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,10 @@ int	execute_single_command(char **envp, t_command *row)
 
 	if (handle_stuff(envp, row))
 		return (1);
+	// if (is_builtin(row->path))
+	// {
+	// 	call_builtin_fct();
+	// }
 	if (row->args[0])
 	{
 		id = fork();

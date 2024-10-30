@@ -46,7 +46,7 @@ int	custom_error(int err_no)
 	else if (err_no == E_TOOMANYARG)
 	{
 		ft_putstr_fd("exit: too many arguments\n", 2);
-		err_no = 1;
+		return (1);
 	}
 	else if (err_no == E_NUMERICARG)
 	{
@@ -60,9 +60,7 @@ int	custom_error(int err_no)
 }
 
 /*-------------------------------------------------------------
-if binary from command failed, for example for "Is a directory"
-or grep o doesnt find lines with o
---> how to stop printing "No such file or directory"?!
+print error message and update static int exit_code
 ---------------------------------------------------------------*/
 int	print_error(int err_no, char *str, int print)
 {

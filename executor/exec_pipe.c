@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/29 10:30:30 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/30 16:05:20 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,16 @@ static void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_list *table)
 {
 	int	nbr_pipes;
 
+	// if (is_builtin(row->path))
+	// {
+	// 	call_builtin_fct();
+	// 	exit (free_table(table));
+	// }
+	if (!row->path)
+	{
+		free_table(table);
+		exit (0);
+	}
 	nbr_pipes = ft_lstsize(table) - 1;
 	if (close_fds(fd, row->id, nbr_pipes))
 		exit (print_error(errno, NULL, PRINT));
