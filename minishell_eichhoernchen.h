@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_eichhoernchen.h                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/30 11:03:09 by maustel          ###   ########.fr       */
+/*   Updated: 2024/10/30 14:19:08 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,11 +100,13 @@ int	copy_env(char **env, t_shell *shell);
 
 //-----------------builtins----------------//
 int 	ft_pwd();
-int    	ft_env(t_shell *shell);
-int   	ft_export(t_shell *shell, t_command *row);
-void    export_no_argument(t_shell *shell);
-void    ft_echo(t_shell *shell, t_command *row);
-int ft_unset(t_shell *shell, t_command *row);
+int		ft_env(t_shell *shell);
+int	 	ft_export(t_shell *shell, t_command *row);
+void	export_no_argument(t_shell *shell);
+void	ft_echo(t_shell *shell, t_command *row);
+int		ft_unset(t_shell *shell, t_command *row);
+void	ft_exit(t_command *row);
+int		ft_cd(t_command *row);
 
 //-----------------lexer----------------//
 void  	lexer(t_shell *shell, char *input);

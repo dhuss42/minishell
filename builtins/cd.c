@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/30 14:07:34 by dhuss             #+#    #+#             */
+/*   Updated: 2024/10/30 14:07:34 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 
 #include "../minishell_eichhoernchen.h"
@@ -21,10 +33,12 @@ int		ft_cd(t_command *row)
     //  check for errors
     //  print the path
 
-    // update oldpwd 
+    // update oldpwd
     // update PWD
 
 
+
+//a
 
     return (0);
 }
