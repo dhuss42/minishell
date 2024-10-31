@@ -37,12 +37,12 @@ void	free_token(void *content)
 	}
 }
 
-void    free_lexer(char *input, char *trim_inpt, char *res)
+void    free_three(char *str, char *str2, char *str3)
 {
-    if (input)
-        free(input);
-    if (trim_inpt)
-        free(trim_inpt);
-    if (res)
-        free(res);
+    if (str)
+        free(str);
+    if (str2)
+        free(str2);
+    if (str3)
+        free(str3);
 }

@@ -20,14 +20,13 @@ int    ft_env(t_shell *shell)
         return (-1);
     i = 0;
     while (shell->env[i] != NULL)
-        ft_printf("%s\n", shell->env[i++]);
+    {
+        if (has_equal(shell->env[i]))
+            ft_printf("%s\n", shell->env[i]);
+        i++;
+    }
     return (0);
 }
 
-/* int main(int argc, char *argv[], char **env)
-{
-    (void) argc;
-    (void) argv;
-    ft_env(env);
-    return (0);
-} */
+// should only print when there is an equal sign
+// export can create keys without =

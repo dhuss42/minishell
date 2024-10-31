@@ -97,6 +97,7 @@ typedef struct s_shell
 
 //-------------------main------------------//
 int	copy_env(char **env, t_shell *shell);
+int	shlvl(t_shell *shell);
 
 //-----------------builtins----------------//
 int 	ft_pwd();
@@ -110,8 +111,8 @@ int		ft_cd(t_command *row);
 
 //-----------------lexer----------------//
 void  	lexer(t_shell *shell, char *input);
-char 	*trim_spaces(char *input);
-size_t	get_len(char *str);
+char 	*trim_spaces(char *input, t_shell *shell);
+size_t	get_len(char *str, t_shell *shell);
 char	**split_space_quotes(char *input);
 t_list	*tokeniser(char **split_double_array);
 bool	syntax_errors(t_list *token_list);
@@ -151,12 +152,13 @@ void	set_to_zero(t_shell *nbr);
 bool	is_quotes(char c);
 bool	contains_dollar(char *str, size_t i);
 size_t	strlen_equal(char *str);
+int		get_int_length(int num);
 
 //----------free-stuf------------//
 void	free_token(void *content);
 void	clear_all(char **to_clear);
 void	free_table_parser(t_shell *parsing);
-void    free_lexer(char *input, char *trim_inpt, char *res);
+void    free_three(char *str, char *str2, char *str3);
 int		print_error(int err_no, char *str, int print);
 
 //------------extra-shit-----------//

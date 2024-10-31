@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../executor.h"
 
 void get_len_unset(t_shell *shell, t_command *row)
 {
@@ -46,16 +46,16 @@ int ft_unset(t_shell *shell, t_command *row)
     bool    should_copy;
 
     get_len_unset(shell, row);
-    printf("shell->len: %zu\n", shell->len);
+    // printf("shell->len: %zu\n", shell->len);
     tmp = malloc(sizeof(char *) * (shell->len + 1));
     if (!tmp)
     {
-        //call error
+        print_error(errno, NULL, PRINT);
         return (-1);
     }
     j = 0;
     k = 0;
-    printf("TEST\n");
+    // printf("TEST\n");
     while (shell->env[k] != NULL)
     {
         should_copy = true;

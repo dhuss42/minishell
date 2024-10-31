@@ -141,4 +141,10 @@ int    ft_export(t_shell *shell, t_command *row)
 // frees original envs
 // copies tmp into envs
 
+
+// ---- issues ----- //
 // export Test="cho Test"
+// export b
+// --> currently not handling keys without = 
+// --> export no args should also list these keys
+//  --> if there is no = then nullterminate after the key

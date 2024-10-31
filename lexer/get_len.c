@@ -1,5 +1,5 @@
 
-#include "../minishell_eichhoernchen.h"
+#include "../executor.h"
 
 // ---for-debugging------/
 // size_t	get_len(char *str)
@@ -107,32 +107,30 @@ void    get_len_ws(t_shell *nbr, char *str)
 		nbr->i++;
 }
 
-void    get_len_quotes(t_shell *nbr, char *str)
+void    get_len_quotes(t_shell *nbr, char *str, t_shell *shell)
 {
-    char	quotes = '\0';
+    char	quotes[2];
 
-/*     if (nbr->i != 0 && !is_wspace(str[nbr->i - 1]) && !is_special_no_quotes(str[nbr->i - 1]))
-				nbr->len++; */
-	quotes = str[nbr->i];
+	quotes[0] = str[nbr->i];
+	quotes[1] = '\0';
 	nbr->i++;
 	nbr->len++;
-	while (str[nbr->i] != quotes && str[nbr->i] != '\0')
+	while (str[nbr->i] != quotes[0] && str[nbr->i] != '\0')
 	{
 		nbr->i++;
 		nbr->len++;
 	}
 	if (str[nbr->i] == '\0')
     {
-		printf("ERROR NO CLOSING QUOTES\n"); // handle properly
-        exit(EXIT_FAILURE);
+		shell->syntax_error = true;
+		print_error(E_SYNTAXERROR, quotes, PRINT);
+		return ; 
     }
-	if (str[nbr->i] == quotes)
+	if (str[nbr->i] == quotes[0])
 	{
 		nbr->i++;
 		nbr->len++;
 	}
-/* 	if (str[nbr->i] != '\0' && !is_wspace(str[nbr->i]))
-		nbr->len++; */
 }
 
 void    get_len_special(t_shell *nbr, char *str)
@@ -155,7 +153,7 @@ void    get_len_double_red(t_shell *nbr, char *str)
 	nbr->i += 2;
 }
 
-size_t	get_len(char *str)
+size_t	get_len(char *str, t_shell *shell)
 {
 	t_shell	nbr;
 
@@ -166,7 +164,7 @@ size_t	get_len(char *str)
 		if (is_wspace(str[nbr.i]))
             get_len_ws(&nbr, str);
 		else if (str[nbr.i] == '\'' || str[nbr.i] == '\"')
-			get_len_quotes(&nbr, str);
+			get_len_quotes(&nbr, str, shell);
 		else if ((str[nbr.i] == '<' && str[nbr.i + 1] == '<') || (str[nbr.i] == '>' && str[nbr.i + 1] == '>'))
             get_len_double_red(&nbr, str);
 		else if (is_special_no_quotes(str[nbr.i]))

@@ -31,8 +31,8 @@ void handle_quotes(t_shell *trim, char *input)
 		// if (input[trim->i + 1] != '\0')
 		// 	trim->res[trim->j++] = ' ';
 	}
-	else
-		printf("error\n"); // update here
+	// else
+	// 	printf("error\n"); // it will never reach here
 }
 
 // for proper quote handling remove ws insertion before and after the quotes
@@ -104,7 +104,7 @@ void	populate_trim_str(t_shell *trim, char *input)
 }
 
 
-char *trim_spaces(char *input)
+char *trim_spaces(char *input, t_shell *shell)
 {
 	t_shell	trim;
 	char	*trim_inpt;
@@ -117,7 +117,9 @@ char *trim_spaces(char *input)
 		return (NULL);
 	}
 
-	trim.len = get_len(trim_inpt);
+	trim.len = get_len(trim_inpt, shell);
+	if (shell->syntax_error == true)
+		return (NULL);
 
 	trim.res = ft_calloc(sizeof(char), (trim.len + 1));
 	if (!trim.res)

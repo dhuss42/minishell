@@ -39,6 +39,7 @@ typedef enum e_custom_err
 	E_CMD_ISDIRECTORY,
 	E_FILE_ISDIRECTORY,
 	E_TOOMANYARG,
+	E_NOCLOSINGQUOTE,
 	E_NUMERICARG = 255,
 	E_SYNTAXERROR = 258
 }			t_custom_err;

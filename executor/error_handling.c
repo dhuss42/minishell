@@ -48,14 +48,23 @@ int	custom_error(int err_no)
 		ft_putstr_fd("exit: too many arguments\n", 2);
 		return (1);
 	}
-	else if (err_no == E_NUMERICARG)
+	return (err_no);
+}
+
+int	custom_error_message(int err_no, char *str)
+{
+	if (err_no == E_NUMERICARG)
 	{
 		ft_putstr_fd("exit: ", 2);
-		// ft_printf("%s", str);
-		ft_putstr_fd("numeric argument required\n", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
 	}
 	else if (err_no == E_SYNTAXERROR)
-		ft_putstr_fd("syntax error near unexpected token\n", 2);
+	{
+		ft_putstr_fd("syntax error near unexpected token ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd("\n", 2);
+	}
 	return (err_no);
 }
 
@@ -71,18 +80,22 @@ int	print_error(int err_no, char *str, int print)
 	else if (print == PRINT && err_no > 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		if (str)
+		if (str && err_no != E_NUMERICARG && err_no != E_SYNTAXERROR) // etwas unschön gelöst von mir
 		{
 			ft_putstr_fd(str, 2);
 			write(2, ": ", 2);
 		}
 		if (err_no > 106)
-			exit_code = custom_error(err_no);
-		else
 		{
-			perror(NULL);
-			exit_code = err_no;
+			if (str)
+				custom_error_message(err_no, str);
+			exit_code = custom_error(err_no);
 		}
+			else
+			{
+				perror(NULL);
+				exit_code = err_no;
+			}
 	}
 	return (exit_code);
 }
