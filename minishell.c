@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/30 15:56:13 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/05 10:13:17 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	minishell_loop(t_shell *shell)
 			// test_builtins(shell);
 			executor(shell->env, shell->table, shell);
 			// ft_lstclear(&shell->list, free_token);
-
+			add_history(input);
 			free_table(shell->table);
 		}
 	}
