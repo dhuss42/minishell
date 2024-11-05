@@ -13,37 +13,37 @@ void    test_builtins(t_shell *shell)
         shell->i = 0;
         while (row->args[shell->i] != NULL)
         {
-            if (ft_strncmp(row->args[shell->i], "echo", ft_strlen(row->args[shell->i])) == 0)
+            if (ft_strncmp(row->args[shell->i], "echo", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 4)
             {
                 ft_echo(shell, row);
                     return ;
             }
-            else if (ft_strncmp(row->args[shell->i], "pwd", ft_strlen(row->args[shell->i])) == 0)
+            else if (ft_strncmp(row->args[shell->i], "pwd", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 3)
             {
                 if (ft_pwd() == -1)
                     return ;
             }
-            else if (ft_strncmp(row->args[shell->i], "env", ft_strlen(row->args[shell->i])) == 0)
+            else if (ft_strncmp(row->args[shell->i], "env", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 3)
             {
                 if (ft_env(shell) == -1)
                     return ;
             }
-            else if (ft_strncmp(row->args[shell->i], "export", ft_strlen(row->args[shell->i])) == 0)
+            else if (ft_strncmp(row->args[shell->i], "export", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 6)
             {
                 if (ft_export(shell, row) == -1)
                     return ;
             }
-            else if (ft_strncmp(row->args[shell->i], "unset", ft_strlen(row->args[shell->i])) == 0)
+            else if (ft_strncmp(row->args[shell->i], "unset", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 5)
             {
                 if (ft_unset(shell, row) == -1)
                     return ;
             }
-			else if (ft_strncmp(row->args[shell->i], "cd", ft_strlen(row->args[shell->i])) == 0)
+			else if (ft_strncmp(row->args[shell->i], "cd", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 2)
             {
-                if (ft_cd(row) == -1)
+                if (ft_cd(shell, row) == -1)
                     return ;
             }
-			else if (ft_strncmp(row->args[shell->i], "exit", ft_strlen(row->args[shell->i])) == 0)
+			else if (ft_strncmp(row->args[shell->i], "exit", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 4)
             {
                 ft_exit(row);
                     return ;
@@ -57,3 +57,4 @@ void    test_builtins(t_shell *shell)
 }
 
 // not sure if the while loop is necessary
+// possible to type c and get cd; same for other builtins

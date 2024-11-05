@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/05 10:13:17 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/05 15:54:15 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	minishell_loop(t_shell *shell)
 		}
 	}
 }
+	// problem with free_table and test_builtins
+	// something is beeing freed which was not allocated
 
 int	copy_env(char **env, t_shell *shell)
 {

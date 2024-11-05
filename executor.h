@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/30 15:25:58 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/05 13:49:44 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ typedef enum e_custom_err
 	E_FILE_ISDIRECTORY,
 	E_TOOMANYARG,
 	E_NOCLOSINGQUOTE,
+	E_NOTSET,
+	E_CDNOSUCHFOD,
 	E_NUMERICARG = 255,
 	E_SYNTAXERROR = 258
 }			t_custom_err;

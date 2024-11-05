@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:16:35 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/30 14:50:04 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/05 10:18:16 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,13 @@ void	ft_exit(t_command *row)
 {
 	int exit_status;
 
-
 	exit_status = print_error(0, NULL, NOTPRINT);
 	if (row->args[1])
 	{
 		if (is_numeric(row->args[1]))
 			exit_status = print_error(ft_atoi(row->args[1]) % 256, NULL, NOTPRINT);
 		else
-			exit_status = print_error(E_NUMERICARG, row->args[1], PRINT); // currently printing the string in the wrong positon
+			exit_status = print_error(E_NUMERICARG, row->args[1], PRINT);
 		if (row->args[2])
 			exit_status = print_error(E_TOOMANYARG, NULL, PRINT);
 	}

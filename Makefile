@@ -61,7 +61,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_INCLUDES = -I $(LIBFT_DIR)
 
 all: $(NAME)
-	@echo "\033[32m minishell built successfully! \033[0m"
+#@echo "\033[32m minishell built successfully! \033[0m"
 # problem with running make multiple times
 # works when the echo message is deleted. Also affects libft
 

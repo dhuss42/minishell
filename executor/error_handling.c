@@ -65,6 +65,20 @@ int	custom_error_message(int err_no, char *str)
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd("\n", 2);
 	}
+	else if (err_no == E_NOTSET)
+	{
+		ft_putstr_fd("cd: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(" not set\n", 2);
+		err_no = 1;
+	}
+	else if (err_no == E_CDNOSUCHFOD)
+	{
+		ft_putstr_fd("cd: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(" No such file or directory\n", 2);
+		err_no = 1;
+	}
 	return (err_no);
 }
 
@@ -80,7 +94,7 @@ int	print_error(int err_no, char *str, int print)
 	else if (print == PRINT && err_no > 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		if (str && err_no != E_NUMERICARG && err_no != E_SYNTAXERROR) // etwas unschön gelöst von mir
+		if (str && err_no != E_NUMERICARG && err_no != E_SYNTAXERROR && err_no != E_NOTSET && err_no != E_CDNOSUCHFOD) // etwas unschön gelöst von mir
 		{
 			ft_putstr_fd(str, 2);
 			write(2, ": ", 2);
@@ -88,8 +102,9 @@ int	print_error(int err_no, char *str, int print)
 		if (err_no > 106)
 		{
 			if (str)
-				custom_error_message(err_no, str);
-			exit_code = custom_error(err_no);
+				exit_code = custom_error_message(err_no, str);
+			else
+				exit_code = custom_error(err_no);
 		}
 			else
 			{
