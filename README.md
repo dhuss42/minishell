@@ -50,7 +50,7 @@ After handling this case, the function performs its standard checks: it verifies
 The [env](https://github.com/maustel/minishell/blob/david_new/builtins/env.c) function iterates through the environment variables and prints those that contain an `=` character.
 
 **_3.2.3 exit_**  
-The [exit](https://github.com/maustel/minishell/blob/david_new/builtins/exit.c) function first calls the error function to retrieve the latest exit status. It then checks if `exit` was called with one argument and whether that argument is numeric. If numeric, it calls the error function with the value modulo 256, ensuring the exit code stays within the range of 0-255. If the argument is not numeric, it prints an error message. 
+The [exit](https://github.com/maustel/minishell/blob/david_new/builtins/exit.c) function first calls [print_error](https://github.com/maustel/minishell/blob/david_new/executor/error_handling.c) to retrieve the latest exit status. It then checks if `exit` was called with one argument and whether that argument is numeric. If numeric, it calls the error function with the value modulo 256, ensuring the exit code stays within the range of 0-255. If the argument is not numeric, it prints an error message. 
 
 Next, it checks if more than one argument was provided; if so, it prints an error. Finally, the function exits the current minishell, using the latest `exit_status`, regardless of any error message printed.
 
