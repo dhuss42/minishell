@@ -27,8 +27,50 @@ Below is the basic structure of the project, with the names in brackets indicati
 ## 3. Description of individual steps
 
 ### 3.1 Environment Variables
+Initializing environment variables enables their modification throughout the program, enabling bash-like behavior for certain built-ins and expansions.
+
+At program start, environment variables are duplicated and stored in the shell struct, allowing modification throughout the program phases. The SHLVL variable is then incremented by one, so when minishell runs within itself, SHLVL increases by one, just like opening bash within bash.
 
 ### 3.2 Builtins
+
+3.2.1 _echo_
+The function first checks if any expansion of `echo` has occurred.
+
+Example
+```
+export t="cho hallo"
+e$t
+```
+
+This becomes `echo hallo`. If an expansion is detected, it splits the string into `echo` and the remainder, then appends any additional arguments (e.g., `e$t hi` turns into `echo hallo hi`). 
+
+After handling this case, the function performs its standard checks: it verifies if there are any arguments and checks for variations of the `-n` option (`-n`, `-nnnn...`). If `-n` is present, it sets `newline` to `false`; otherwise, it sets `newline` to `true`. Finally, the function prints all arguments stored in `args[i]`, separated by spaces, and appends a trailing newline based on the `newline` status.
+
+3.2.2 _env_
+The `env` function iterates through the environment variables and prints those that contain an `=` character.
+
+3.2.3 _exit_
+The `exit` function first calls the error function to retrieve the latest exit status. It then checks if `exit` was called with one argument and whether that argument is numeric. If numeric, it calls the error function with the value modulo 256, ensuring the exit code stays within the range of 0-255. If the argument is not numeric, it prints an error message. 
+
+Next, it checks if more than one argument was provided; if so, it prints an error. Finally, the function exits the current minishell, using the latest `exit_status`, regardless of any error message printed.
+
+3.2.4 _export_
+
+3.2.5 _cd_
+The `cd` function first stores the current working directory. It then checks if an argument is provided. 
+
+If no argument is given, the function retrieves the `HOME` variable and changes to the path stored in `HOME`. It then updates `OLDPWD` with the stored current directory and sets `PWD` to the new directory path. If an argument is provided, the function changes to the directory path stored in `args[1]`. It then updates `OLDPWD` and `PWD` as described above.
+If `OLDPWD` is not set (e.g., when bash or minishell is started without changing directories), `OLDPWD` is created and updated after the first directory change.
+
+3.2.5 _pwd_
+The `pwd` function calls `getcwd` with `(NULL, 0)` to obtain the current working directory. If the function fails, it prints an error message. Afterward, the string returned by `getcwd` is freed.
+
+3.2.7 _unset_
+The `unset` function first calculates the length for the shortened environment variables char **. It then allocates a temporary variable `tmp` with this length.
+
+Next, the function iterates through all the environment variables and checks if any match the arguments provided in the input. If a match is found, that environment variable is not copied into `tmp`. The remaining variables in `env` are copied into `tmp`.
+
+Finally, the original `env` is freed, and `tmp` is copied back into `env`.
 
 ### 3.3 Lexer
 The lexer serves to transform an input string of characters into meaningful tokens. 
