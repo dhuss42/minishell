@@ -16,8 +16,8 @@ This project was the first team-based assignment at 42, requiring us to collabor
 
 Below is the basic structure of the project, with the names in brackets indicating who was responsible for each part:
 
-1. [Environment Variables](#31-Environment-Variables) 
-2. [Builtins](#32-Builtins)
+1. [Environment Variables](#31-Environment-Variables) (dhuss)
+2. [Builtins](#32-Builtins) (dhuss)
 3. [Lexer](#33-Lexer) (dhuss)
 4. [Parser](#34-Parser) (dhuss)
 5. [Expansion](#35-Expansion) (dhuss)
@@ -35,6 +35,9 @@ At program start, environment variables are duplicated and stored in the shell s
 
 The minishell project implements several core built-in commands to manage the environment and interact with the system. These builtins include `echo`, `env`, `exit`, `export`, `cd`, `pwd`, and `unset`, each handling a specific task in the shell environment.
 
+**_[cd](https://github.com/maustel/minishell/blob/david_new/builtins/cd.c)_**
+changes the current working directory. If no argument is provided, it changes to the directory specified in the `HOME` variable. It also updates the `PWD` and `OLDPWD` environment variables.
+
 **_`echo`_**
 outputs the arguments passed to it, expanding variables where necessary (e.g., `e$t` becomes `echo hallo` if `t` is set to "hallo"). It also supports the `-n` flag to prevent printing a newline at the end.
 
@@ -46,9 +49,6 @@ terminates the shell process, optionally accepting an argument to set the exit s
 
 **_`export`_**
 manages the shell's environment variables. It allows new variables to be added or existing ones to be updated. If no arguments are provided, it lists all environment variables in a sorted order.
-
-**_`cd`_**
-changes the current working directory. If no argument is provided, it changes to the directory specified in the `HOME` variable. It also updates the `PWD` and `OLDPWD` environment variables.
 
 **_`pwd`_**
 prints the current working directory to the output. If the command fails, it displays an error message.
