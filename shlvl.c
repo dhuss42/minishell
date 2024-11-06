@@ -1,12 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shlvl.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/06 10:19:30 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/06 10:21:26 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "executor.h"
 
-char    *update_shlvl(t_shell *shell, char *new_shlvl, size_t *i)
+char	*update_shlvl(t_shell *shell, char *new_shlvl, size_t *i)
 {
-    int		shlvl;
-    
-    char	*pos;
-
+	int		shlvl;
+	char	*pos;
 
 	*i = 0;
 	while (shell->env[*i] != NULL)
@@ -21,37 +30,37 @@ char    *update_shlvl(t_shell *shell, char *new_shlvl, size_t *i)
 	shlvl++;
 	new_shlvl = ft_itoa(shlvl);
 	if (!new_shlvl)
-    {
-        print_error(errno, NULL, PRINT);
+	{
+		print_error(errno, NULL, PRINT);
 		return (NULL);
-    }
+	}
 	return (new_shlvl);
 }
 
 int	shlvl(t_shell *shell)
 {
-    size_t 	i;
-    char	*new_shlvl;
+	size_t 	i;
+	char	*new_shlvl;
 	char 	*key;
 	char	*res;
 
-    new_shlvl = NULL;
-    new_shlvl = update_shlvl(shell, new_shlvl, &i);
-    if (!new_shlvl)
-        return (print_error(errno, NULL, PRINT));
+	new_shlvl = NULL;
+	new_shlvl = update_shlvl(shell, new_shlvl, &i);
+	if (!new_shlvl)
+		return (-1);
 	key = malloc(sizeof(char) * (ft_strlen("SHLVL=") + 1));
 	if (!key)
-    {
-        free(new_shlvl);
+	{
+		free(new_shlvl);
 		return (print_error(errno, NULL, PRINT));
-    }
+	}
 	ft_strlcpy(key, "SHLVL=", ft_strlen("SHLVL=") + 1);
 	res = ft_strjoin(key, new_shlvl);
 	if (!res)
-    {
-        free_three(NULL, key, new_shlvl);
+	{
+		free_three(NULL, key, new_shlvl);
 		return (print_error(errno, NULL, PRINT));
-    }
+	}
 	free(shell->env[i]);
 	shell->env[i] = ft_strdup(res);
 	if (!shell->env[i])
@@ -60,6 +69,6 @@ int	shlvl(t_shell *shell)
 		free_three(res, key, new_shlvl);
 		return (print_error(errno, NULL, PRINT));
 	}
-    free_three(res, key, new_shlvl);
+	free_three(res, key, new_shlvl);
 	return (0);
 }

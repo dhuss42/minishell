@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:16:35 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/05 10:18:16 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/06 10:54:07 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,3 +43,7 @@ void	ft_exit(t_command *row)
 	// ft_printf("Exiting with status %d\n", exit_status);
 	exit(exit_status);
 }
+
+
+
+

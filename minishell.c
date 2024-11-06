@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/06 10:03:42 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/06 12:31:09 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,15 @@ void	minishell_loop(t_shell *shell)
 		{
 			lexer(shell, input);
 			parser(shell);
-			// print_table(shell);
+			print_table(shell);
 			expansion(shell, shell->env);
 			print_error(0, NULL, NOTPRINT);
-			// print_table(shell);
+			print_table(shell);
 			test_builtins(shell);
-			executor(shell->env, shell->table, shell);
-			ft_lstclear(&shell->list, free_token);
-			add_history(input);
-			free_table(shell->table);
+			// executor(shell->env, shell->table, shell);
+			// ft_lstclear(&shell->list, free_token);
+			// add_history(input);
+			// free_table(shell->table);
 		}
 	}
 }

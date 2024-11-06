@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/05 10:28:46 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/06 14:35:44 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ int		ft_env(t_shell *shell);
 int	 	ft_export(t_shell *shell, t_command *row);
 void	export_no_argument(t_shell *shell);
 void	ft_echo(t_shell *shell, t_command *row);
+void	echo_expanded(t_shell *shell, t_command *row);
 int		ft_unset(t_shell *shell, t_command *row);
 void	ft_exit(t_command *row);
 int		ft_cd(t_shell *shell, t_command *row);

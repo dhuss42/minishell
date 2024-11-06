@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:34 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/05 15:52:50 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/06 10:53:58 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,14 +103,9 @@ int	append_oldpwd(t_shell *shell, char *old_pwd)
 
 int	update_oldpwd(t_shell *shell, char *content)
 {
-	// char		*content;
 	char		*new_pwd;
 
 	new_pwd = NULL;
-	// I think I should get the string following pwd before I call chdir but update oldpwd after I call chdir
-	// content = search_env(shell->env, "PWD");
-	// if (!content)
-	// 	return (print_error(errno, "PWD", PRINT));
 	if (replace_pwd(shell, "OLDPWD=", content) == -1)
 	{
 		new_pwd = ft_strjoin("OLDPWD=", content);
@@ -161,10 +156,11 @@ int	cd_no_args(t_shell *shell, t_command *row, char *current_dir)
 	no_args = search_env(shell->env, "HOME");
 	if (!no_args)
 		return (print_error(E_NOTSET, "HOME", PRINT));
-	// I think here should be the part where for HOME=
-	// in this case cd does nothing but changes the oldpwd
-	if (chdir(no_args) == -1)
-		return (print_error(errno, row->args[1], PRINT));
+	if (no_args[0] !='\0')
+	{
+		if (chdir(no_args) == -1)
+			return (print_error(errno, row->args[1], PRINT));
+	}
 	if (update_oldpwd(shell, current_dir) != 0)
 		return (-1);
 	if (update_pwd(shell) != 0)
@@ -196,7 +192,6 @@ int		ft_cd(t_shell *shell, t_command *row)
 		if (update_pwd(shell) != 0)
 			return (-1);
 	}
-	// make with args a separate function
 	return (0);
 }
 
@@ -206,5 +201,5 @@ int		ft_cd(t_shell *shell, t_command *row)
 
 // ---- issues --- /
 // get malloc error for cd l, has to do with free_table
-// oldpwd is updated when cd fails
-// --> this should happen later, if cd fails than oldpwd should not be updated
+
+
