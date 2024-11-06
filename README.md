@@ -34,7 +34,7 @@ At program start, environment variables are duplicated and stored in the shell s
 ### 3.2 Builtins
 
 **_3.2.1 echo_**  
-The function first checks if any expansion of `echo` has occurred.
+The [echo](https://github.com/maustel/minishell/blob/david_new/builtins/echo.c) function first checks if any expansion of echo has occurred.
 
 Example
 ```
@@ -47,10 +47,10 @@ This turns into `echo hallo`. If an expansion is detected, it splits the string 
 After handling this case, the function performs its standard checks: it verifies if there are any arguments and checks for variations of the `-n` option (`-n`, `-nnnn...`). If `-n` is present, it sets `newline` to `false`; otherwise, it sets `newline` to `true`. Finally, the function prints all arguments stored in `args[i]`, separated by spaces, and appends a trailing newline based on the `newline` status.
 
 **_3.2.2 env_**  
-The `env` function iterates through the environment variables and prints those that contain an `=` character.
+The [env](https://github.com/maustel/minishell/blob/david_new/builtins/env.c) function iterates through the environment variables and prints those that contain an `=` character.
 
 **_3.2.3 exit_**  
-The `exit` function first calls the error function to retrieve the latest exit status. It then checks if `exit` was called with one argument and whether that argument is numeric. If numeric, it calls the error function with the value modulo 256, ensuring the exit code stays within the range of 0-255. If the argument is not numeric, it prints an error message. 
+The [exit](https://github.com/maustel/minishell/blob/david_new/builtins/exit.c) function first calls the error function to retrieve the latest exit status. It then checks if `exit` was called with one argument and whether that argument is numeric. If numeric, it calls the error function with the value modulo 256, ensuring the exit code stays within the range of 0-255. If the argument is not numeric, it prints an error message. 
 
 Next, it checks if more than one argument was provided; if so, it prints an error. Finally, the function exits the current minishell, using the latest `exit_status`, regardless of any error message printed.
 
@@ -63,10 +63,10 @@ If no argument is given, the function retrieves the `HOME` variable and changes 
 If `OLDPWD` is not set (e.g., when bash or minishell is started without changing directories), `OLDPWD` is created and updated after the first directory change.
 
 **_3.2.5 pwd_**  
-The `pwd` function calls `getcwd` with `(NULL, 0)` to obtain the current working directory. If the function fails, it prints an error message. Afterward, the string returned by `getcwd` is freed.
+The [pwd](https://github.com/maustel/minishell/blob/david_new/builtins/pwd.c) function calls `getcwd` with `(NULL, 0)` to obtain the current working directory. If the function fails, it prints an error message. Afterward, the string is freed.
 
 **_3.2.7 unset_**  
-The `unset` function first calculates the length for the shortened environment variables char **. It then allocates a temporary variable `tmp` with this length.
+The [unset](https://github.com/maustel/minishell/blob/david_new/builtins/unset.c) function first calculates the length for the shortened environment variables char **. It then allocates a temporary variable with this length.
 
 Next, the function iterates through all the environment variables and checks if any match the arguments provided in the input. If a match is found, that environment variable is not copied into `tmp`. The remaining variables in `env` are copied into `tmp`.
 
