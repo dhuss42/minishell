@@ -33,44 +33,28 @@ At program start, environment variables are duplicated and stored in the shell s
 
 ### 3.2 Builtins
 
-**_3.2.1 echo_**  
-The [echo](https://github.com/maustel/minishell/blob/david_new/builtins/echo.c) function first checks if any expansion of echo has occurred.
+The minishell project implements several core built-in commands to manage the environment and interact with the system. These builtins include `echo`, `env`, `exit`, `export`, `cd`, `pwd`, and `unset`, each handling a specific task in the shell environment.
 
-Example
-```
-export t="cho hallo"
-e$t
-```
+**_`echo`_**
+Outputs the arguments passed to it, expanding variables where necessary (e.g., `e$t` becomes `echo hallo` if `t` is set to "hallo"). It also supports the `-n` flag to prevent printing a newline at the end.
 
-This turns into `echo hallo`. If an expansion is detected, it splits the string into `echo` and the remainder, then appends any additional arguments (e.g., `e$t hi` turns into `echo hallo hi`). 
+### `env`
+Displays the current environment variables that contain an `=` sign, essentially showing the shell's environment.
 
-After handling this case, the function performs its standard checks: it verifies if there are any arguments and checks for variations of the `-n` option (`-n`, `-nnnn...`). If `-n` is present, it sets `newline` to `false`; otherwise, it sets `newline` to `true`. Finally, the function prints all arguments stored in `args[i]`, separated by spaces, and appends a trailing newline based on the `newline` status.
+### `exit`
+Terminates the shell process, optionally accepting an argument to set the exit status. It ensures the exit code is numeric and within the range of 0-255, handling errors and multiple arguments gracefully.
 
-**_3.2.2 env_**  
-The [env](https://github.com/maustel/minishell/blob/david_new/builtins/env.c) function iterates through the environment variables and prints those that contain an `=` character.
+### `export`
+Manages the shell's environment variables. It allows new variables to be added or existing ones to be updated. If no arguments are provided, it lists all environment variables in a sorted order.
 
-**_3.2.3 exit_**  
-The [exit](https://github.com/maustel/minishell/blob/david_new/builtins/exit.c) function first calls [print_error](https://github.com/maustel/minishell/blob/david_new/executor/error_handling.c) to retrieve the latest exit status. It then checks if `exit` was called with one argument and whether that argument is numeric. If numeric, it calls the error function with the value modulo 256, ensuring the exit code stays within the range of 0-255. If the argument is not numeric, it prints an error message. 
+### `cd`
+Changes the current working directory. If no argument is provided, it changes to the directory specified in the `HOME` variable. It also updates the `PWD` and `OLDPWD` environment variables.
 
-Next, it checks if more than one argument was provided; if so, it prints an error. Finally, the function exits the current minishell, using the latest `exit_status`, regardless of any error message printed.
+### `pwd`
+Prints the current working directory to the output. If the command fails, it displays an error message.
 
-**_3.2.4 export_**  
-
-**_3.2.5 cd_**  
-The [cd](https://github.com/maustel/minishell/blob/david_new/builtins/cd.c) function first stores the current working directory. It then checks if an argument is provided. 
-
-If no argument is given, the function retrieves the `HOME` variable and changes to the path stored in `HOME`. It then updates `OLDPWD` with the stored current directory and sets `PWD` to the new directory path. If an argument is provided, the function changes to the directory path stored in `args[1]`. It then updates `OLDPWD` and `PWD` as described above.
-If `OLDPWD` is not set (e.g., when bash or minishell is started without changing directories), `OLDPWD` is created and updated after the first directory change.
-
-**_3.2.5 pwd_**  
-The [pwd](https://github.com/maustel/minishell/blob/david_new/builtins/pwd.c) function calls `getcwd` with `(NULL, 0)` to obtain the current working directory. If the function fails, it prints an error message. Afterward, the string is freed.
-
-**_3.2.7 unset_**  
-The [unset](https://github.com/maustel/minishell/blob/david_new/builtins/unset.c) function first calculates the length for the shortened environment variables char **. It then allocates a temporary variable with this length.
-
-Next, the function iterates through all the environment variables and checks if any match the arguments provided in the input. If a match is found, that environment variable is not copied into `tmp`. The remaining variables in `env` are copied into `tmp`.
-
-Finally, the original `env` is freed, and `tmp` is copied back into `env`.
+### `unset`
+Removes specified environment variables. It iterates over the environment, creating a new temporary list without the variables to be unset, and then updates the environment with this new list.
 
 ### 3.3 Lexer
 The lexer serves to transform an input string of characters into meaningful tokens. 
