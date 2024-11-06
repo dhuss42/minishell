@@ -36,24 +36,24 @@ At program start, environment variables are duplicated and stored in the shell s
 The minishell project implements several core built-in commands to manage the environment and interact with the system. These builtins include `echo`, `env`, `exit`, `export`, `cd`, `pwd`, and `unset`, each handling a specific task in the shell environment.
 
 **_`echo`_**
-Outputs the arguments passed to it, expanding variables where necessary (e.g., `e$t` becomes `echo hallo` if `t` is set to "hallo"). It also supports the `-n` flag to prevent printing a newline at the end.
+outputs the arguments passed to it, expanding variables where necessary (e.g., `e$t` becomes `echo hallo` if `t` is set to "hallo"). It also supports the `-n` flag to prevent printing a newline at the end.
 
-### `env`
+**_`env`_**
 Displays the current environment variables that contain an `=` sign, essentially showing the shell's environment.
 
-### `exit`
+**_`exit`_**
 Terminates the shell process, optionally accepting an argument to set the exit status. It ensures the exit code is numeric and within the range of 0-255, handling errors and multiple arguments gracefully.
 
-### `export`
+**_`export`_**
 Manages the shell's environment variables. It allows new variables to be added or existing ones to be updated. If no arguments are provided, it lists all environment variables in a sorted order.
 
-### `cd`
+**_`cd`_**
 Changes the current working directory. If no argument is provided, it changes to the directory specified in the `HOME` variable. It also updates the `PWD` and `OLDPWD` environment variables.
 
-### `pwd`
+**_`pwd`_**
 Prints the current working directory to the output. If the command fails, it displays an error message.
 
-### `unset`
+**_`unset`_**
 Removes specified environment variables. It iterates over the environment, creating a new temporary list without the variables to be unset, and then updates the environment with this new list.
 
 ### 3.3 Lexer
