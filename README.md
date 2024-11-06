@@ -35,25 +35,25 @@ At program start, environment variables are duplicated and stored in the shell s
 
 The minishell project implements several core built-in commands to manage the environment and interact with the system. These builtins include `echo`, `env`, `exit`, `export`, `cd`, `pwd`, and `unset`, each handling a specific task in the shell environment.
 
-**_[cd](https://github.com/maustel/minishell/blob/david_new/builtins/cd.c)_**
+[cd](https://github.com/maustel/minishell/blob/david_new/builtins/cd.c)
 changes the current working directory. If no argument is provided, it changes to the directory specified in the `HOME` variable. It also updates the `PWD` and `OLDPWD` environment variables.
 
-**_`echo`_**
+[echo](https://github.com/maustel/minishell/blob/david_new/builtins/echo.c)
 outputs the arguments passed to it, expanding variables where necessary (e.g., `e$t` becomes `echo hallo` if `t` is set to "hallo"). It also supports the `-n` flag to prevent printing a newline at the end.
 
-**_`env`_**
+[env](https://github.com/maustel/minishell/blob/david_new/builtins/env.c)
 displays the current environment variables that contain an `=` sign, essentially showing the shell's environment.
 
-**_`exit`_**
+[exit](https://github.com/maustel/minishell/blob/david_new/builtins/exit.c)
 terminates the shell process, optionally accepting an argument to set the exit status. It ensures the exit code is numeric and within the range of 0-255, handling errors and multiple arguments gracefully.
 
-**_`export`_**
+[export](https://github.com/maustel/minishell/blob/david_new/builtins/export.c)
 manages the shell's environment variables. It allows new variables to be added or existing ones to be updated. If no arguments are provided, it lists all environment variables in a sorted order.
 
-**_`pwd`_**
+[pwd](https://github.com/maustel/minishell/blob/david_new/builtins/pwd.c)
 prints the current working directory to the output. If the command fails, it displays an error message.
 
-**_`unset`_**
+[unset](https://github.com/maustel/minishell/blob/david_new/builtins/unset.c)
 removes specified environment variables. It iterates over the environment, creating a new temporary list without the variables to be unset, and then updates the environment with this new list.
 
 ### 3.3 Lexer
