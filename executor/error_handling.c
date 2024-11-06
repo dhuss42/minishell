@@ -103,14 +103,13 @@ int	print_error(int err_no, char *str, int print)
 		{
 			if (str)
 				exit_code = custom_error_message(err_no, str);
-			else
-				exit_code = custom_error(err_no);
+			exit_code = custom_error(err_no);
 		}
-			else
-			{
-				perror(NULL);
-				exit_code = err_no;
-			}
+		else
+		{
+			perror(NULL);
+			exit_code = err_no;
+		}
 	}
 	return (exit_code);
 }
