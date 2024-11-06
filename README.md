@@ -39,22 +39,22 @@ The minishell project implements several core built-in commands to manage the en
 outputs the arguments passed to it, expanding variables where necessary (e.g., `e$t` becomes `echo hallo` if `t` is set to "hallo"). It also supports the `-n` flag to prevent printing a newline at the end.
 
 **_`env`_**
-Displays the current environment variables that contain an `=` sign, essentially showing the shell's environment.
+displays the current environment variables that contain an `=` sign, essentially showing the shell's environment.
 
 **_`exit`_**
-Terminates the shell process, optionally accepting an argument to set the exit status. It ensures the exit code is numeric and within the range of 0-255, handling errors and multiple arguments gracefully.
+terminates the shell process, optionally accepting an argument to set the exit status. It ensures the exit code is numeric and within the range of 0-255, handling errors and multiple arguments gracefully.
 
 **_`export`_**
-Manages the shell's environment variables. It allows new variables to be added or existing ones to be updated. If no arguments are provided, it lists all environment variables in a sorted order.
+manages the shell's environment variables. It allows new variables to be added or existing ones to be updated. If no arguments are provided, it lists all environment variables in a sorted order.
 
 **_`cd`_**
-Changes the current working directory. If no argument is provided, it changes to the directory specified in the `HOME` variable. It also updates the `PWD` and `OLDPWD` environment variables.
+changes the current working directory. If no argument is provided, it changes to the directory specified in the `HOME` variable. It also updates the `PWD` and `OLDPWD` environment variables.
 
 **_`pwd`_**
-Prints the current working directory to the output. If the command fails, it displays an error message.
+prints the current working directory to the output. If the command fails, it displays an error message.
 
 **_`unset`_**
-Removes specified environment variables. It iterates over the environment, creating a new temporary list without the variables to be unset, and then updates the environment with this new list.
+removes specified environment variables. It iterates over the environment, creating a new temporary list without the variables to be unset, and then updates the environment with this new list.
 
 ### 3.3 Lexer
 The lexer serves to transform an input string of characters into meaningful tokens. 
