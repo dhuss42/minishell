@@ -57,3 +57,5 @@ int	main(int argc, char *argv[], char **env)
 	(void) argv;
 	return (0);
 }
+
+// after executing a command we need to update _ variable in envs 

@@ -19,10 +19,10 @@ int	replace_key(t_shell *shell, t_command *row, size_t index, size_t j)
 	// printf(MAGENTA"[%zu]shell->k\n"WHITE, shell->k);
 	if (shell->env[index])
 		free(shell->env[index]);
-	shell->env[index] = ft_strdup(row->args[j]);
+	shell->env[index] = safe_ft_strdup(row->args[j]);
 	if (!shell->env[index])
 	{
-		//print_error()
+		// unsure about freeing
 		return (-1);
 	}
 	// printf(CYAN"[%zu] ENV shell->env: %s\n"WHITE, index, shell->env[index]);
@@ -37,13 +37,9 @@ char	**append_keys(char **tmp, t_shell *shell, t_command *row)
 	{
 		if (valid_key_name(row->args[shell->i]) && (key_exists(tmp, row->args[shell->i]) == -1))
 		{
-				tmp[shell->j] = ft_strdup(row->args[shell->i]);
+				tmp[shell->j] = safe_ft_strdup(row->args[shell->i]);
 				if (!tmp[shell->j])
-				{
-					clear_all(tmp);
-					print_error(errno, NULL, PRINT);
-					return (NULL);
-				}
+					return (clear_all(tmp), NULL);
 			shell->j++;
 		}
 		shell->i++;
@@ -58,13 +54,9 @@ char	**copy_new_envs(char **tmp, t_shell *shell, t_command *row)
 	shell->j = 0;
 	while (shell->env[shell->j] != NULL)
 	{
-		tmp[shell->j] = ft_strdup(shell->env[shell->j]);
+		tmp[shell->j] = safe_ft_strdup(shell->env[shell->j]);
 		if (!tmp[shell->j])
-		{
-			clear_all(tmp);
-			print_error(errno, NULL, PRINT);
-			return (NULL);
-		}
+			return (clear_all(tmp), NULL);
 		shell->j++;
 	}
 	tmp = append_keys(tmp, shell, row);
@@ -102,9 +94,9 @@ int	export_with_args(t_shell *shell, t_command *row)
 
 	tmp = NULL;
 	shell->len = get_len_new_env(shell->env, row, shell->i);
-	tmp = malloc(sizeof(char *) * (shell->len + 1));
+	tmp = safe_malloc(sizeof(char *) * (shell->len + 1));
 	if (!tmp)
-	 	return (print_error(errno, NULL, PRINT));
+	 	return (-1);
 	tmp = set_to_null(tmp, shell->len);
 	if (check_duplicate_keys(shell, row) == -1)
 		return (-1);

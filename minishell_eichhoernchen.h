@@ -133,15 +133,19 @@ int		remove_quotes(t_list *table);
 
 //-------------------utils------------------//
 void    *safe_malloc(size_t size);
+char    *safe_ft_substr(const char *s, unsigned int start, size_t len);
+char    *safe_ft_strdup(const char *s);
 
 //----------------helpers----------------//
 
 	//--> builtins
 bool    has_equal(const char *str);
 bool    valid_key_name(const char *str);
-int    key_exists(char **env, char *key);
-char **set_to_null(char **tmp, size_t len);
+int    	key_exists(char **env, char *key);
+char 	**set_to_null(char **tmp, size_t len);
 size_t  get_len_new_env(char **env, t_command *row, size_t i);
+int	update_pwd(t_shell *shell);
+int	update_oldpwd(t_shell *shell, char *content);
 
 	//--> lexer
 bool	is_special(char input);

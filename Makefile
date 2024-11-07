@@ -40,6 +40,7 @@ CFILES = minishell.c\
 	builtins/echo_expanded.c\
 	builtins/unset.c\
 	builtins/cd.c\
+	builtins/cd_pwd_handling.c\
 	builtins/exit.c\
 	executor/check_files.c\
 	executor/error_handling.c\

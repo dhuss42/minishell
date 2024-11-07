@@ -23,22 +23,15 @@ char	**allocate_sorted(t_shell *shell, char **sorted)
 	shell->k = 0;
 		while(shell->env[shell->k] != NULL)
 			shell->k++;
-		sorted = malloc(sizeof(char *) * (shell->k + 1));
+		sorted = safe_malloc(sizeof(char *) * (shell->k + 1));
 		if (!sorted)
-		{
-			print_error(errno, NULL, PRINT);
 			return (NULL);
-		}
 		shell->k = 0;
 		while(shell->env[shell->k] != NULL)
 		{
-			sorted[shell->k] = ft_strdup(shell->env[shell->k]);
+			sorted[shell->k] = safe_ft_strdup(shell->env[shell->k]);
 			if (!sorted[shell->k])
-			{
-				print_error(errno, NULL, PRINT);
-				clear_all(sorted);
-				return (NULL);
-			}
+				return (clear_all(sorted), NULL);
 			shell->k++;
 		}
 	sorted[shell->k] = NULL;

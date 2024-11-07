@@ -19,7 +19,7 @@ char	*split_echo(char *str)
 
 	pos = ft_strchr(str, ' ');
 	pos++;
-	remainder = malloc(sizeof(char) * (ft_strlen(pos) + 1));
+	remainder = safe_malloc(sizeof(char) * (ft_strlen(pos) + 1));
 	if (!remainder)
 		return (NULL);
 	ft_strlcpy(remainder, pos, ft_strlen(pos) + 1);
@@ -34,18 +34,15 @@ char	**duplicate_double_ptr(char **double_ptr)
 	i = 0;
 	while (double_ptr[i] != NULL)
 		i++;
-	duplicate = malloc(sizeof(char *) * (i + 1));
+	duplicate = safe_malloc(sizeof(char *) * (i + 1));
 	if(!duplicate)
 		return (NULL);
 	i = 0;
 	while (double_ptr[i] != NULL)
 	{
-		duplicate[i] = ft_strdup(double_ptr[i]);
+		duplicate[i] = safe_ft_strdup(double_ptr[i]);
 		if (!duplicate[i])
-		{
-			clear_all(duplicate);
-			return (NULL);
-		}
+			return (clear_all(duplicate), NULL);
 		i++;
 	}
 	duplicate[i] = NULL;
@@ -61,18 +58,23 @@ char	**special_dup(t_command *row, char **tmp)
 	j = 1;
 	while (row->args[j] != NULL)
 	{
-		tmp[i] = ft_strdup(row->args[j]);
+		tmp[i] = safe_ft_strdup(row->args[j]);
 		if(!tmp[i])
-		{
-			clear_all(tmp);
-			return (NULL);
-		}
+			return (clear_all(tmp), NULL);
 		i++;
 		j++;
 	}
 	tmp[i] = NULL;
 	return (tmp);
 }
+
+// handle -n -nnn inside string
+
+// check if next char is -
+// while(n) i++;
+// if char is '\0' or ' ' stop
+
+// ---> not sure if effort is worth it tbh
 
 char	**tmp_args(t_command *row, char *separated)
 {
@@ -82,24 +84,19 @@ char	**tmp_args(t_command *row, char *separated)
 	i = 0;
 	while(row->args[i] != NULL)
 		i++;
-	tmp = malloc(sizeof(char *) * (i + 2));
+	tmp = safe_malloc(sizeof(char *) * (i + 2));
 	if (!tmp)
 		return (NULL);
-	tmp[0] = ft_strdup("echo");
+	tmp[0] = safe_ft_strdup("echo");
 	if (!tmp[0])
 		return (NULL);
-	tmp[1] = ft_strdup(separated); // here for -n
+	// function handling -n -nnnn inside the remainder string
+	tmp[1] = safe_ft_strdup(separated); // here for -n
 	if (!tmp[1])
-	{
-		free(tmp[0]);
-		return (NULL);
-	}
+		return (clear_all(tmp), NULL);
 	tmp = special_dup(row, tmp);
 	if (!tmp)
-	{
-		clear_all(tmp);
 		return (NULL);
-	}
 	return (tmp);
 }
 
