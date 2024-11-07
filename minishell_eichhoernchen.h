@@ -135,9 +135,9 @@ int		remove_quotes(t_list *table);
 void    *safe_malloc(size_t size);
 char    *safe_ft_substr(const char *s, unsigned int start, size_t len);
 char    *safe_ft_strdup(const char *s);
+char    *safe_ft_strtrim(char *s, const char *set);
 
 //----------------helpers----------------//
-
 	//--> builtins
 bool    has_equal(const char *str);
 bool    valid_key_name(const char *str);

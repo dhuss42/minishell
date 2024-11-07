@@ -48,27 +48,17 @@ int	shlvl(t_shell *shell)
 	new_shlvl = update_shlvl(shell, new_shlvl, &i);
 	if (!new_shlvl)
 		return (-1);
-	key = malloc(sizeof(char) * (ft_strlen("SHLVL=") + 1));
+	key = safe_malloc(sizeof(char) * (ft_strlen("SHLVL=") + 1));
 	if (!key)
-	{
-		free(new_shlvl);
-		return (print_error(errno, NULL, PRINT));
-	}
+		return (free(new_shlvl), -1);
 	ft_strlcpy(key, "SHLVL=", ft_strlen("SHLVL=") + 1);
 	res = ft_strjoin(key, new_shlvl);
 	if (!res)
-	{
-		free_three(NULL, key, new_shlvl);
-		return (print_error(errno, NULL, PRINT));
-	}
+		return (free_three(NULL, key, new_shlvl), -1);
 	free(shell->env[i]);
-	shell->env[i] = ft_strdup(res);
+	shell->env[i] = safe_ft_strdup(res);
 	if (!shell->env[i])
-	{
-		clear_all(shell->env);
-		free_three(res, key, new_shlvl);
-		return (print_error(errno, NULL, PRINT));
-	}
+		return (clear_all(shell->env), free_three(res, key, new_shlvl), -1);
 	free_three(res, key, new_shlvl);
 	return (0);
 }

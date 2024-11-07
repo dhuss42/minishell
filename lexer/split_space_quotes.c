@@ -103,7 +103,7 @@ char	*populate_str(char *input, size_t *end)
 			(*end)++;
 		}
 	}
-	return (ft_substr(input, start, (*end - start)));
+	return (safe_ft_substr(input, start, (*end - start)));
 }
 
 //goes through string
@@ -126,10 +126,7 @@ char	**fill_token_list(char *input, char **tokens)
 		{
 			tokens[i] = populate_str(input, &end);
 			if (!tokens[i])
-			{
-				// print_error(errno, NULL);
-				return (NULL);
-			}
+				return (clear_all(tokens), NULL);
 
 			// printf(CYAN"[%zu] TOKEN: %s\n"WHITE, i, tokens[i]);
 			i++;
@@ -150,12 +147,9 @@ char	**split_space_quotes(char *input)
 
 	// printf(RED"inside split_space_quotes\n"WHITE);
 	// printf("count_tokens: %zu\n", count_tokens(input));
-	tokens = malloc(sizeof(char *) * (count_tokens(input) + 1));
+	tokens = safe_malloc(sizeof(char *) * (count_tokens(input) + 1));
 	if (!tokens)
-	{
-	// 	print_error(errno, NULL);
 		return (NULL);
-	}
 
 	tokens = fill_token_list(input, tokens);
 	if (!tokens)

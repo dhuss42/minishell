@@ -10,19 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../executor.h"
 
 t_command	*create_cmd_block(void)
 {
 	t_command	*new_cmd;
 
 	new_cmd = NULL;
-	new_cmd = malloc(sizeof(t_command));
+	new_cmd = safe_malloc(sizeof(t_command));
 	if (!new_cmd)
-	{
-		// print_error(errno, NULL);
 		return (NULL);
-	}
 	new_cmd->args = NULL;
 	new_cmd->filename = NULL;
 	new_cmd->red_symbol = NULL;
@@ -76,34 +73,28 @@ void	nbr_words_redirections(t_shell *nbr, t_list **token_list)
 
 t_command	*allocate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 {
-	new_cmd->args = malloc(sizeof(char *) * (parsing->words + 1));
+	new_cmd->args = safe_malloc(sizeof(char *) * (parsing->words + 1));
 	if (!new_cmd->args)
 	{
-		// printf("I return after new_cmd->args malloc fail\n");
 		free_table_parser(parsing);
-		// print_error(errno, NULL);
 		return (NULL);
 	}
-	new_cmd->red_symbol = malloc(sizeof(char *) * (parsing->reds + 1));
+	new_cmd->red_symbol = safe_malloc(sizeof(char *) * (parsing->reds + 1));
 	if (!new_cmd->red_symbol)
 	{
-		// printf("I return after new_cmd->red_symbol malloc fail\n");
 		free_table_parser(parsing);
-		// print_error(errno, NULL);
 		return (NULL);
 	}
-	new_cmd->filename = malloc (sizeof(char *) * (parsing->filenames + 1));
+	new_cmd->filename = safe_malloc(sizeof(char *) * (parsing->filenames + 1));
 	if (!new_cmd->filename)
 	{
-		// printf("I return after new_cmd->filename malloc fail\n");
 		free_table_parser(parsing);
-		// print_error(errno, NULL);
 		return (NULL);
 	}
 	new_cmd = populate_cmd(new_cmd, tl_pos, parsing);
 	if (!new_cmd)
 	{
-		// printf("I return after populate_cmd\n");
+		// not sure about frees
 		return (NULL);
 	}
 	return (new_cmd);
@@ -123,16 +114,14 @@ int	create_table(t_shell *shell)
 		new_cmd = create_cmd_block();
 		if (!new_cmd)
 		{
-			// printf("I return after create_cmd_block\n");
+			// needs to free everything that was allocated before
 			return (-1);
 		}
-		// printf("TEST2\n");
 		new_node = ft_lstnew((void *)new_cmd);
 		if (!new_node)
 		{
-			// printf("I return after ft_lstnew\n");
-			// print_error(errno, NULL);
-			return (-1);
+			// needs to free everything that was allocated before
+			return (print_error(errno, NULL, PRINT));
 		}
 		tmp2 = tmp;
 		set_to_zero(shell);
@@ -151,3 +140,5 @@ int	create_table(t_shell *shell)
 	}
 	return (0);
 }
+
+// need to split this function

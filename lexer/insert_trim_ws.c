@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../executor.h"
 
 void handle_quotes(t_shell *trim, char *input)
 {
@@ -113,27 +113,19 @@ char *trim_spaces(char *input, t_shell *shell)
 	trim_inpt = ft_strtrim(input, " \n\t");
 	if (!trim_inpt)
 	{
-	// 	print_error(errno, NULL);
+		print_error(errno, NULL, PRINT);
 		return (NULL);
 	}
-
 	trim.len = get_len(trim_inpt, shell);
 	if (shell->syntax_error == true)
 		return (NULL);
-
 	trim.res = ft_calloc(sizeof(char), (trim.len + 1));
 	if (!trim.res)
 	{
-		free(trim_inpt);
-	//  print_error(errno, NULL)
-		return (NULL);
+	 	print_error(errno, NULL, PRINT);
+		return (free(trim_inpt), NULL);
 	}
-
 	populate_trim_str(&trim, trim_inpt);
-	// printf("\nonly edge trimmed string: [%s]\n", trim_inpt);
-	// printf("calculated length: %zu\n\n", trim.len);
-	// printf("trim.res: [%s]\n", trim.res);
-	// printf("actual result string length: %zu\n", ft_strlen(trim.res));
 	if(trim_inpt)
 		free(trim_inpt);
 	return (trim.res);

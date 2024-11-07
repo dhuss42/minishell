@@ -1,5 +1,5 @@
 
-#include "../minishell_eichhoernchen.h"
+#include "../executor.h"
 
 void  lexer(t_shell *shell, char *input)
 {
@@ -16,12 +16,9 @@ void  lexer(t_shell *shell, char *input)
         return (free_three(input, trim_inpt, res));
     if (!trim_inpt)
         return (free_three(input, trim_inpt, res));
-    res = ft_strtrim(trim_inpt, " \n\t");
+    res = safe_ft_strtrim(trim_inpt, " \n\t");
     if (!res)
-    {
-    //  print_error(errno, NULL);
         return (free_three(input, trim_inpt, res));
-    }
     tokens = split_space_quotes(res);
     if (!tokens)
         return (free_three(input, trim_inpt, res));
@@ -31,6 +28,8 @@ void  lexer(t_shell *shell, char *input)
     shell->syntax_error = syntax_errors(shell->list);
     free_three(input, trim_inpt, res);
 }
+
+// not sure if input needs to be freed
 
 // problem with echo hallo"welt"hallo
 // --> bash: echo hallowelthallo

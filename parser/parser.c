@@ -19,21 +19,12 @@ void	parser(t_shell *shell)
 	shell->table = NULL;
 	if (create_table(shell) == -1)
 	{
-		// printf("I return after create table\n");
 		return ;
 	}
 	if (!shell->table)
 	{
-		// printf("I return after check if table is empty\n");
 		return ;
 	}
-	// printf(BLUE"TABLE IN PARSER\n"WHITE);
-	// print_table(shell->table);
-
-	// free_table(shell); // just here for leak check
 }
 
-// < hello | wc -l | grep a >> outfile >> out
-// "$HOME" > out1 > out2 >> outmain | '     test' |        wc     -l | grep -lala > outfile
-// ls -la | cat -e | cat -e
-// echo $PATH | tr : '\n'
+// need to go through the parser to check if all frees were handled properly

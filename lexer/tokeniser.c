@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../executor.h"
 
 t_token *create_token(t_token_type type, char *input)
 {
@@ -71,13 +71,11 @@ t_list	*tokeniser(char **split_double_array)
 		tok = which_token(split_double_array[i]);
 		if (!tok)
 			return (NULL);
-		// print_token(tok);
 		new = ft_lstnew((void *)tok);
 		if (!new)
 		{
-			free_token(tok);
-			// print_error(errno, NULL);
-			return (NULL);
+			print_error(errno, NULL, PRINT);
+			return (free_token(tok), NULL);
 		}
 		ft_lstadd_back(&head, new);
 		i++;

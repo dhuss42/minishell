@@ -91,7 +91,7 @@ char	**tmp_args(t_command *row, char *separated)
 	if (!tmp[0])
 		return (NULL);
 	// function handling -n -nnnn inside the remainder string
-	tmp[1] = safe_ft_strdup(separated); // here for -n
+	tmp[1] = safe_ft_strdup(separated); 
 	if (!tmp[1])
 		return (clear_all(tmp), NULL);
 	tmp = special_dup(row, tmp);

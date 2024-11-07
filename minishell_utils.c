@@ -43,4 +43,17 @@ char    *safe_ft_strdup(const char *s)
     return (str);
 }
 
+char    *safe_ft_strtrim(char *s, const char *set)
+{
+    char *res;
+
+    res = ft_strtrim(s, set);
+    if (!res)
+    {
+        print_error(errno, NULL, PRINT);
+        return (NULL);
+    }
+    return (res);
+}
+
 // add duplicate double_pointers
