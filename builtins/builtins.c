@@ -15,7 +15,7 @@ void	test_builtins(t_shell *shell)
 		{
 			if (ft_strncmp(row->args[shell->i], "echo", /* ft_strlen(row->args[shell->i])) */4) == 0 /* && ft_strlen(row->args[shell->i]) == 4 */)
 			{
-				ft_echo(shell, row);
+				if (ft_echo(shell, row) == -1)
 					return ;
 			}
 			else if (ft_strncmp(row->args[shell->i], "pwd", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 3)
@@ -57,8 +57,3 @@ void	test_builtins(t_shell *shell)
 }
 
 // not sure if the while loop is necessary
-// handle this case
-// --> export t="cho hallo"
-// --> e$t
-// -----> should be [echo] [hallo]
-// -----> currently is [echo hallo]

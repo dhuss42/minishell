@@ -44,12 +44,13 @@ int ft_unset(t_shell *shell, t_command *row)
 
 	get_len_unset(shell, row);
 	// printf("shell->len: %zu\n", shell->len);
-	tmp = malloc(sizeof(char *) * (shell->len + 1));
+	tmp = (char **)safe_malloc(sizeof(char *) * shell->len + 1);
+	// tmp = malloc(sizeof(char *) * (shell->len + 1));
 	if (!tmp)
-	{
-		print_error(errno, NULL, PRINT);
+	// {
+	// 	print_error(errno, NULL, PRINT);
 		return (-1);
-	}
+	// }
 	j = 0;
 	k = 0;
 	// printf("TEST\n");

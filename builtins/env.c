@@ -17,7 +17,7 @@ int    ft_env(t_shell *shell)
     size_t i;
 
     if (shell->env == NULL)
-        return (-1);
+        return (-1); // not sure what is suppossed to happen
     i = 0;
     while (shell->env[i] != NULL)
     {
@@ -27,6 +27,3 @@ int    ft_env(t_shell *shell)
     }
     return (0);
 }
-
-// should only print when there is an equal sign
-// export can create keys without =

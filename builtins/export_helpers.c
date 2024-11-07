@@ -70,21 +70,35 @@ size_t  get_len_new_env(char **env, t_command *row, size_t i)
 	count = 0;
 	while (env[count] != NULL)
 		count++;
-	printf(YELLOW"count after env: %zu\n"WHITE, count);
+	// printf(YELLOW"count after env: %zu\n"WHITE, count);
 	while (row->args[i] != NULL)
 	{
-		printf(BLUE"current_var %s\n"WHITE, row->args[i]);
-		if (/* has_equal(row->args[i]) &&  */valid_key_name(row->args[i]) && (key_exists(env, row->args[i]) == -1))
+		// printf(BLUE"current_var %s\n"WHITE, row->args[i]);
+		if (valid_key_name(row->args[i]) && (key_exists(env, row->args[i]) == -1))
 		{
-			printf(GREEN"export count: %zu\n"WHITE, count);
+			// printf(GREEN"export count: %zu\n"WHITE, count);
 			count++;
 		}
 		i++;
 	}
-	printf(YELLOW"count total: %zu\n"WHITE, count);
+	// printf(YELLOW"count total: %zu\n"WHITE, count);
 	return (count);
 }
 
 // counts len of current env variables
 // iterates through User input (args)
 // if the structure is valid a counter is added
+
+
+char **set_to_null(char **tmp, size_t len)
+{
+	size_t	j;
+
+	j = 0;
+	while (j <= len)
+	{
+		tmp[j] = NULL;
+		j++;
+	}
+	return (tmp);
+}

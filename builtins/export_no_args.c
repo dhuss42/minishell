@@ -10,8 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../executor.h"
 
-#include "../minishell_eichhoernchen.h"
+void	put_str_n(char *str, size_t n, size_t i)
+{
+	while (str[i] != '\0' && i < n)
+		write(1, &str[i++], 1);
+}
 
 char	**allocate_sorted(t_shell *shell, char **sorted)
 {
@@ -21,7 +26,7 @@ char	**allocate_sorted(t_shell *shell, char **sorted)
 		sorted = malloc(sizeof(char *) * (shell->k + 1));
 		if (!sorted)
 		{
-			//print error
+			print_error(errno, NULL, PRINT);
 			return (NULL);
 		}
 		shell->k = 0;
@@ -30,7 +35,7 @@ char	**allocate_sorted(t_shell *shell, char **sorted)
 			sorted[shell->k] = ft_strdup(shell->env[shell->k]);
 			if (!sorted[shell->k])
 			{
-				//print error
+				print_error(errno, NULL, PRINT);
 				clear_all(sorted);
 				return (NULL);
 			}
@@ -40,16 +45,11 @@ char	**allocate_sorted(t_shell *shell, char **sorted)
 	return (sorted);
 }
 
-char	**bubble_sort(t_shell *shell)
+char **bubble_sort(t_shell *shell, char **sorted)
 {
 	size_t i;
 	char	*tmp;
-	char	**sorted;
 
-	sorted = NULL;
-	sorted = allocate_sorted(shell, sorted);
-	if (!sorted)
-		return (NULL);
 	i = 0;
 	while (i < shell->k - 1)
 	{
@@ -73,21 +73,27 @@ char	**bubble_sort(t_shell *shell)
 	return (sorted);
 }
 
-void	put_str_n(char *str, size_t n, size_t i)
+char	**sorter(t_shell *shell)
 {
-	while (str[i] != '\0' && i < n)
-		write(1, &str[i++], 1);
+	char	**sorted;
+
+	sorted = NULL;
+	sorted = allocate_sorted(shell, sorted);
+	if (!sorted)
+		return (NULL);
+	sorted = bubble_sort(shell, sorted);
+	return (sorted);
 }
 
-void	export_no_argument(t_shell *shell)
+int	export_no_argument(t_shell *shell)
 {
 	size_t  i;
 	char	**sorted;
 
 	i = 0;
-	sorted = bubble_sort(shell);
+	sorted = sorter(shell);
 	if (!sorted)
-		return ;
+		return (-1);
 	while (sorted[i] != NULL)
 	{
 			ft_printf("declare -x ");
@@ -102,4 +108,5 @@ void	export_no_argument(t_shell *shell)
 		i++;
 	}
 	clear_all(sorted);
+	return (0);
 }

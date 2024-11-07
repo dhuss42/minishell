@@ -95,7 +95,7 @@ typedef struct s_shell
 	char	**env;
 } t_shell;
 
-//-------------------main------------------//
+//-------------------environment------------------//
 int	copy_env(char **env, t_shell *shell);
 int	shlvl(t_shell *shell);
 
@@ -103,8 +103,8 @@ int	shlvl(t_shell *shell);
 int 	ft_pwd();
 int		ft_env(t_shell *shell);
 int	 	ft_export(t_shell *shell, t_command *row);
-void	export_no_argument(t_shell *shell);
-void	ft_echo(t_shell *shell, t_command *row);
+int		export_no_argument(t_shell *shell);
+int		ft_echo(t_shell *shell, t_command *row);
 void	echo_expanded(t_shell *shell, t_command *row);
 int		ft_unset(t_shell *shell, t_command *row);
 void	ft_exit(t_command *row);
@@ -131,12 +131,16 @@ char	*compare_with_env(char *variable, char **env, char *exp);
 int		get_exit_code(char *tmp, t_command *row, t_shell *expand);
 int		remove_quotes(t_list *table);
 
+//-------------------utils------------------//
+void    *safe_malloc(size_t size);
+
 //----------------helpers----------------//
 
 	//--> builtins
 bool    has_equal(const char *str);
 bool    valid_key_name(const char *str);
 int    key_exists(char **env, char *key);
+char **set_to_null(char **tmp, size_t len);
 size_t  get_len_new_env(char **env, t_command *row, size_t i);
 
 	//--> lexer

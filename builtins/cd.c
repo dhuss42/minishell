@@ -64,7 +64,33 @@ int	replace_pwd(t_shell *shell, char *key, char *content)
 	return (0);
 }
 
-int	append_oldpwd(t_shell *shell, char *old_pwd)
+char **append_oldpwd(t_shell *shell, char *old_pwd, char **tmp)
+{
+	size_t i;
+
+	i = 0;
+	while (shell->env[i] != NULL)
+	{
+		tmp[i] = ft_strdup(shell->env[i]);
+		if (!tmp[i])
+		{
+			clear_all(tmp);
+			return (NULL);
+		}
+		i++;
+	}
+	tmp[i] = ft_strdup(old_pwd);
+	if (!tmp[i])
+	{
+		clear_all(tmp);
+		return (NULL);
+	}
+	i++;
+	tmp[i] = NULL;
+	return (tmp);
+}
+
+int	allocate_oldpwd(t_shell *shell, char *old_pwd)
 {
 	size_t	i;
 	char	**tmp;
@@ -75,25 +101,9 @@ int	append_oldpwd(t_shell *shell, char *old_pwd)
 	tmp = malloc(sizeof(char *) * (i + 2));
 	if (!tmp)
 		return (print_error(errno, NULL, PRINT));
-	i = 0;
-	while (shell->env[i] != NULL)
-	{
-		tmp[i] = ft_strdup(shell->env[i]);
-		if (!tmp[i])
-		{
-			clear_all(tmp);
-			return (print_error(errno, NULL, PRINT));
-		}
-		i++;
-	}
-	tmp[i] = ft_strdup(old_pwd);
-	if (!tmp[i])
-	{
-		clear_all(tmp);
+	tmp = append_oldpwd(shell, old_pwd, tmp);
+	if (!tmp)
 		return (print_error(errno, NULL, PRINT));
-	}
-	i++;
-	tmp[i] = NULL;
 	clear_all(shell->env);
 	if (copy_env(tmp, shell) == -1)
 		return (print_error(errno, NULL, PRINT));
@@ -114,7 +124,7 @@ int	update_oldpwd(t_shell *shell, char *content)
 			free(content);
 			return (print_error(errno, NULL, PRINT));
 		}
-		if (append_oldpwd(shell, new_pwd) != 0)
+		if (allocate_oldpwd(shell, new_pwd) != 0)
 		{
 			if (content)
 				free(content);
@@ -177,7 +187,6 @@ int		ft_cd(t_shell *shell, t_command *row)
 	current_dir = getcwd(NULL, 0);
 	if (!current_dir)
 		return (print_error(errno, NULL, PRINT));
-
 	if (!row->args[1])
 	{
 		if (cd_no_args(shell, row, current_dir) != 0)

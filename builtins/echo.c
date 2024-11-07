@@ -62,13 +62,17 @@ void	echo(t_shell *shell, t_command *row)
 		ft_printf("\n");
 }
 
-void	ft_echo(t_shell *shell, t_command *row)
+int	ft_echo(t_shell *shell, t_command *row)
 {
 	if (row->args[shell->i][4] == ' ')
 		echo_expanded(shell, row);
 	if (ft_strncmp(row->args[0], "echo",  ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 4)
+	{
 		echo(shell, row);
-	return ;
+		return (0);
+	}
+	else
+		return (-1);
 }
 
 // check for empty string

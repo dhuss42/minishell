@@ -7,7 +7,9 @@ LFLAGS = -lreadline
 # is a linking flag not a compiler flag
 NAME = minishell
 CFILES = minishell.c\
-	shlvl.c\
+	minishell_utils.c\
+	environment/shlvl.c\
+	environment/get_env.c\
 	lexer/lexer.c\
 	lexer/insert_trim_ws.c\
 	lexer/get_len.c\
@@ -28,8 +30,6 @@ CFILES = minishell.c\
 	expansion/compare_with_env.c\
 	expansion/remove_quotes.c\
 	expansion/helper_expansion.c\
-	print_tokenlist.c\
-	print_table.c\
 	builtins/builtins.c\
 	builtins/env.c\
 	builtins/pwd.c\
@@ -49,10 +49,12 @@ CFILES = minishell.c\
 	executor/executor.c\
 	executor/find_path.c\
 	executor/heredoc.c\
-	executor/redirections.c
-
+	executor/redirections.c\
+	print_tokenlist.c\
+	print_table.c
 
 # take out functions later such as print_table.c, print_tokenlist.c, builtins/builtins.c
+
 OFILES = $(CFILES:.c=.o)
 DEPS = $(OFILES:.o=.d)
 # look into again

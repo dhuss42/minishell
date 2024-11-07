@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../executor.h"
 
 int	replace_key(t_shell *shell, t_command *row, size_t index, size_t j)
 {
@@ -35,14 +35,13 @@ char	**append_keys(char **tmp, t_shell *shell, t_command *row)
 {
 	while (row->args[shell->i] != NULL)
 	{
-		// printf(BLUE"current_var %s\n"WHITE, row->args[shell->i]);
 		if (valid_key_name(row->args[shell->i]) && (key_exists(tmp, row->args[shell->i]) == -1))
 		{
 				tmp[shell->j] = ft_strdup(row->args[shell->i]);
 				if (!tmp[shell->j])
 				{
 					clear_all(tmp);
-					//  print_error(errno, NULL);
+					print_error(errno, NULL, PRINT);
 					return (NULL);
 				}
 			shell->j++;
@@ -57,25 +56,20 @@ char	**append_keys(char **tmp, t_shell *shell, t_command *row)
 char	**copy_new_envs(char **tmp, t_shell *shell, t_command *row)
 {
 	shell->j = 0;
-	// printf("TEST2\n");
 	while (shell->env[shell->j] != NULL)
 	{
 		tmp[shell->j] = ft_strdup(shell->env[shell->j]);
 		if (!tmp[shell->j])
 		{
 			clear_all(tmp);
-			//  print_error(errno, NULL);
+			print_error(errno, NULL, PRINT);
 			return (NULL);
 		}
 		shell->j++;
 	}
 	tmp = append_keys(tmp, shell, row);
 	if (!tmp)
-	{
-		clear_all(tmp);
-		//  print_error(errno, NULL);
 		return (NULL);
-	}
 	return (tmp);
 }
 
@@ -89,12 +83,10 @@ int	check_duplicate_keys(t_shell *shell, t_command *row)
 	i = 0;
 	while(row->args[i] != NULL)
 	{
-		// printf("run [%zu]\n", i);
 		if (key_exists(shell->env, row->args[i]) != -1)
 		{
 			if (replace_key(shell, row, key_exists(shell->env, row->args[i]), i) == -1)
 				return (-1);
-			// printf("TEST1\n");
 		}
 		i++;
 	}
@@ -104,37 +96,15 @@ int	check_duplicate_keys(t_shell *shell, t_command *row)
 // iterates through args and checks if the current string is an existing key in the og envs
 // if the key exists in og envs then it calls the function to replace it
 
-char **set_to_null(char **tmp, size_t len)
-{
-	size_t	j;
-
-	j = 0;
-	while (j <= len)
-	{
-		tmp[j] = NULL;
-		j++;
-	}
-	return (tmp);
-}
-
-int	ft_export(t_shell *shell, t_command *row)
+int	export_with_args(t_shell *shell, t_command *row)
 {
 	char	**tmp;
 
 	tmp = NULL;
-	shell->i++;
-	if (row->args[shell->i] == NULL)
-	{
-		export_no_argument(shell);
-		return (-1);
-	}
 	shell->len = get_len_new_env(shell->env, row, shell->i);
 	tmp = malloc(sizeof(char *) * (shell->len + 1));
 	if (!tmp)
-	{
-	//  print_error(errno, NULL);
-		return (-1);
-	}
+	 	return (print_error(errno, NULL, PRINT));
 	tmp = set_to_null(tmp, shell->len);
 	if (check_duplicate_keys(shell, row) == -1)
 		return (-1);
@@ -144,10 +114,28 @@ int	ft_export(t_shell *shell, t_command *row)
 	if (shell->env)
 		clear_all(shell->env);
 	if (copy_env(tmp, shell) == -1)
-		return (clear_all(shell->env), clear_all(tmp), -1); //not sure about clearing env
-
+		return (clear_all(tmp), -1);
 	clear_all(tmp);
 	return (0);
+}
+
+int	ft_export(t_shell *shell, t_command *row)
+{
+	shell->i++;
+	if (row->args[shell->i] == NULL)
+	{
+		if (export_no_argument(shell) == -1)
+			return (-1);
+		else
+			return (0);
+	}
+	else
+	{
+		if (export_with_args(shell, row) == -1)
+			return (-1);
+		else
+			return (0);
+	}
 }
 
 // gets length of the new double char array that will hold all the keys=variables
