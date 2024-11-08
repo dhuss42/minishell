@@ -16,13 +16,14 @@ This project was the first team-based assignment at 42, requiring us to collabor
 
 Below is the basic structure of the project, with the names in brackets indicating who was responsible for each part:
 
-1. [Environment Variables](#31-Environment-Variables) (dhuss)
-2. [Builtins](#32-Builtins) (dhuss)
-3. [Lexer](#33-Lexer) (dhuss)
-4. [Parser](#34-Parser) (dhuss)
-5. [Expansion](#35-Expansion) (dhuss)
-6. [Heredoc](#36-Heredoc) (maustel)
-7. [Executer](#37-Executer) (maustel)
+1. [Environment Variables](#31-Environment-Variables)
+2. [Builtins](#32-Builtins) 
+3. [Lexer](#33-Lexer) 
+4. [Parser](#34-Parser) 
+5. [Expansion](#35-Expansion) 
+6. [Heredoc](#36-Heredoc) 
+7. [Executer](#37-Executer)
+8. [Signals](#38-Signals)
 
 ## 3. Description of individual steps
 
@@ -92,3 +93,6 @@ Lastly, [remove_quotes](expansion/remove_quotes.c) removes the outer most quote 
 ### 3.6 Heredoc
 
 ### 3.7 Executer
+
+### 3.8 Signals
+
