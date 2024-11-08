@@ -76,36 +76,33 @@ t_command	*allocate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 	new_cmd->args = safe_malloc(sizeof(char *) * (parsing->words + 1));
 	if (!new_cmd->args)
 	{
-		free_table_parser(parsing);
+		memory_parser(parsing, new_cmd);
 		return (NULL);
 	}
 	new_cmd->red_symbol = safe_malloc(sizeof(char *) * (parsing->reds + 1));
 	if (!new_cmd->red_symbol)
 	{
-		free_table_parser(parsing);
+		memory_parser(parsing, new_cmd);
 		return (NULL);
 	}
 	new_cmd->filename = safe_malloc(sizeof(char *) * (parsing->filenames + 1));
 	if (!new_cmd->filename)
 	{
-		free_table_parser(parsing);
+		memory_parser(parsing, new_cmd);
 		return (NULL);
 	}
 	new_cmd = populate_cmd(new_cmd, tl_pos, parsing);
 	if (!new_cmd)
 	{
-		// not sure about frees
+		memory_parser(parsing, new_cmd);
 		return (NULL);
 	}
 	return (new_cmd);
 }
 
-int	create_table(t_shell *shell)
+int	create_table(t_shell *shell, t_list *new_node, t_command *new_cmd, t_list *tmp)
 {
-	t_list		*tmp;
 	t_list		*tmp2;
-	t_list		*new_node;
-	t_command	*new_cmd;
 
 	tmp = shell->list;
 	shell->lines = count_lines_table(shell->list);
@@ -113,25 +110,16 @@ int	create_table(t_shell *shell)
 	{
 		new_cmd = create_cmd_block();
 		if (!new_cmd)
-		{
-			// needs to free everything that was allocated before
-			return (-1);
-		}
+			return (free_table_parser(shell), -1);
 		new_node = ft_lstnew((void *)new_cmd);
 		if (!new_node)
-		{
-			// needs to free everything that was allocated before
-			return (print_error(errno, NULL, PRINT));
-		}
+			return (memory_parser(shell, new_cmd), print_error(errno, NULL, PRINT));
 		tmp2 = tmp;
 		set_to_zero(shell);
 		nbr_words_redirections(shell, &tmp);
 		new_cmd = allocate_cmd(new_cmd, tmp2, shell);
 		if (!new_cmd)
-		{
-			// printf("I return after allocate_cmd\n");
-			return (-1);
-		}
+			return (memory_parser(shell, new_cmd), -1);
 		ft_lstadd_back(&shell->table, new_node);
 		if (tmp == NULL)
 			break ;
@@ -140,5 +128,3 @@ int	create_table(t_shell *shell)
 	}
 	return (0);
 }
-
-// need to split this function

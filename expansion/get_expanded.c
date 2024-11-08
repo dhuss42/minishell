@@ -88,25 +88,19 @@ int	switcheroo(t_command *row, char *exp, t_shell *expand)
 	char	*tmp;
 
 	expand->len = get_len_exp(row, exp, expand);
-	tmp = ft_calloc(expand->len + 1, sizeof(char));
+	tmp = safe_ft_calloc(expand->len + 1, sizeof(char)); // tmp is allocated
 	if (!tmp)
-	{
-		// print_error(errno, NULL);
 		return (-1);
-	}
-	tmp = copy_into_tmp(row, exp, expand, tmp);
+	tmp = copy_into_tmp(row, exp, expand, tmp); // exp is freed
 	if (row->args[expand->i])
 	{
 		free(row->args[expand->i]);
 		row->args[expand->i] = NULL;
 	}
-	row->args[expand->i] = ft_strdup(tmp);
+	row->args[expand->i] = safe_ft_strdup(tmp);
 	if (!row->args[expand->i])
-	{
-		// print_error(errno, NULL);
-		return (-1);
-	}
-	if (tmp)
+		return (free(tmp), -1);
+	if (tmp) // tmp is freed
 		free(tmp);
 	return (0);
 }
@@ -131,12 +125,9 @@ char	*get_key(t_command *row, t_shell *expand)
 	expand->j = index;
 	while (row->args[expand->i][expand->j] != '\0' && !is_quotes(row->args[expand->i][expand->j]) && row->args[expand->i][expand->j] != '$' && !is_wspace(row->args[expand->i][expand->j]))
 		expand->j++;
-	tmp = malloc(sizeof(char) * (expand->j + 1));
+	tmp = safe_malloc(sizeof(char) * (expand->j + 1));
 	if (!tmp)
-	{
-		// print_error(errno, NULL);
 		return (NULL);
-	}
 	expand->j = 0;
 	while (row->args[expand->i][index] != '\0' && row->args[expand->i][index] != '\"' && row->args[expand->i][index] != '\'' && row->args[expand->i][index] != '$' && !is_wspace(row->args[expand->i][index]))
 		tmp[expand->j++] = row->args[expand->i][index++];
@@ -161,20 +152,16 @@ int	get_expanded(char *key, char **env, t_command *row, t_shell *expand)
 {
 	char	*exp = NULL;
 
-	key = get_key(row, expand);
+	key = get_key(row, expand); // key is allocated
 	if (!key)
 		return (-1);
-	while (*key == '$') // not sure if I need this here (test later on)
+	while (*key == '$')
 		key++;
-	exp = compare_with_env(key, env, exp);
-	// printf(RED"exp: %s\n", exp);
+	exp = compare_with_env(key, env, exp); // exp is allocated
 	if (!exp)
-	{
-		// print_error(errno, NULL);
-		return (-1);
-	}
+		return (free(key), -1);
 	if (switcheroo(row, exp, expand) == -1)
-		return (-1);
+		return (free(key), -1);
 	if (key)
 	{
 		free (key);

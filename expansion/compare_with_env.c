@@ -22,13 +22,13 @@ char	*compare_with_env(char *variable, char **env, char *exp)
 			{
 				if (ft_strncmp(variable, env[j], strlen_equal(env[j])) == 0)
 				{
-					return (exp = ft_substr(env[j], strlen_equal(env[j]) + 1, ft_strlen(env[j]) - strlen_equal(env[j]) - 1));
+					return (exp = safe_ft_substr(env[j], strlen_equal(env[j]) + 1, ft_strlen(env[j]) - strlen_equal(env[j]) - 1));
 				}
 			}
 			j++;
 		}
 	if (!exp)
-		return (exp = ft_strdup(""));
+		return (exp = safe_ft_strdup(""));
 	return (NULL);
 }
 

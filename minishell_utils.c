@@ -19,6 +19,19 @@ void    *safe_malloc(size_t size)
 // then it returns NULL
 // else it returns the pointer
 
+void    *safe_ft_calloc(size_t count, size_t size)
+{
+    void    *ptr;
+
+    ptr = ft_calloc(count, size);
+    if (!ptr)
+    {
+        print_error(errno, NULL, PRINT);
+        return (NULL);
+    }
+    return (ptr);
+}
+
 char    *safe_ft_substr(const char *s, unsigned int start, size_t len)
 {
     char *substr = ft_substr(s, start, len);
@@ -55,5 +68,7 @@ char    *safe_ft_strtrim(char *s, const char *set)
     }
     return (res);
 }
+
+
 
 // add duplicate double_pointers

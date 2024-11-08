@@ -12,11 +12,31 @@
 
 #include "../minishell_eichhoernchen.h"
 
+void count_tokens_quotes(char *str, size_t *i, size_t *counter)
+{
+	char	quotes;
 
+	quotes = str[(*i)++];
+	// printf(YELLOW"[%zu] Found quote: %c\n"WHITE, i - 1, quotes);
+	while(str[*i] != '\0' && str[*i] != quotes)
+	{
+		// printf(GREEN"[%zu] Inside quotes: %c\n"WHITE, i, str[i]);
+		(*i)++;
+	}
+	if (str[*i] == quotes)
+	{
+		if (str[*i + 1] == ' ' || str[*i + 1] == '\0')
+		{
+			(*counter)++;
+			// printf(RED"update counter {%zu}\n"WHITE, counter);
+		}
+		// printf(YELLOW"[%zu] Closing quote found: %c\n"WHITE, i, str[i]);
+		(*i)++;
+	}
+}
 
 size_t count_tokens(char *str)
 {
-	char	quotes;
 	size_t	i;
 	size_t	counter;
 
@@ -31,23 +51,7 @@ size_t count_tokens(char *str)
 		}
 		if (str[i] == '\'' || str[i] == '\"')
 		{
-			quotes = str[i++];
-			// printf(YELLOW"[%zu] Found quote: %c\n"WHITE, i - 1, quotes);
-			while(str[i] != '\0' && str[i] != quotes)
-			{
-				// printf(GREEN"[%zu] Inside quotes: %c\n"WHITE, i, str[i]);
-				i++;
-			}
-			if (str[i] == quotes)
-			{
-				if (str[i + 1] == ' ' || str[i + 1] == '\0')
-				{
-					counter++;
-					// printf(RED"update counter {%zu}\n"WHITE, counter);
-				}
-				// printf(YELLOW"[%zu] Closing quote found: %c\n"WHITE, i, str[i]);
-				i++;
-			}
+			count_tokens_quotes(str, &i, &counter);
 		}
 		else if (str[i] != '\0' && str[i] != ' ')
 		{

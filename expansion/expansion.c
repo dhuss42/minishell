@@ -23,3 +23,5 @@ void expansion(t_shell *shell, char **env)
 	if (remove_quotes(shell->table) == -1)
 		return ;
 }
+
+// split check_for_expansion

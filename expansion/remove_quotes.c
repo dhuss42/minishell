@@ -46,12 +46,9 @@ int	remove_outer_quotes(t_command *row, t_shell *expand)
 	char	*no_quotes;
 	
 	get_len_no_quotes(row, expand);
-	no_quotes = ft_calloc(expand->len + 1, sizeof(char));
+	no_quotes = safe_ft_calloc(expand->len + 1, sizeof(char));
 	if (!no_quotes)
-	{
-		// print_error(errno, NULL);
 		return (-1);
-	}
 	expand->j = 0;
 	expand->k = 0;
 	while (row->args[expand->i][expand->j] != '\0')
@@ -71,12 +68,9 @@ int	remove_outer_quotes(t_command *row, t_shell *expand)
 	}
 	if (row->args[expand->i])
 		free (row->args[expand->i]);
-	row->args[expand->i] = ft_strdup(no_quotes);
+	row->args[expand->i] = safe_ft_strdup(no_quotes);
 	if (!row->args[expand->i])
-	{
-		// print_error(errno, NULL);
-		return (-1);
-	}
+		return (free(no_quotes), -1);
 	if (no_quotes)
 		free(no_quotes);
 	return (0);

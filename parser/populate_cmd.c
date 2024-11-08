@@ -17,7 +17,7 @@ int	populate_red_array(t_shell *parsing, t_token *current_token, t_command *new_
 	new_cmd->red_symbol[parsing->i] = safe_malloc(sizeof(char) * (ft_strlen(current_token->input) + 1));
 	if (!new_cmd->red_symbol[parsing->i])
 	{
-		free_table_parser(parsing);
+		free_command(new_cmd);
 		return (-1);
 	}
 	ft_strlcpy(new_cmd->red_symbol[parsing->i], current_token->input, ft_strlen(current_token->input) + 1);
@@ -29,7 +29,7 @@ int	populate_filename_array(t_shell *parsing, t_token *next_token, t_command *ne
 	new_cmd->filename[parsing->i] = safe_malloc(sizeof(char) * (ft_strlen(next_token->input) + 1));
 	if (!new_cmd->filename[parsing->i])
 	{
-		free_table_parser(parsing);
+		free_command(new_cmd);
 		return (-1);
 	}
 	ft_strlcpy(new_cmd->filename[parsing->i], next_token->input, ft_strlen(next_token->input) + 1);
@@ -42,7 +42,7 @@ int	populate_args_array(t_shell *parsing, t_token *current_token, t_command *new
 	new_cmd->args[parsing->j] = safe_malloc(sizeof(char) * ft_strlen(current_token->input) + 1);
 	if (!new_cmd->args[parsing->j])
 	{
-		free_table_parser(parsing);
+		free_command(new_cmd);
 		return (-1);
 	}
 	ft_strlcpy(new_cmd->args[parsing->j], current_token->input, ft_strlen(current_token->input) + 1);
@@ -56,7 +56,7 @@ int	populate_double_arrays(t_shell *parsing, t_token *current_token, t_token *ne
 	{
 		if (populate_red_array(parsing, current_token, new_cmd) == -1)
 			return (-1);
-		if (is_filename(next_token)) // not sure at the moment
+		if (is_filename(next_token))
 		{
 			if (populate_filename_array(parsing, next_token, new_cmd) == -1)
 				return (-1);
@@ -68,7 +68,6 @@ int	populate_double_arrays(t_shell *parsing, t_token *current_token, t_token *ne
 		if (populate_args_array(parsing, current_token, new_cmd) == -1)
 			return (-1);
 	}
-	// printf("i return from populate_double arrays normally\n");
 	return (0);
 }
 

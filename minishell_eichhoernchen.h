@@ -120,7 +120,7 @@ bool	syntax_errors(t_list *token_list);
 
 //----------------parser----------------//
 void		parser(t_shell *shell);
-int			create_table(t_shell *shell);
+int			create_table(t_shell *shell, t_list *new_node, t_command *new_cmd, t_list *tmp);
 t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing);
 
 //----------------expansion----------------//
@@ -136,6 +136,7 @@ void    *safe_malloc(size_t size);
 char    *safe_ft_substr(const char *s, unsigned int start, size_t len);
 char    *safe_ft_strdup(const char *s);
 char    *safe_ft_strtrim(char *s, const char *set);
+void    *safe_ft_calloc(size_t count, size_t size);
 
 //----------------helpers----------------//
 	//--> builtins
@@ -166,7 +167,9 @@ int		get_int_length(int num);
 //----------free-stuf------------//
 void	free_token(void *content);
 void	clear_all(char **to_clear);
+void	memory_parser(t_shell *parsing, t_command *cmd);
 void	free_table_parser(t_shell *parsing);
+void	free_command(t_command *cmd);
 void    free_three(char *str, char *str2, char *str3);
 int		print_error(int err_no, char *str, int print);
 
