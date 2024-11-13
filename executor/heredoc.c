@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/13 17:27:36 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/13 17:46:51 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	heredoc_child(char *delimiter, int fd)
 		ft_putstr_fd("\n", fd);
 		free (line);
 	}
+	exit (0);
 }
 
 /*-------------------------------------------------------------

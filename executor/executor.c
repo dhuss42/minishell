@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/13 17:15:45 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/13 17:44:11 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 		return (1);
 	if (handle_heredoc(table))
 		return (2);
+	handle_signals(1);
 	nbr_pipes = ft_lstsize(table) - 1;
 	if (nbr_pipes == 0)
 	{

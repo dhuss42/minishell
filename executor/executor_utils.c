@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/30 16:05:30 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/13 17:39:53 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	get_check_path(t_command *row, char **envp)
 {
 	struct stat filestat;
 
+	ft_memset(&filestat, 0, sizeof(filestat));
 	stat(row->args[0], &filestat);
 	if (S_ISDIR(filestat.st_mode))
 		return (print_error(E_CMD_ISDIRECTORY, row->args[0], PRINT));
