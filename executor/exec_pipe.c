@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/30 16:05:20 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/13 11:44:48 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2])
 	tmp = table;
 	while (tmp != NULL)
 	{
+		handle_signals(1);
 		row = (t_command*) tmp->content;
 		if (handle_stuff(envp, row))
 			return (1);

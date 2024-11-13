@@ -21,8 +21,10 @@ int	custom_error(int err_no)
 		ft_putstr_fd("function get_path failed\n", 2);
 	else if (err_no == 127)
 		ft_putstr_fd("command not found\n", 2);
-	else if (err_no == E_PARENT)
-		ft_putstr_fd("error in parent_function\n", 2);
+	// else if (err_no == E_PARENT)
+	// 	ft_putstr_fd("error in parent_function\n", 2);
+	else if (err_no == E_INIT_TERMINAL)
+		ft_putstr_fd("error in init_terminal\n", 2);
 	else if(err_no == E_FILENOEXIST)
 	{
 		ft_putstr_fd("no such file or directory\n", 2);
