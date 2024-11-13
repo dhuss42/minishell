@@ -65,7 +65,7 @@ LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_INCLUDES = -I $(LIBFT_DIR)
 
-all: $(NAME)
+all: $(NAME) executor/tmp
 #@echo "\033[32m minishell built successfully! \033[0m"
 # problem with running make multiple times
 # works when the echo message is deleted. Also affects libft
@@ -79,6 +79,9 @@ $(NAME): $(OFILES) $(LIBFT)
 
 %.o: %.c
 	@$(CC) $(CFLAGS) $(LIBFT_INCLUDES) -c $< -o $@
+
+executor/tmp:
+	@mkdir -p $@
 
 clean:
 	@echo "\033[33m cleaning minishell files \033[0m"

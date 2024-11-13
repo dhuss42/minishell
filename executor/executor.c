@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/13 11:41:39 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/13 14:17:10 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	execute_single_command(char **envp, t_command *row)
 
 	if (handle_stuff(envp, row))
 		return (1);
-	handle_signals(1);
+	// handle_signals(1);
 	// if (is_builtin(row->path))
 	// {
 	// 	call_builtin_fct();

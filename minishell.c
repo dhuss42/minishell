@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/13 11:25:13 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/13 14:29:48 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	main(int argc, char *argv[], char **env)
 	t_shell	shell;
 
 	printf("minishell started\n");
-	init_terminal();
+	// init_terminal();
 	shell.table = NULL;
 	if (argc == 1)
 	{

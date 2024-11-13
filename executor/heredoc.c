@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/13 11:34:48 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/13 14:26:42 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	handle_heredoc_input(char *delimiter, t_command *row)
 	line = NULL;
 	while (1)
 	{
-		handle_signals(0);
+		// handle_signals(0);
 		line = readline("> ");
 		if (line == NULL)
 			break ;
