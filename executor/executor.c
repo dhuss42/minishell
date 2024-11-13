@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/13 14:17:10 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/13 16:04:26 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	single_parent(pid_t id, char* cmd)
 
 	exit_code = 0;
 	if (waitpid(id, &wstatus, 0) == -1)
-		return (print_error(E_PARENT, NULL, PRINT));
+		return (1);
+		// return (print_error(E_PARENT, NULL, PRINT));
 	if (WIFEXITED(wstatus))
 			exit_code = WEXITSTATUS(wstatus);
 	else

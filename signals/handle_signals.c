@@ -35,11 +35,9 @@ void	handle_child_signal(int signal)
 {
 	if (signal == SIGINT)
 	{
-		return ;
-	}
-	if (signal == SIGQUIT)
-	{
-		return ;
+		write(1, "\n", 1);
+		rl_on_new_line();
+		print_error(130, NULL, NOTPRINT);
 	}
 	return ;
 }
@@ -59,6 +57,7 @@ void	handle_sig(int sig)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
+		print_error(130, NULL, NOTPRINT);
 	}
 }
 
@@ -69,26 +68,31 @@ won't respond to the QUIT character (usually Ctrl+) in the terminal.
 ---------------------------------------------------------------*/
 void	handle_signals(int is_child)
 {
-	struct sigaction sa;
+	struct sigaction sa_int;
+	struct sigaction sa_quit;
 
 	if (is_child)
 	{
-		sa.sa_handler = &handle_child_signal;
-		sigemptyset(&sa.sa_mask);
-		sa.sa_flags = SA_RESTART;
-		if (sigaction(SIGINT, &sa, NULL) < 0)
+		sa_int.sa_handler = &handle_child_signal;
+		sigemptyset(&sa_int.sa_mask);
+		// sa.sa_flags = SA_RESTART;
+		sa_int.sa_flags = 0;
+		if (sigaction(SIGINT, &sa_int, NULL) < 0)
 			return ;
-		if (sigaction(SIGQUIT, &sa, NULL) < 0)
-			return ;
+		// if (sigaction(SIGQUIT, &sa, NULL) < 0)
+		// 	return ;
 	}
 	else
 	{
-		sa.sa_handler = &handle_sig;
-		sigemptyset(&sa.sa_mask);
-		sa.sa_flags = 0;
-		if (sigaction(SIGINT, &sa, NULL) < 0)
+		sa_int.sa_handler = &handle_sig;
+		sa_quit.sa_handler = SIG_IGN;
+		sigemptyset(&sa_int.sa_mask);
+		sigemptyset(&sa_quit.sa_mask);
+		sa_int.sa_flags = 0;
+		sa_quit.sa_flags = 0;
+		if (sigaction(SIGINT, &sa_int, NULL) < 0)
 			return ;
-		if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+		if (sigaction(SIGQUIT, &sa_quit, NULL) < 0)
 			return ;
 	}
 }

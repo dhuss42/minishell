@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/13 11:44:48 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/13 16:05:29 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes)
 	while (i <= nbr_pipes)
 	{
 		if (waitpid(pid[i], &wstatus, 0) == -1)
-			return (print_error(E_PARENT, NULL, PRINT));
+			return (1);
+			// return (print_error(E_PARENT, NULL, PRINT));
 		if (WIFEXITED(wstatus))
 			exit_code = WEXITSTATUS(wstatus);
 		else
@@ -140,7 +141,7 @@ int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2])
 	tmp = table;
 	while (tmp != NULL)
 	{
-		handle_signals(1);
+		// handle_signals(1);
 		row = (t_command*) tmp->content;
 		if (handle_stuff(envp, row))
 			return (1);

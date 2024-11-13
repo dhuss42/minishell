@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/13 15:06:39 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/13 15:58:08 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	minishell_loop(t_shell *shell)
 	{
 		handle_signals(0);
 		input = readline("minishell: ");
+		handle_signals(1);
 		if (!input)
 			return ;
 		if (input[0] != '\0')
@@ -47,7 +48,7 @@ int	main(int argc, char *argv[], char **env)
 	t_shell	shell;
 
 	printf("minishell started\n");
-	// init_terminal();
+	init_terminal();
 	shell.table = NULL;
 	if (argc == 1)
 	{

@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/13 11:42:09 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/13 15:57:17 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ typedef enum e_custom_err
 	E_NOTSET,
 	E_CDNOSUCHFOD,
 	E_INIT_TERMINAL,
-	E_PARENT = 130,
+	E_PARENT,
+	E_SIGINT = 130,
 	E_NUMERICARG = 255,
 	E_SYNTAXERROR = 258
 }			t_custom_err;
