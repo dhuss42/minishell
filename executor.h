@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/05 13:49:44 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/13 11:42:09 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <unistd.h>
 # include <stdio.h>
+# include <signal.h>
+# include <termios.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <stdlib.h>
@@ -33,7 +35,6 @@ typedef enum e_custom_err
 {
 	E_CUSTOM_ARGC = 107,
 	E_PATH,
-	E_PARENT,
 	E_FILENOEXIST,
 	E_NOPERMISSION,
 	E_CMD_ISDIRECTORY,
@@ -42,6 +43,8 @@ typedef enum e_custom_err
 	E_NOCLOSINGQUOTE,
 	E_NOTSET,
 	E_CDNOSUCHFOD,
+	E_INIT_TERMINAL,
+	E_PARENT = 130,
 	E_NUMERICARG = 255,
 	E_SYNTAXERROR = 258
 }			t_custom_err;
@@ -97,5 +100,9 @@ int		redirect_output(t_command row, int *fd);
 int		executor(char **envp, t_list *table, t_shell *shell);
 int		pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2]);
 int		pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes);
+
+//-------------signals---------
+void	handle_signals(int is_child);
+void	init_terminal(void);
 
 #endif

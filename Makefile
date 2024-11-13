@@ -51,6 +51,7 @@ CFILES = minishell.c\
 	executor/find_path.c\
 	executor/heredoc.c\
 	executor/redirections.c\
+	signals/handle_signals.c\
 	print_tokenlist.c\
 	print_table.c
 
