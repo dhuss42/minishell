@@ -78,7 +78,7 @@ void	populate_trim_str(t_shell *trim, char *input)
 {
 	trim->j = 0;
 	trim->i = 0;
-	trim->isspace = false; 
+	trim->isspace = false;
 	while (trim->j < trim->len)
 	{
 		// printf("[%zu] < [%zu]\n", trim->j, trim->len);
@@ -118,7 +118,7 @@ char *trim_spaces(char *input, t_shell *shell)
 	}
 	trim.len = get_len(trim_inpt, shell);
 	if (shell->syntax_error == true)
-		return (NULL);
+		return (free(trim_inpt), NULL);
 	trim.res = ft_calloc(sizeof(char), (trim.len + 1));
 	if (!trim.res)
 	{

@@ -28,3 +28,5 @@ void  lexer(t_shell *shell, char *input)
     shell->syntax_error = syntax_errors(shell->list);
     free_three(input, trim_inpt, res);
 }
+
+// echo "shit    i" hello |grep<file>>outfile|'"''whyallthe>quotes

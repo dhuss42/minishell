@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:37 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/06 15:12:26 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/13 13:44:21 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	copy_unset_varibles(t_shell *shell, t_command *row, char **tmp)
 	{
 		if (should_copy_env_var(row, shell->env[k], shell->i))
 		{
-			tmp[j] = ft_strdup(shell->env[k]);
+			tmp[j] = safe_ft_strdup(shell->env[k]);
 			if (!tmp[j])
 			{
 				clear_all(tmp);
@@ -89,7 +89,7 @@ int	copy_unset_varibles(t_shell *shell, t_command *row, char **tmp)
 	return (0);
 }
 // mangages the copying of non-unset environment variables tmp
-// iterates through envs calling should_copy_env_var to determine if current 
+// iterates through envs calling should_copy_env_var to determine if current
 // variable should be copied into tmp
 
 int ft_unset(t_shell *shell, t_command *row)
@@ -97,13 +97,13 @@ int ft_unset(t_shell *shell, t_command *row)
 	char	**tmp;
 
 	get_len_unset(shell, row);
-	tmp = (char **)safe_malloc(sizeof(char *) * shell->len + 1);
+	tmp = (char **)safe_malloc(sizeof(char *) * (shell->len + 1));
 	if (!tmp)
 		return (-1);
 	if (copy_unset_varibles(shell, row, tmp) == -1)
-		return (-1);
+		return (-1); // free tmp?
 	return (finalise_unset(shell, tmp));
 }
 
 // allocates tmp with safe_malloc
-// 
+//
