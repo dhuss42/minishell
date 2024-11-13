@@ -1,21 +1,4 @@
 
-<infile cat -e | cat -e | cat -e|cat-e| >outfile >out
-
--->	==765== Conditional jump or move depends on uninitialised value(s)
-	==765==    at 0x10F0EA: free_row (exec_free.c:65)
-	==765==    by 0x10F196: free_table (exec_free.c:97)
-	==765==    by 0x10931B: minishell_loop (minishell.c:36)
-	==765==    by 0x109497: main (minishell.c:79)
-
-<------------------------------------------------------------------->
-
-< <<
-
-minishell: <<: syntax error near unexpected token
-bash: syntax error near unexpected token `<<'
-
-<------------------------------------------------------------------->
-
 echo Hello, World!
 
 minishell: echo Hello, World!
