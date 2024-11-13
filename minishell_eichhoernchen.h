@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/06 14:35:44 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/13 15:04:17 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ char 	**set_to_null(char **tmp, size_t len);
 size_t  get_len_new_env(char **env, t_command *row, size_t i);
 int	update_pwd(t_shell *shell);
 int	update_oldpwd(t_shell *shell, char *content);
+char	**duplicate_double_ptr(char **double_ptr);
 
 	//--> lexer
 bool	is_special(char input);

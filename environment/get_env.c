@@ -20,6 +20,10 @@ int	copy_env(char **env, t_shell *shell)
 		i++;
 	}
 	new_env[i] = NULL;
-	shell->env = new_env;
+	shell->env = duplicate_double_ptr(new_env);
+	if (!shell->env)
+		return (clear_all(new_env), -1);
+	clear_all(new_env);
+	// shell->env = new_env; // probably have to duplicate here
 	return (0);
 }
