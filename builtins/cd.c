@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:34 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/06 10:53:58 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/14 15:23:36 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,20 +65,22 @@ int		ft_cd(t_shell *shell, t_command *row)
 
 	current_dir = getcwd(NULL, 0);
 	if (!current_dir)
+	{
 		return (print_error(errno, NULL, PRINT));
+	}
 	if (!row->args[1])
 	{
 		if (cd_no_args(shell, row, current_dir) != 0)
-			return (-1);
+			return (free(current_dir), -1);
 	}
 	else if (row->args[1])
 	{
 		if (chdir(row->args[1]) == -1)
-			return (print_error(errno, row->args[1], PRINT));
+			return (free(current_dir), print_error(errno, row->args[1], PRINT));
 		if (update_oldpwd(shell, current_dir) != 0)
-			return (-1);
+			return (free(current_dir), -1);
 		if (update_pwd(shell) != 0)
-			return (-1);
+			return (free(current_dir), -1);
 	}
 	return (0);
 }
