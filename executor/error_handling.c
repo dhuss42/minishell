@@ -25,6 +25,8 @@ int	custom_error(int err_no)
 	// 	ft_putstr_fd("error in parent_function\n", 2);
 	else if (err_no == E_INIT_TERMINAL)
 		ft_putstr_fd("error in init_terminal\n", 2);
+	else if (err_no == E_BUILTIN)
+		ft_putstr_fd("error in builtins\n", 2);
 	else if(err_no == E_FILENOEXIST)
 	{
 		ft_putstr_fd("no such file or directory\n", 2);

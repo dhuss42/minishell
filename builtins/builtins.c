@@ -1,59 +1,60 @@
 
 #include "../minishell_eichhoernchen.h"
 
-void	test_builtins(t_shell *shell)
+int	test_builtins(t_shell *shell)
 {
 	t_command   *row;
 
-	if (shell->syntax_error == true)
-		return ;
-	while (shell->table != NULL)
+	if (shell->table == NULL)
+		return (-1);
+	row = (t_command*) shell->table->content;
+	shell->i = 0;
+	if (row->args[0] == NULL)
+		return (1);
+	if (ft_strlen(row->args[0]) == 2)
 	{
-		row = (t_command*) shell->table->content;
-		shell->i = 0;
-		while (row->args[shell->i] != NULL)
-		{
-			if (ft_strncmp(row->args[shell->i], "echo", /* ft_strlen(row->args[shell->i])) */4) == 0 /* && ft_strlen(row->args[shell->i]) == 4 */)
-			{
-				if (ft_echo(shell, row) == -1)
-					return ;
-			}
-			else if (ft_strncmp(row->args[shell->i], "pwd", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 3)
-			{
-				if (ft_pwd() == -1)
-					return ;
-			}
-			else if (ft_strncmp(row->args[shell->i], "env", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 3)
-			{
-				if (ft_env(shell) == -1)
-					return ;
-			}
-			else if (ft_strncmp(row->args[shell->i], "export", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 6)
-			{
-				if (ft_export(shell, row) == -1)
-					return ;
-			}
-			else if (ft_strncmp(row->args[shell->i], "unset", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 5)
-			{
-				if (ft_unset(shell, row) == -1)
-					return ;
-			}
-			else if (ft_strncmp(row->args[shell->i], "cd", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 2)
-			{
-				if (ft_cd(shell, row) == -1)
-					return ;
-			}
-			else if (ft_strncmp(row->args[shell->i], "exit", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 4)
-			{
-				ft_exit(row);
-					return ;
-			}
-			// if (row->args[shell->i] == NULL)
-				break ;
-			shell->i++;
-		}
-		shell->table = shell->table->next;
+		if (ft_strncmp(row->args[0], "cd", 2) == 0)
+			return (ft_cd(shell, row));
 	}
+	else if (ft_strlen(row->args[0]) == 3)
+	{
+		if (ft_strncmp(row->args[0], "pwd", 3) == 0)
+			return (ft_pwd());
+		else if (ft_strncmp(row->args[0], "env", 3) == 0)
+			return (ft_env(shell));
+	}
+	else if (ft_strlen(row->args[0]) == 4)
+	{
+		if (ft_strncmp(row->args[0], "echo", 4) == 0)
+			return (ft_echo(shell, row));
+		else if (ft_strncmp(row->args[0], "exit", 4) == 0)
+			ft_exit(row);
+	}
+	else if (ft_strlen(row->args[0]) == 5)
+	{
+		if (ft_strncmp(row->args[0], "unset", 5) == 0)
+		return (ft_unset(shell, row));
+	}
+	else if (ft_strlen(row->args[0]) == 6)
+	{
+		if (ft_strncmp(row->args[0], "export", 6) == 0)
+			return (ft_export(shell, row));
+	}
+	// else if (ft_strncmp(row->args[0], "echo", 4) == 0 && ft_strlen(row->args[0]) == 4)
+	// 	return (ft_echo(shell, row));
+	// else if (ft_strncmp(row->args[0], "pwd", 3) == 0 && ft_strlen(row->args[0]) == 3)
+	// 	return (ft_pwd());
+	// else if (ft_strncmp(row->args[0], "env", 3) == 0 && ft_strlen(row->args[0]) == 3)
+	// 	return (ft_env(shell));
+	// else if (ft_strncmp(row->args[0], "export", 6) == 0 && ft_strlen(row->args[0]) == 6)
+	// 	return (ft_export(shell, row));
+	// else if (ft_strncmp(row->args[0], "unset", 5) == 0 && ft_strlen(row->args[0]) == 5)
+	// 	return (ft_unset(shell, row));
+	// else if (ft_strncmp(row->args[0], "cd", 2) == 0 && ft_strlen(row->args[0]) == 2)
+	// 	return (ft_cd(shell, row));
+	// else if (ft_strncmp(row->args[0], "exit", 4) == 0 && ft_strlen(row->args[0]) == 4)
+	// 	ft_exit(row);
+	return (1);
 }
 
 // not sure if the while loop is necessary

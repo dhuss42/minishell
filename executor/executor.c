@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/13 17:44:11 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 11:20:48 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,16 +78,19 @@ void	single_child(char *path, char **envp, t_command *row)
 /*-------------------------------------------------------------
 execute single command without pipe
 ---------------------------------------------------------------*/
-int	execute_single_command(char **envp, t_command *row)
+int	execute_single_command(char **envp, t_command *row, t_shell *shell)
 {
 	pid_t	id;
 
+	//check files
+	if (test_builtins(shell) == 0)
+		return (0);
+	else if (test_builtins(shell) < 0)
+		return (print_error(E_BUILTIN, NULL, PRINT));
+	//check path
 	if (handle_stuff(envp, row))
 		return (1);
-	// if (is_builtin(row->path))
-	// {
-	// 	call_builtin_fct();
-	// }
+	printf("-----NOT A BUILTIN!-----\n");
 	if (row->args[0])
 	{
 		id = fork();
@@ -121,7 +124,7 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 	if (nbr_pipes == 0)
 	{
 		current_cmd = (t_command*) table->content;
-		if (execute_single_command(envp, current_cmd))
+		if (execute_single_command(envp, current_cmd, shell))
 			return (3);
 	}
 	else if (nbr_pipes > 0)
