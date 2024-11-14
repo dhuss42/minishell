@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/13 15:58:08 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 10:41:03 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	minishell_loop(t_shell *shell)
 		input = readline("minishell: ");
 		handle_signals(1);
 		if (!input)
-			return ;
+			return clear_all(shell->env);
 		if (input[0] != '\0')
 		{
 			lexer(shell, input);

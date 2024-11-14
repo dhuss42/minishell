@@ -1,16 +1,8 @@
 
-echo Hello, World!
-
-minishell: echo Hello, World!
-==1199== Conditional jump or move depends on uninitialised value(s)
-==1199==    at 0x110F08: get_check_path (executor_utils.c:35)
-==1199==    by 0x111091: handle_stuff (executor_utils.c:61)
-==1199==    by 0x11135C: execute_single_command (executor.c:85)
-==1199==    by 0x111474: executor (executor.c:124)
-==1199==    by 0x1093C0: minishell_loop (minishell.c:34)
-==1199==    by 0x10948A: main (minishell.c:58)
-
 <------------------------------------------------------------------->
+
+
+
 <------------------------------------------------------------------->
 <------------------------------------------------------------------->
 <------------------------------------------------------------------->

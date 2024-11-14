@@ -249,3 +249,81 @@ cat result.txt
 export COMPLEX_VAR="Complexity"
 echo "$COMPLEX_VAR is important" | { unset COMPLEX_VAR; echo "${COMPLEX_VAR:-Unset variable}"; }
 # Expected output: Unset variable
+
+//-----Tests for commands pipes and redirections -----//
+
+# 1. Pipe chain with simple redirection to a file
+echo "Hello World" | tr '[:upper:]' '[:lower:]' > output.txt
+# Expected output in output.txt: hello world
+# Explanation: Tests if the output of the pipe chain is correctly redirected to a file.
+
+# 2. Complex pipe chain with multiple transformations
+echo "Hello World" | tr ' ' '\n' | grep "World" | tr '[:lower:]' '[:upper:]'
+# Expected output: WORLD
+# Explanation: Breaks "Hello World" into separate lines, searches for "World", and outputs it in uppercase.
+
+# 3. Using a file as input, transforming content, and redirecting output to a new file
+echo -e "line1\nline2\nline3" > input.txt
+cat < input.txt | grep "line2" | tr '[:lower:]' '[:upper:]' > output.txt
+# Expected output in output.txt: LINE2
+# Explanation: Tests input redirection, filtering with `grep`, and final redirection to output.
+
+# 4. Multiple pipes with intermediate file redirection
+echo "apple\nbanana\ncarrot" | tee fruits.txt | grep "a" > result.txt
+# Expected output in result.txt: apple\nbanana\ncarrot
+# Explanation: Uses `tee` to write to a file mid-pipeline, filters for lines with "a," and redirects final output.
+
+# 5. Pipe chain with variable expansion and redirection
+export GREETING="Hello"
+echo "$GREETING World" | tr '[:lower:]' '[:upper:]' > greeting.txt
+# Expected output in greeting.txt: HELLO WORLD
+# Explanation: Checks if variable expansion and output redirection both work correctly within a pipeline.
+
+# 6. Testing redirection and append with pipes
+echo "First line" > output.txt
+echo "Second line" | tee -a output.txt | grep "Second" | tr '[:lower:]' '[:upper:]' >> output.txt
+# Expected output in output.txt:
+# First line
+# Second line
+# SECOND LINE
+# Explanation: Appends output through multiple stages and checks if `-a` appends correctly.
+
+# 7. Nested commands with redirections in a pipeline
+echo "This is a test" | { echo "Output before modification"; cat; } | tr '[:lower:]' '[:upper:]' > final.txt
+# Expected output in final.txt:
+# OUTPUT BEFORE MODIFICATION
+# THIS IS A TEST
+# Explanation: Nested command execution and redirection with pipes to verify command grouping behavior.
+
+# 8. Pipe with both input and output redirection
+echo "Shell test" > input.txt
+cat < input.txt | tr '[:lower:]' '[:upper:]' > output.txt
+# Expected output in output.txt: SHELL TEST
+# Explanation: Tests combined use of input redirection, pipes, and output redirection.
+
+# 9. Multi-command pipeline with redirection and intermediate filtering
+echo -e "Apple\nBanana\nCherry" | grep -i "a" | sort | tr '[:lower:]' '[:upper:]' > sorted_output.txt
+# Expected output in sorted_output.txt:
+# APPLE
+# BANANA
+# CHERRY
+# Explanation: Multiple filters in sequence, sorting, and final output redirection.
+
+# 10. Chained commands with conditional pipes and output redirection
+echo "Hello Shell" | grep "Hello" && echo "Found Hello" > condition.txt || echo "Not Found" > condition.txt
+# Expected output in condition.txt: Found Hello
+# Explanation: Tests conditional command execution with `&&` and `||` and redirection to verify logic.
+
+# 11. Redirecting stderr and stdout in a pipe
+ls non_existent_file 2> error.log | cat nonexistent_file | tr '[:lower:]' '[:upper:]' > output.log
+# Expected output in error.log: ls: cannot access 'non_existent_file': No such file or directory
+# Expected output in output.log: (should be empty due to non-existent input)
+# Explanation: Checks redirection of error output to a file and tests behavior with an invalid pipe stage.
+
+# 12. Multiple redirections with a command in a pipeline
+echo "First" > test.txt
+echo "Second" | tee test.txt | tr '[:lower:]' '[:upper:]' >> test.txt
+# Expected output in test.txt:
+# Second
+# SECOND
+# Explanation: Combines `tee` and append redirection to test mid-pipeline redirection and appending.
