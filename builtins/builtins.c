@@ -1,13 +1,13 @@
 
 #include "../executor.h"
 
-int	builtins(t_shell *shell)
+int	builtins(t_shell *shell, t_command *row)
 {
-	t_command   *row;
+	// t_command   *row;
 
 	if (shell->table == NULL)
 		return (-1);
-	row = (t_command*) shell->table->content;
+	// row = (t_command*) shell->table->content;
 	shell->i = 0;
 	if (row->args[0] == NULL)
 		return (1);
@@ -45,14 +45,14 @@ int	builtins(t_shell *shell)
 
 int	check_builtins(t_shell *shell, t_command *row)
 {
-	if (builtins(shell) == 0)
+	if (builtins(shell, row) == 0)
 	{
 		dup2(row->original_stdout, STDOUT_FILENO);
 		dup2(row->original_stdin, STDIN_FILENO);
 		// close(row->original_stdout);
 		return (0);
 	}
-	else if (builtins(shell) < 0)
+	else if (builtins(shell, row) < 0)
 	{
 		dup2(row->original_stdout, STDOUT_FILENO);
 		dup2(row->original_stdin, STDIN_FILENO);
