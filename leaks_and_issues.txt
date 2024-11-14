@@ -1,7 +1,13 @@
 
 <------------------------------------------------------------------->
 
+minishell: ls non_existent_file 2> error.log | cat nonexistent_file | tr '[:lower:]' '[:upper:]' > output.log
 
+ls: cannot access 'non_existent_file': No such file or directory
+ls: cannot access '2': No such file or directory
+cat: nonexistent_file: No such file or directory
+
+bash: cat: nonexistent_file: No such file or directory
 
 <------------------------------------------------------------------->
 <------------------------------------------------------------------->

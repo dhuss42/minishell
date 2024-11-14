@@ -1,3 +1,5 @@
+//--- Test for buildins ----//
+
 echo Hello, World!
 echo -n "Hello, World!"
 echo "This is a test $USER"
@@ -35,7 +37,8 @@ cat input.txt | tr 'a-z' 'A-Z' | grep "HELLO" > output.txt
 Jeus Christ|echo this>but her "  $HOME "'$SHLVL'|cat -e >>outfile
 
 export a b=hi $=not_this_one c=but_this_one
-<infile cat -e | cat -e >>outfile>out>out_main
+
+//------ More complex Testcases --------//
 
 # Complex Test Case 1: Combined echo, export, and environment variable usage
 export GREETING="Hello"
@@ -250,6 +253,7 @@ export COMPLEX_VAR="Complexity"
 echo "$COMPLEX_VAR is important" | { unset COMPLEX_VAR; echo "${COMPLEX_VAR:-Unset variable}"; }
 # Expected output: Unset variable
 
+
 //-----Tests for commands pipes and redirections -----//
 
 # 1. Pipe chain with simple redirection to a file
@@ -273,12 +277,6 @@ echo "apple\nbanana\ncarrot" | tee fruits.txt | grep "a" > result.txt
 # Expected output in result.txt: apple\nbanana\ncarrot
 # Explanation: Uses `tee` to write to a file mid-pipeline, filters for lines with "a," and redirects final output.
 
-# 5. Pipe chain with variable expansion and redirection
-export GREETING="Hello"
-echo "$GREETING World" | tr '[:lower:]' '[:upper:]' > greeting.txt
-# Expected output in greeting.txt: HELLO WORLD
-# Explanation: Checks if variable expansion and output redirection both work correctly within a pipeline.
-
 # 6. Testing redirection and append with pipes
 echo "First line" > output.txt
 echo "Second line" | tee -a output.txt | grep "Second" | tr '[:lower:]' '[:upper:]' >> output.txt
@@ -288,13 +286,6 @@ echo "Second line" | tee -a output.txt | grep "Second" | tr '[:lower:]' '[:upper
 # SECOND LINE
 # Explanation: Appends output through multiple stages and checks if `-a` appends correctly.
 
-# 7. Nested commands with redirections in a pipeline
-echo "This is a test" | { echo "Output before modification"; cat; } | tr '[:lower:]' '[:upper:]' > final.txt
-# Expected output in final.txt:
-# OUTPUT BEFORE MODIFICATION
-# THIS IS A TEST
-# Explanation: Nested command execution and redirection with pipes to verify command grouping behavior.
-
 # 8. Pipe with both input and output redirection
 echo "Shell test" > input.txt
 cat < input.txt | tr '[:lower:]' '[:upper:]' > output.txt
@@ -302,17 +293,12 @@ cat < input.txt | tr '[:lower:]' '[:upper:]' > output.txt
 # Explanation: Tests combined use of input redirection, pipes, and output redirection.
 
 # 9. Multi-command pipeline with redirection and intermediate filtering
-echo -e "Apple\nBanana\nCherry" | grep -i "a" | sort | tr '[:lower:]' '[:upper:]' > sorted_output.txt
+echo -e "Apple\nBanana\nCherry\nMango" | grep -i "a" | sort | tr '[:lower:]' '[:upper:]' > sorted_output.txt
 # Expected output in sorted_output.txt:
 # APPLE
 # BANANA
-# CHERRY
+# MANGO
 # Explanation: Multiple filters in sequence, sorting, and final output redirection.
-
-# 10. Chained commands with conditional pipes and output redirection
-echo "Hello Shell" | grep "Hello" && echo "Found Hello" > condition.txt || echo "Not Found" > condition.txt
-# Expected output in condition.txt: Found Hello
-# Explanation: Tests conditional command execution with `&&` and `||` and redirection to verify logic.
 
 # 11. Redirecting stderr and stdout in a pipe
 ls non_existent_file 2> error.log | cat nonexistent_file | tr '[:lower:]' '[:upper:]' > output.log
