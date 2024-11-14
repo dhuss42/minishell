@@ -43,11 +43,21 @@ int	builtins(t_shell *shell)
 	return (1);
 }
 
-int	check_builtins(t_shell *shell)
+int	check_builtins(t_shell *shell, t_command *row)
 {
 	if (builtins(shell) == 0)
+	{
+		dup2(row->original_stdout, STDOUT_FILENO);
+		dup2(row->original_stdin, STDIN_FILENO);
+		// close(row->original_stdout);
 		return (0);
+	}
 	else if (builtins(shell) < 0)
+	{
+		dup2(row->original_stdout, STDOUT_FILENO);
+		dup2(row->original_stdin, STDIN_FILENO);
+		// close(row->original_stdout);
 		return (print_error(E_BUILTIN, NULL, PRINT));
+	}
 	return (1);
 }

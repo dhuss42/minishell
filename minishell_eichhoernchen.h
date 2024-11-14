@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/14 11:46:54 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 12:24:34 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ typedef struct s_command
 	char	*final_outfile;
 	char	*final_in_red;
 	char	*final_out_red;
+	int		original_stdout;
+	int		original_stdin;
 	char	*heredoc_file_path;	//to free
 } t_command;
 
@@ -178,6 +180,6 @@ int		print_error(int err_no, char *str, int print);
 void	print_token(t_token *tok);
 void	print_token_list(t_list *list);
 void	print_table(t_shell *shell);
-int		check_builtins(t_shell *shell);
+int		check_builtins(t_shell *shell, t_command *row);
 
 #endif

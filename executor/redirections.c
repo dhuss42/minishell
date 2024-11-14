@@ -6,11 +6,17 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:38:08 by maustel           #+#    #+#             */
-/*   Updated: 2024/10/29 11:45:03 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 12:38:12 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../executor.h"
+
+void	reset_redirections(t_command row)
+{
+	dup2(row.original_stdout, STDOUT_FILENO);
+	dup2(row.original_stdin, STDIN_FILENO);
+}
 
 /*-------------------------------------------------------------
 duplicate fd from final infile to stdin
@@ -18,7 +24,7 @@ duplicate fd from final infile to stdin
 int	redirect_input(t_command row, int *fd)
 {
 	*fd = open(row.final_infile, O_RDONLY);
-	if (dup2(*fd, 0) == -1)
+	if (dup2(*fd, STDIN_FILENO) == -1)
 		return (print_error(errno, NULL, PRINT));
 	if (close(*fd) == -1)
 		return (print_error(errno, NULL, PRINT));
@@ -38,7 +44,7 @@ int	redirect_output(t_command row, int *fd)
 		return (1);
 	if (*fd == -1)
 		return (print_error(errno, NULL, PRINT));
-	if (dup2(*fd, 1) == -1)
+	if (dup2(*fd, STDOUT_FILENO) == -1)
 		return (print_error(errno, NULL, PRINT));
 	if (close(*fd) == -1)
 		return (print_error(errno, NULL, PRINT));
@@ -52,6 +58,8 @@ int	exec_redirections(t_command *row)
 {
 	int	fd;
 
+	row->original_stdout = dup(STDOUT_FILENO);
+	row->original_stdin = dup(STDIN_FILENO);
 	if (row->final_outfile && row->final_out_red)
 	{
 		if (redirect_output(*row, &fd))

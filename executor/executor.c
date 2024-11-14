@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/14 11:55:24 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 12:38:47 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,10 @@ int	execute_single_command(char **envp, t_command *row, t_shell *shell)
 		return (1);
 	if (exec_redirections(row))
 		return (2);
-	if (check_builtins(shell) < 1)
+	if (check_builtins(shell, row) < 1)
 		return (0);
 	if (get_check_path(row, envp))
-		return (2);
-	printf("-----NOT A BUILTIN!-----\n");
+		return (3);
 	if (row->args[0])
 	{
 		id = fork();
@@ -104,6 +103,7 @@ int	execute_single_command(char **envp, t_command *row, t_shell *shell)
 				return (2);
 		}
 	}
+	reset_redirections(*row);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/14 11:51:11 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 12:38:35 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int		free_table(t_list *table);
 int		handle_heredoc(t_list *table);
 int		redirect_input(t_command row, int *fd);
 int		redirect_output(t_command row, int *fd);
+void	reset_redirections(t_command row);
 int		executor(char **envp, t_list *table, t_shell *shell);
 int		pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2]);
 int		pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes);
