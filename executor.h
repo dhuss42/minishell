@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/14 12:38:35 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 13:50:12 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int		check_files(t_command *row);
 int		exec_redirections(t_command *row);
 void	free_double(char **to_free);
 int		free_row(t_command *example);
-int		execute_pipechain(char **envp, t_list *table, int nbr_pipes);
+// int		execute_pipechain(char **envp, t_list *table, int nbr_pipes, t_shell *shell);
 int		handle_stuff(char **envp, t_command *row);
 int		get_check_path(t_command *row, char **envp);
 int		free_table(t_list *table);
@@ -103,7 +103,7 @@ int		redirect_input(t_command row, int *fd);
 int		redirect_output(t_command row, int *fd);
 void	reset_redirections(t_command row);
 int		executor(char **envp, t_list *table, t_shell *shell);
-int		pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2]);
+int		pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2], t_shell *shell);
 int		pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes);
 
 //-------------signals---------

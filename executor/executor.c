@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/14 12:49:54 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 14:04:17 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*-------------------------------------------------------------
 Handle pipechain
 ---------------------------------------------------------------*/
-int	execute_pipechain(char **envp, t_list *table, int nbr_pipes)
+int	execute_pipechain(char **envp, t_list *table, int nbr_pipes, t_shell *shell)
 {
 	int		fd[nbr_pipes][2];
 	pid_t	pid[nbr_pipes + 1];
@@ -28,7 +28,7 @@ int	execute_pipechain(char **envp, t_list *table, int nbr_pipes)
 			return (print_error(errno, NULL, PRINT));
 		n++;
 	}
-	if (pipechain_loop(envp, table, pid, fd))
+	if (pipechain_loop(envp, table, pid, fd, shell))
 		return (1);
 	if (pipe_parent(pid, fd, table, nbr_pipes))
 		return (2);
@@ -40,6 +40,7 @@ Handle parent for single command
 waitpid() blocks until the child process terminates or until a signal occurs
 WIFEXITED(wstatus) macro checks if the process exited normally
 WEXITwSTATUS(wstatus) extracts the exit wstatus value from the wstatus argument
+if (WIFSIGNALED(wstatus)): if interrupted with signal
 ---------------------------------------------------------------*/
 int	single_parent(pid_t id, char* cmd)
 {
@@ -66,8 +67,6 @@ if it doesnt fail, exit code is 0
 ---------------------------------------------------------------*/
 void	single_child(char *path, char **envp, t_command *row)
 {
-	// if (exec_redirections(row))
-	// 	exit (2);
 	if (execve(path, row->args, envp))
 		{
 			free_row(row);
@@ -132,7 +131,7 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 	}
 	else if (nbr_pipes > 0)
 	{
-		if (execute_pipechain(envp, table, nbr_pipes))
+		if (execute_pipechain(envp, table, nbr_pipes, shell))
 			return (4);
 	}
 	return (0);

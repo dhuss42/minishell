@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/13 17:15:41 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 14:14:40 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,15 +101,10 @@ static int	duplicate_fd(t_command *row, int (*fd)[2], int nbr_pipes)
 /*-------------------------------------------------------------
 Child handler for pipechain
 ---------------------------------------------------------------*/
-static void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_list *table)
+static void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_list *table, t_shell *shell)
 {
 	int	nbr_pipes;
 
-	// if (is_builtin(row->path))
-	// {
-	// 	call_builtin_fct();
-	// 	exit (free_table(table));
-	// }
 	if (!row->path)
 	{
 		free_table(table);
@@ -120,6 +115,8 @@ static void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_list *table)
 		exit (print_error(errno, NULL, PRINT));
 	if (duplicate_fd(row, fd, nbr_pipes))
 		exit(errno);
+	if (check_builtins(shell, row) < 1)
+		exit (free_table(table));
 	if (execve(row->path, row->args, envp))
 	{
 		free_table(table);
@@ -130,7 +127,7 @@ static void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_list *table)
 /*-------------------------------------------------------------
 Loop through all the pipes
 ---------------------------------------------------------------*/
-int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2])
+int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2], t_shell *shell)
 {
 	int			n;
 	t_command	*row;
@@ -140,7 +137,6 @@ int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2])
 	tmp = table;
 	while (tmp != NULL)
 	{
-		// handle_signals(1);
 		row = (t_command*) tmp->content;
 		if (handle_stuff(envp, row))
 			return (1);
@@ -148,7 +144,8 @@ int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2])
 		if (pid[n] == -1)
 			return (print_error(errno, NULL, PRINT));
 		if (pid[n] == 0)
-			pipe_child(row, envp, fd, table);
+			pipe_child(row, envp, fd, table, shell);
+		usleep(30);
 		tmp = tmp->next;
 		n++;
 	}
