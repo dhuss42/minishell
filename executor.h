@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/14 11:01:42 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 11:51:11 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ typedef enum e_print_err
 // 	// char	*final_out_red;
 // }					t_exec;
 
+
+//-----------------executor-----------------------
 char	*get_path(char *cmd, char **envp);
 void	free_paths(char **split_paths, char **append);
 // int		print_error(int err_no, char *str, int print);

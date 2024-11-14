@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/14 11:20:48 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 11:55:24 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ if it doesnt fail, exit code is 0
 ---------------------------------------------------------------*/
 void	single_child(char *path, char **envp, t_command *row)
 {
-	if (exec_redirections(row))
-		exit (2);
+	// if (exec_redirections(row))
+	// 	exit (2);
 	if (execve(path, row->args, envp))
 		{
 			free_row(row);
@@ -82,14 +82,14 @@ int	execute_single_command(char **envp, t_command *row, t_shell *shell)
 {
 	pid_t	id;
 
-	//check files
-	if (test_builtins(shell) == 0)
-		return (0);
-	else if (test_builtins(shell) < 0)
-		return (print_error(E_BUILTIN, NULL, PRINT));
-	//check path
-	if (handle_stuff(envp, row))
+	if (check_files(row))
 		return (1);
+	if (exec_redirections(row))
+		return (2);
+	if (check_builtins(shell) < 1)
+		return (0);
+	if (get_check_path(row, envp))
+		return (2);
 	printf("-----NOT A BUILTIN!-----\n");
 	if (row->args[0])
 	{

@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/14 10:57:12 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 11:46:54 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,6 @@ int		print_error(int err_no, char *str, int print);
 void	print_token(t_token *tok);
 void	print_token_list(t_list *list);
 void	print_table(t_shell *shell);
-int    test_builtins(t_shell *shell);
+int		check_builtins(t_shell *shell);
 
 #endif
