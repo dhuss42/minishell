@@ -43,8 +43,13 @@ when in multiple minishells
 running exit exits all shells not the current one
 
  				[----- solution idea -----]
--> instead of calling exit the function should set a value to true and return to the main loop
--> in main loop check if the value is true then return to main and return exit_code in main
+
+-> create a bool in the shell struct called exit
+-> set exit to false
+-> in ft_exit set shell->exit to true
+-> in main loop check if the value is true then return to main and  in main return (print_error(0, NULL, NOTPRINT)) in main
+
+-> exit with the error code in main
 
 <------------------------------------------------------------------->
 [4.]
