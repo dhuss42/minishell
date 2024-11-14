@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/14 12:38:47 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 12:49:54 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,10 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 	{
 		current_cmd = (t_command*) table->content;
 		if (execute_single_command(envp, current_cmd, shell))
+		{
+			reset_redirections(*current_cmd);
 			return (3);
+		}
 	}
 	else if (nbr_pipes > 0)
 	{
