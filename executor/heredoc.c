@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/13 17:46:51 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/14 15:27:35 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	heredoc_parent(pid_t pid)
 	return (exit_code);
 }
 
-void	heredoc_child(char *delimiter, int fd)
+void	heredoc_child(char *delimiter, int fd, char **env)
 {
 	char	*line;
 
@@ -54,7 +54,7 @@ void	heredoc_child(char *delimiter, int fd)
 		line = readline("> ");
 		if (line == NULL)
 			break ;
-		//expansion!
+		heredoc_expansion(line, env);
 		if (ft_strlen(line) == ft_strlen(delimiter)
 			&&ft_strncmp(line, delimiter, ft_strlen(line)) == 0)
 		{
@@ -74,7 +74,7 @@ write until delimiter into file
 the funciton readline has memory issues (still reachable)
 see with valgrind --leak-check=full --show-leak-kinds=all
 ---------------------------------------------------------------*/
-static int	handle_heredoc_input(char *delimiter, t_command *row)
+static int	handle_heredoc_input(char *delimiter, t_command *row, char **env)
 {
 	pid_t pid;
 	int		fd;
@@ -87,7 +87,7 @@ static int	handle_heredoc_input(char *delimiter, t_command *row)
 	if (pid == -1)
 			return (print_error(errno, NULL, PRINT));
 	else if (pid == 0)
-		heredoc_child(delimiter, fd);
+		heredoc_child(delimiter, fd, env);
 	heredoc_parent(pid);
 	if (close(fd) == -1)
 		return (print_error(errno, NULL, PRINT));
@@ -97,7 +97,7 @@ static int	handle_heredoc_input(char *delimiter, t_command *row)
 /*-------------------------------------------------------------
 check if symbol is heredoc, then handle heredoc input
 ---------------------------------------------------------------*/
-static int go_through_heredoc_files(t_command *row)
+static int go_through_heredoc_files(t_command *row, char **env)
 {
 	int	i;
 
@@ -106,7 +106,7 @@ static int go_through_heredoc_files(t_command *row)
 	{
 		if (row->red_symbol[i][0] == '<' && row->red_symbol[i][1] == '<')
 		{
-			if (handle_heredoc_input(row->filename[i], row))
+			if (handle_heredoc_input(row->filename[i], row, env))
 				return (1);
 		}
 		i++;
@@ -127,7 +127,7 @@ void init_content(t_command *row)
 /*-------------------------------------------------------------
 Go through table and handle each heredoc in each row
 ---------------------------------------------------------------*/
-int	handle_heredoc(t_list *table)
+int	handle_heredoc(t_list *table, char **env)
 {
 	int			id;
 	t_list		*tmp;
@@ -143,7 +143,7 @@ int	handle_heredoc(t_list *table)
 		init_content(row);
 		if (row->red_symbol && row->filename)
 		{
-			if (go_through_heredoc_files(row))
+			if (go_through_heredoc_files(row, env))
 				return (1);
 		}
 		tmp = tmp->next;
