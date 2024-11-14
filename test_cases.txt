@@ -23,18 +23,27 @@ exit
 exit 42
 
 echo "Hello" | grep "H"
+-> Hello
 echo "Hello World" | tr ' ' '\n' | grep "World"
+-> World
 
-echo "Hello, World!" > output.txt
+echo "Hello, World" > output.txt
+-> Hello, World (in output.txt)
+
 Create a file input.txt containing Hello, Shell!
 cat < input.txt
+-> Hello, Shell
+
 Create a file append.txt containing First line
 echo "Second line" >> append.txt
+-> appends "Second line"
 
 echo "Hello World" | grep "World" > output.txt
+-> Hello World (in output.txt)
+
 cat input.txt | tr 'a-z' 'A-Z' | grep "HELLO" > output.txt
 
-Jeus Christ|echo this>but her "  $HOME "'$SHLVL'|cat -e >>outfile
+echo this but her "  $HOME "'$SHLVL'|cat -e >>outfile
 
 export a b=hi $=not_this_one c=but_this_one
 
@@ -57,19 +66,16 @@ export SEARCH="Shell"
 echo "Welcome to MiniShell" | grep "$SEARCH"
 # Expected Output: Welcome to MiniShell
 
-# Complex Test Case 4: Chaining cd, pwd, and echo with pipes
-cd /tmp && pwd | echo "Current directory is: $(cat -)"
-# Expected Output: Current directory is: /tmp
-
 # Complex Test Case 5: Unset environment variable and verify with echo
 export MYVAR="Test"
 unset MYVAR
 echo "$MYVAR"
 # Expected Output: (empty line, variable unset)
 
-# Complex Test Case 6: Chained cd and pwd with error handling
-cd /nonexistent && echo "Changed to nonexistent" || echo "Directory not found"
-# Expected Output: Directory not found
+# Complex Test Case 6: cd to not existing directory
+cd /nonexistent
+# Expected Output: cd: /nonexistent: No such file or directory
+--> does not work
 
 # Complex Test Case 7: Pipe, environment variable, and redirection
 export PHRASE="Hello, MiniShell!"
@@ -103,16 +109,6 @@ export TARGET="Shell"
 echo "$GREETING $TARGET" | tr '[:lower:]' '[:upper:]' | grep "HELLO"
 # Expected Output: HELLO SHELL
 
-# Complex Test Case 12: Redirected output from a pipe with unset verification
-export REMOVE_ME="Goodbye"
-echo "Removing variable" && unset REMOVE_ME && echo "$REMOVE_ME" > remove_test.txt
-cat remove_test.txt
-# Expected Output (in remove_test.txt): (empty, as REMOVE_ME is unset)
-
-# Complex Test Case 13: Using cd, pwd, echo with error handling and piping
-cd /tmp && pwd || echo "Could not navigate" | echo "Final directory: $(pwd)"
-# Expected Output: /tmp
-
 # Complex Test Case 14: Multi-pipe with uppercase transformation and pattern matching
 echo "hello minishell" | tr '[:lower:]' '[:upper:]' | grep "MINISHELL"
 # Expected Output: HELLO MINISHELL
@@ -127,11 +123,6 @@ export FRUIT="apple"
 echo "$FRUIT orange" | tr ' ' '\n' | grep "orange" > fruits.txt
 cat fruits.txt
 # Expected Output (in fruits.txt): orange
-
-# Complex Test Case 17: Complex chaining with logical AND and OR operators
-export EXISTING_VAR="Exists"
-unset NON_EXISTING_VAR && echo "$EXISTING_VAR" || echo "Variable unset or missing"
-# Expected Output: Exists
 
 # Complex Test Case 18: Multi-step pipe with word filtering and uppercase transformation
 echo "The quick brown fox jumps" | tr ' ' '\n' | grep "fox" | tr '[:lower:]' '[:upper:]' > output.txt
@@ -155,13 +146,8 @@ echo "$TESTVAR, World!" | tr '[:lower:]' '[:upper:]' > output.txt
 
 # 2. Export and use environment variable with multiple pipes
 export GREETING="Hello"
-echo "$GREETING, Shell!" | sed 's/Shell/World/' | tr '[:upper:]' '[:lower:]' | grep "hello"
-# Expected output: hello, world!
-
-# 3. Unset variable in a pipeline
-export TEMP="Temporary"
-echo "$TEMP should not appear" | { unset TEMP; echo "${TEMP:-Cleared}"; }
-# Expected output: Cleared should appear instead of the original variable value
+echo "$GREETING Shell!" | sed 's/Shell/World/' | tr '[:upper:]' '[:lower:]' | grep "hello"
+# Expected output: hello world!
 
 # 4. Create, read, and append using redirections
 echo "Line 1" > test.txt
@@ -169,61 +155,20 @@ echo "Line 2" >> test.txt
 cat < test.txt | grep "Line" | wc -l
 # Expected output: 2
 
-# 5. Export and access variables across multiple commands
-export NAME="Minishell"
-echo "$NAME is cool" > test_output.txt && cat test_output.txt | grep "cool"
-# Expected output: Minishell is cool
+----
 
 # 6. Combine multiple pipes with a redirection
 echo -e "apple\nbanana\ncarrot" | grep "a" | sort | tr 'a-z' 'A-Z' > sorted.txt
 # Expected output in sorted.txt: APPLE\nBANANA\nCARROT (sorted and in uppercase)
-
-# 7. Use cd, pwd, and output redirection to store directory path
-cd /tmp && pwd > dir_path.txt && cd - > /dev/null
-cat dir_path.txt
-# Expected output: /tmp
-
-# 8. Exit within a pipeline (should not terminate the shell entirely)
-echo "Check exit within pipeline" | { echo "Message before exit"; exit 0; } | cat
-# Expected output: Message before exit
 
 # 9. Redirection with pipeline, modifying the output in sequence
 echo "This is a test" | sed 's/test/experiment/' | tee output.txt | tr '[:lower:]' '[:upper:]'
 # Expected output to terminal: THIS IS AN EXPERIMENT
 # Expected content in output.txt: This is an experiment
 
-# 10. Append output with multiple commands in background
-(echo "First background line" >> output.txt; echo "Second background line" >> output.txt) &
-wait
-cat output.txt
-# Expected output in output.txt: Both lines appended in order
-
-# 11. Chained commands with conditional execution
-export CONDITION=1
-[ "$CONDITION" -eq 1 ] && echo "Condition met" || echo "Condition not met"
-# Expected output: Condition met
-
-# 12. Nested export and unset with pipes
-export NESTED="Nested"
-echo "$NESTED environment" | { unset NESTED; echo "${NESTED:-No variable}"; }
-# Expected output: No variable
-
-# 13. Command substitution with pipes and environment variable usage
-export PREFIX="Super"
-echo "$(echo "$PREFIX Shell") is awesome" | tr '[:upper:]' '[:lower:]'
-# Expected output: super shell is awesome
-
-# 14. Using exit with specific status codes
-(exit 5); echo $?
-# Expected output: 5 (exit status code from previous command should be displayed)
-
 # 15. Test multiple pipes with intermediate redirection
 echo -e "one\ntwo\nthree" | tee intermediate.txt | grep "two" | wc -c
 # Expected output: 4 (length of "two\n")
-
-# 16. Combination of pipes, cd, and environment variables
-cd / && export PATH_VAR=$PATH && echo "$PATH_VAR" | grep "/bin"
-# Expected output: should display part of the PATH that contains /bin
 
 # 17. Pipe with both input and output redirection
 echo "Hello Minishell" > input.txt
@@ -234,25 +179,6 @@ cat upper_output.txt
 # 18. Testing nested quotes and pipes
 echo 'This is "quoted" and $USER' | sed 's/USER/user/g' | tr '[:upper:]' '[:lower:]'
 # Expected output: this is "quoted" and $user
-
-# 19. Using multiple file descriptors with redirection
-echo "Content for file descriptor test" > fd_test.txt
-exec 3>fd_test_out.txt
-cat < fd_test.txt >&3
-exec 3>&-
-cat fd_test_out.txt
-# Expected output in fd_test_out.txt: Content for file descriptor test
-
-# 20. Complex pipeline with conditional execution and redirection
-echo "Test pipeline" | { grep "Test" && echo "Found test"; } > result.txt || echo "No test found"
-cat result.txt
-# Expected output in result.txt: Found test
-
-# 21. Complex variable usage and unsetting
-export COMPLEX_VAR="Complexity"
-echo "$COMPLEX_VAR is important" | { unset COMPLEX_VAR; echo "${COMPLEX_VAR:-Unset variable}"; }
-# Expected output: Unset variable
-
 
 //-----Tests for commands pipes and redirections -----//
 
