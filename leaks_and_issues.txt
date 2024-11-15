@@ -37,19 +37,7 @@ in the example e$t expands to a single string 'echo hallo'
 ft_echo has the strlen = 4 check implemented after splitting the strings in two separate string 'echo' and 'hallo'
 
 <------------------------------------------------------------------->
-[3.]
 
-when in multiple minishells
-running exit exits all shells not the current one
-
- 				[----- solution idea -----]
-
--> create a bool in the shell struct called exit
--> set exit to false
--> in ft_exit set shell->exit to true
--> in main loop check if the value is true then return to main and  in main return (print_error(0, NULL, NOTPRINT)) in main
-
--> exit with the error code in main
 
 <------------------------------------------------------------------->
 [4.]
@@ -66,7 +54,7 @@ bash output:
 			bash: cd: /nonexistent: No such file or directory
 
  				[----- solution idea -----]
-built in errors are not handled correct in the print_error function
+seems like cd is called multiple times here
 
 <------------------------------------------------------------------->
 

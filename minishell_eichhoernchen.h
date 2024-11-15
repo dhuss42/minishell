@@ -92,6 +92,7 @@ typedef struct s_shell
 	t_list	*table;
 	bool	isspace;
 	bool	syntax_error;
+	bool	exit;
 	char	quote;
 	char	*res;
 	char	**env;
@@ -109,7 +110,7 @@ int		export_no_argument(t_shell *shell);
 int		ft_echo(t_shell *shell, t_command *row);
 void	echo_expanded(t_shell *shell, t_command *row);
 int		ft_unset(t_shell *shell, t_command *row);
-void	ft_exit(t_command *row);
+int		ft_exit(t_shell *shell, t_command *row);
 int		ft_cd(t_shell *shell, t_command *row);
 
 //-----------------lexer----------------//

@@ -28,7 +28,7 @@ int	builtins(t_shell *shell, t_command *row)
 		if (ft_strncmp(row->args[0], "echo", 4) == 0)
 			return (ft_echo(shell, row));
 		else if (ft_strncmp(row->args[0], "exit", 4) == 0)
-			ft_exit(row);
+			return (ft_exit(shell,row));
 	}
 	else if (ft_strlen(row->args[0]) == 5)
 	{

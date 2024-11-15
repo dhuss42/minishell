@@ -37,6 +37,8 @@ void	minishell_loop(t_shell *shell)
 			ft_lstclear(&shell->list, free_token);
 			free_table(shell->table);
 			free(input);
+			if (shell->exit == true)
+				break ;
 		}
 	}
 }
@@ -50,6 +52,7 @@ int	main(int argc, char *argv[], char **env)
 	printf("minishell started\n");
 	init_terminal();
 	shell.table = NULL;
+	shell.exit = false;
 	if (argc == 1)
 	{
 		if (copy_env(env, &shell) == -1)
@@ -59,7 +62,8 @@ int	main(int argc, char *argv[], char **env)
 		minishell_loop(&shell);
 	}
 	(void) argv;
-	return (0);
+	printf("exiting minishell\n");
+	return (print_error(-1, NULL, NOTPRINT));
 }
 
 // after executing a command we need to update _ variable in envs

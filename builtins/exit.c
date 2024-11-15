@@ -26,22 +26,20 @@ bool	is_numeric(char *str)
 	return (true);
 }
 
-void	ft_exit(t_command *row)
+int	ft_exit(t_shell *shell, t_command *row)
 {
-	int exit_status;
-
-	exit_status = print_error(0, NULL, NOTPRINT);
 	if (row->args[1])
 	{
 		if (is_numeric(row->args[1]))
-			exit_status = print_error(ft_atoi(row->args[1]) % 256, NULL, NOTPRINT);
+			print_error(ft_atoi(row->args[1]) % 256, NULL, NOTPRINT);
 		else
-			exit_status = print_error(E_NUMERICARG, row->args[1], PRINT);
+			print_error(E_NUMERICARG, row->args[1], PRINT);
 		if (row->args[2])
-			exit_status = print_error(E_TOOMANYARG, NULL, PRINT);
+			print_error(E_TOOMANYARG, NULL, PRINT);
 	}
-	// ft_printf("Exiting with status %d\n", exit_status);
-	exit(exit_status);
+	// ft_printf("Exiting with status %d\n", print_error(-1, NULL, NOTPRINT));
+	shell->exit = true;
+	return (0);
 }
 
 
