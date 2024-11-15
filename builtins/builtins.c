@@ -47,16 +47,16 @@ int	check_builtins(t_shell *shell, t_command *row)
 {
 	if (builtins(shell, row) == 0)
 	{
+		// printf("---------------IS BUILTIN---------------\n");
+		// usleep(30000);
 		dup2(row->original_stdout, STDOUT_FILENO);
 		dup2(row->original_stdin, STDIN_FILENO);
-		// close(row->original_stdout);
 		return (0);
 	}
 	else if (builtins(shell, row) < 0)
 	{
 		dup2(row->original_stdout, STDOUT_FILENO);
 		dup2(row->original_stdin, STDIN_FILENO);
-		// close(row->original_stdout);
 		return (print_error(E_BUILTIN, NULL, PRINT));
 	}
 	return (1);

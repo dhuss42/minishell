@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/14 14:14:40 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/15 10:27:23 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,6 @@ static void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_list *table,
 {
 	int	nbr_pipes;
 
-	if (!row->path)
-	{
-		free_table(table);
-		exit (0);
-	}
 	nbr_pipes = ft_lstsize(table) - 1;
 	if (close_fds(fd, row->id, nbr_pipes))
 		exit (print_error(errno, NULL, PRINT));
@@ -117,6 +112,13 @@ static void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_list *table,
 		exit(errno);
 	if (check_builtins(shell, row) < 1)
 		exit (free_table(table));
+	if (get_check_path(row, envp))
+			exit (3);
+	if (!row->path)
+	{
+		free_table(table);
+		exit (0);
+	}
 	if (execve(row->path, row->args, envp))
 	{
 		free_table(table);
@@ -138,14 +140,14 @@ int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2], t_shell
 	while (tmp != NULL)
 	{
 		row = (t_command*) tmp->content;
-		if (handle_stuff(envp, row))
+		if (check_files(row))
 			return (1);
 		pid[n] = fork();
 		if (pid[n] == -1)
 			return (print_error(errno, NULL, PRINT));
 		if (pid[n] == 0)
 			pipe_child(row, envp, fd, table, shell);
-		usleep(30);
+		// usleep(300);	//necessary??
 		tmp = tmp->next;
 		n++;
 	}
