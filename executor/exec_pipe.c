@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/15 10:27:23 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/15 12:00:57 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes)
 	int	wstatus;
 	int	exit_code;
 	t_list	*tmp;
-	t_command	*row;
 
 	if (close_fds(fd, -1, nbr_pipes))
 		exit (print_error(errno, NULL, PRINT));
@@ -60,9 +59,7 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes)
 			exit_code = WEXITSTATUS(wstatus);
 		if (WIFSIGNALED(wstatus))
 			exit_code = WTERMSIG(wstatus) + 128;
-		row = (t_command*) tmp->content;
-		if (exit_code > 0)
-			return(print_error(exit_code, row->args[0], NOTPRINT));
+		print_error(exit_code, NULL, NOTPRINT);
 		tmp = tmp->next;
 		i++;
 	}
@@ -101,35 +98,31 @@ static int	duplicate_fd(t_command *row, int (*fd)[2], int nbr_pipes)
 /*-------------------------------------------------------------
 Child handler for pipechain
 ---------------------------------------------------------------*/
-static void	pipe_child(t_command *row, char **envp, int (*fd)[2], t_list *table, t_shell *shell)
+static void	pipe_child(t_command *row, int (*fd)[2], t_list *table, t_shell *shell)
 {
 	int	nbr_pipes;
+	int	ret;
 
 	nbr_pipes = ft_lstsize(table) - 1;
 	if (close_fds(fd, row->id, nbr_pipes))
-		exit (print_error(errno, NULL, PRINT));
+		free_child_exit(shell, errno);
 	if (duplicate_fd(row, fd, nbr_pipes))
-		exit(errno);
+		free_child_exit(shell, errno);
 	if (check_builtins(shell, row) < 1)
-		exit (free_table(table));
-	if (get_check_path(row, envp))
-			exit (3);
+		free_child_exit(shell, 0);
+	ret = get_check_path(row, shell->env);
+	if (ret)
+			free_child_exit(shell, ret);
 	if (!row->path)
-	{
-		free_table(table);
-		exit (0);
-	}
-	if (execve(row->path, row->args, envp))
-	{
-		free_table(table);
-		exit (print_error(errno, NULL, PRINT));
-	}
+		free_child_exit(shell, 0);
+	if (execve(row->path, row->args, shell->env))
+		free_child_exit(shell, 0);
 }
 
 /*-------------------------------------------------------------
 Loop through all the pipes
 ---------------------------------------------------------------*/
-int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2], t_shell *shell)
+int	pipechain_loop(t_list *table, pid_t *pid, int (*fd)[2], t_shell *shell)
 {
 	int			n;
 	t_command	*row;
@@ -146,8 +139,7 @@ int	pipechain_loop(char **envp, t_list *table, pid_t *pid, int (*fd)[2], t_shell
 		if (pid[n] == -1)
 			return (print_error(errno, NULL, PRINT));
 		if (pid[n] == 0)
-			pipe_child(row, envp, fd, table, shell);
-		// usleep(300);	//necessary??
+			pipe_child(row, fd, table, shell);
 		tmp = tmp->next;
 		n++;
 	}

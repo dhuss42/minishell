@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/14 15:26:35 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/15 11:11:15 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*-------------------------------------------------------------
 Handle pipechain
 ---------------------------------------------------------------*/
-int	execute_pipechain(char **envp, t_list *table, int nbr_pipes, t_shell *shell)
+int	execute_pipechain(t_list *table, int nbr_pipes, t_shell *shell)
 {
 	int		fd[nbr_pipes][2];
 	pid_t	pid[nbr_pipes + 1];
@@ -28,7 +28,7 @@ int	execute_pipechain(char **envp, t_list *table, int nbr_pipes, t_shell *shell)
 			return (print_error(errno, NULL, PRINT));
 		n++;
 	}
-	if (pipechain_loop(envp, table, pid, fd, shell))
+	if (pipechain_loop(table, pid, fd, shell))
 		return (1);
 	if (pipe_parent(pid, fd, table, nbr_pipes))
 		return (2);
@@ -65,12 +65,11 @@ if execve fails, its because of command not found (127)
 child then exits with 127 and the parent will store the exit state
 if it doesnt fail, exit code is 0
 ---------------------------------------------------------------*/
-void	single_child(char *path, char **envp, t_command *row)
+void	single_child(char *path, char **envp, t_command *row, t_shell *shell)
 {
 	if (execve(path, row->args, envp))
 		{
-			free_row(row);
-			exit (127);
+			free_child_exit(shell, errno);
 		}
 }
 
@@ -95,7 +94,7 @@ int	execute_single_command(char **envp, t_command *row, t_shell *shell)
 		if (id == -1)
 			return (print_error(errno, NULL, PRINT));
 		else if (id == 0)
-			single_child(row->path, envp, row);
+			single_child(row->path, envp, row, shell);
 		else if (id > 0)
 		{
 			if (single_parent(id, row->args[0]))
@@ -131,7 +130,7 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 	}
 	else if (nbr_pipes > 0)
 	{
-		if (execute_pipechain(envp, table, nbr_pipes, shell))
+		if (execute_pipechain(table, nbr_pipes, shell))
 			return (4);
 	}
 	return (0);
