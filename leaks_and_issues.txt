@@ -37,7 +37,8 @@ in the example e$t expands to a single string 'echo hallo'
 ft_echo has the strlen = 4 check implemented after splitting the strings in two separate string 'echo' and 'hallo'
 
 <------------------------------------------------------------------->
-
+[3.]
+	Minishell tester does not work with init_terminal();
 
 <------------------------------------------------------------------->
 [4.]
@@ -57,9 +58,30 @@ bash output:
 seems like cd is called multiple times here
 
 <------------------------------------------------------------------->
-
+5. Minishell tester has issues with exit codes, doesnt recognize our exit codes
+--> I think the issue is in print_error or the way we are handling it
+-> When I leave a debugging message in print_error 61 Tests work, when I remove the debugging message 0 Tests work
 
 <------------------------------------------------------------------->
+issues with syntax errors, segfault for some reason
+
+
+AirvonSPAdmin:minishell david$ ./minishell
+minishell: |
+minishell: syntax error near unexpected token `|'
+exit_code is: 258
+exit_code is: 0
+minishell: echo $?
+exit_code is: 0
+exit_code is: 0
+exit_code is: 0
+0
+minishell: |
+minishell: syntax error near unexpected token `|'
+exit_code is: 258
+exit_code is: 0
+Segmentation fault: 11
+
 <------------------------------------------------------------------->
 <------------------------------------------------------------------->
 <------------------------------------------------------------------->

@@ -34,7 +34,7 @@ bool	syntax_error_red(t_list *tl_pos)
 	}
 	else if (tmp->next == NULL)
 	{
-		print_error(258, "`newline'", PRINT);
+		print_error(258, "newline", PRINT);
 		return (true);
 	}
 	return (false);
@@ -50,12 +50,12 @@ bool	syntax_error_pipe(t_list *tl_pos)
 		next_token = (t_token *)tmp->next->content;
 	if (tmp->next == NULL)
 	{
-		print_error(258, "`|'", PRINT);
+		print_error(258, "|", PRINT);
 		return (true);
 	}
 	if (next_token->type == TOKEN_PIPE)
 	{
-		print_error(258, "`|'", PRINT);
+		print_error(258, "|", PRINT);
 		return (true);
 	}
 	return (false);
@@ -71,7 +71,7 @@ bool	syntax_errors(t_list *token_list)
 	current_token = (t_token *)tmp->content;
 	if (current_token->type == TOKEN_PIPE)
 	{
-		print_error(258, "`|'", PRINT);
+		print_error(258, "|", PRINT);
 		return (true);
 	}
 	while (tmp != NULL)

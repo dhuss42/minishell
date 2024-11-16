@@ -80,14 +80,14 @@ int	get_exit_code(char *tmp, t_command *row, t_shell *expand)
 	len = get_int_length(exit_code);
 
 	len += ft_strlen(row->args[expand->i]) - 2;
-	tmp = safe_malloc(sizeof(char) * (len + 1));
+	tmp = safe_malloc(sizeof(char) * (len + 1)); // tmp is allocated
 	if (!tmp)
 		return (-1);
 
 	tmp = copy_exit_code(expand, row, tmp);
 	if (!tmp)
 		return (-1);
-	if (update_arg_and_free(expand, row, tmp) == -1)
+	if (update_arg_and_free(expand, row, tmp) == -1) // tmp is freed
 		return (-1);
 
 	// move expand->k accordingly

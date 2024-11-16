@@ -29,14 +29,15 @@ void	minishell_loop(t_shell *shell)
 			parser(shell);
 			// print_table(shell);
 			expansion(shell, shell->env);
-			print_error(0, NULL, NOTPRINT);
 			// print_table(shell);
 			// test_builtins(shell);
+			print_error(0, NULL, NOTPRINT);
 			executor(shell->env, shell->table, shell);
 			add_history(input);
 			ft_lstclear(&shell->list, free_token);
 			free_table(shell->table);
 			free(input);
+			// printf("Debug: Exit Code: %d\n", print_error(-1, NULL, NOTPRINT));
 			if (shell->exit == true)
 				break ;
 		}
@@ -49,7 +50,7 @@ int	main(int argc, char *argv[], char **env)
 {
 	t_shell	shell;
 
-	printf("minishell started\n");
+	// printf("minishell started\n");
 	init_terminal();
 	shell.table = NULL;
 	shell.exit = false;
@@ -62,7 +63,7 @@ int	main(int argc, char *argv[], char **env)
 		minishell_loop(&shell);
 	}
 	(void) argv;
-	printf("exiting minishell\n");
+	// printf("exiting minishell\n");
 	return (print_error(-1, NULL, NOTPRINT));
 }
 

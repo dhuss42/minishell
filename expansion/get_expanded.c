@@ -152,12 +152,12 @@ int	get_expanded(char *key, char **env, t_command *row, t_shell *expand)
 {
 	char	*exp = NULL;
 
-	key = get_key(row, expand); // key is allocated
+	key = get_key(row, expand);
 	if (!key)
 		return (-1);
 	while (*key == '$')
 		key++;
-	exp = compare_with_env(key, env, exp); // exp is allocated
+	exp = compare_with_env(key, env, exp);
 	if (!exp)
 		return (free(key), -1);
 	if (switcheroo(row, exp, expand) == -1)

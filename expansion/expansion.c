@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../minishell_eichhoernchen.h"
-
 
 void expansion(t_shell *shell, char **env)
 {

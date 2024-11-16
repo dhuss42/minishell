@@ -65,9 +65,9 @@ int	custom_error_message(int err_no, char *str)
 	}
 	else if (err_no == E_SYNTAXERROR)
 	{
-		ft_putstr_fd("syntax error near unexpected token ", 2);
+		ft_putstr_fd("syntax error near unexpected token `", 2);
 		ft_putstr_fd(str, 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd("\'\n", 2);
 	}
 	else if (err_no == E_NOTSET)
 	{
@@ -115,6 +115,7 @@ int	print_error(int err_no, char *str, int print)
 			exit_code = err_no;
 		}
 	}
+	// printf("exit_code is: %d\n", exit_code);
 	return (exit_code);
 }
 
