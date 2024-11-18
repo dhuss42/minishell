@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:04 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 12:04:53 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 16:00:29 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	has_equal(const char *str)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (str[i] != '\0')
@@ -28,7 +28,7 @@ bool	has_equal(const char *str)
 
 bool	valid_key_name(char *str)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (!ft_isalpha(str[i]) && str[i] != '_')
@@ -55,10 +55,10 @@ bool	valid_key_name(char *str)
 
 int	key_exists(char **env, char *key)
 {
-	size_t  i;
+	size_t	i;
 
 	i = 0;
-	while(env[i] != NULL)
+	while (env[i] != NULL)
 	{
 		if (ft_strncmp(key, env[i], strlen_equal(env[i])) == 0)
 			return (i);
@@ -71,9 +71,9 @@ int	key_exists(char **env, char *key)
 // returns index when match is found
 // returns -1 when they don't match
 
-int  get_len_new_env(char **env, t_command *row, size_t i)
+int	get_len_new_env(char **env, t_command *row, size_t i)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (env[count] != NULL)
@@ -87,8 +87,11 @@ int  get_len_new_env(char **env, t_command *row, size_t i)
 			// printf(GREEN"export count: %zu\n"WHITE, count);
 			count++;
 		}
-		else
+		else // this is wrong
+		{
+			printf("returning here\n");
 			return (-1);
+		}
 		i++;
 	}
 	// printf(YELLOW"count total: %zu\n"WHITE, count);
@@ -99,8 +102,7 @@ int  get_len_new_env(char **env, t_command *row, size_t i)
 // iterates through User input (args)
 // if the structure is valid a counter is added
 
-
-char **set_to_null(char **tmp, size_t len)
+char	**set_to_null(char **tmp, size_t len)
 {
 	size_t	j;
 

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd_pwd_handling.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/18 14:28:36 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/18 14:28:59 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../executor.h"
 
@@ -32,9 +43,9 @@ int	replace_pwd(t_shell *shell, char *key, char *content)
 
 // the function needs proper handling for freeing things
 
-char **append_oldpwd(t_shell *shell, char *old_pwd, char **tmp)
+char	**append_oldpwd(t_shell *shell, char *old_pwd, char **tmp)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (shell->env[i] != NULL)
@@ -110,7 +121,7 @@ int	update_oldpwd(t_shell *shell, char *content)
 
 int	update_pwd(t_shell *shell)
 {
-	char *pathname;
+	char	*pathname;
 
 	pathname = getcwd(NULL, 0);
 	if (!pathname)

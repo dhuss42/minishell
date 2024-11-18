@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:16:35 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 11:32:17 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 14:08:50 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	is_numeric(char *str)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (str[i] != '\0')
@@ -51,10 +51,5 @@ int	ft_exit(t_shell *shell, t_command *row)
 		}
 	}
 	// ft_printf("Exiting with status %d\n", print_error(-1, NULL, NOTPRINT));
-
 	return (0);
 }
-
-
-
-

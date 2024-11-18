@@ -1,17 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/18 14:42:40 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/18 14:43:45 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "executor.h"
 
-void    *safe_malloc(size_t size)
+void	*safe_malloc(size_t size)
 {
-    void *ptr;
+	void	*ptr;
 
-    ptr = malloc(size);
-    if (!ptr)
-    {
-        print_error(errno, NULL, PRINT);
-        return (NULL);
-    }
-    return (ptr);
+	ptr = malloc(size);
+	if (!ptr)
+	{
+		print_error(errno, NULL, PRINT);
+		return (NULL);
+	}
+	return (ptr);
 }
 
 // safe malloc allocates any type of variable by being of return type void pointer
@@ -19,56 +30,56 @@ void    *safe_malloc(size_t size)
 // then it returns NULL
 // else it returns the pointer
 
-void    *safe_ft_calloc(size_t count, size_t size)
+void	*safe_ft_calloc(size_t count, size_t size)
 {
-    void    *ptr;
+	void	*ptr;
 
-    ptr = ft_calloc(count, size);
-    if (!ptr)
-    {
-        print_error(errno, NULL, PRINT);
-        return (NULL);
-    }
-    return (ptr);
+	ptr = ft_calloc(count, size);
+	if (!ptr)
+	{
+		print_error(errno, NULL, PRINT);
+		return (NULL);
+	}
+	return (ptr);
 }
 
-char    *safe_ft_substr(const char *s, unsigned int start, size_t len)
+char	*safe_ft_substr(const char *s, unsigned int start, size_t len)
 {
-    char *substr = ft_substr(s, start, len);
-    if (!substr)
-    {
-        print_error(errno, NULL, PRINT);
-        return (NULL);
-    }
-    return (substr);
+	char	*substr;
+
+	substr = ft_substr(s, start, len);
+	if (!substr)
+	{
+		print_error(errno, NULL, PRINT);
+		return (NULL);
+	}
+	return (substr);
 }
 
-char    *safe_ft_strdup(const char *s)
+char	*safe_ft_strdup(const char *s)
 {
-    char *str;
+	char	*str;
 
-    str = ft_strdup(s);
-    if (!str)
-    {
-        print_error(errno, NULL, PRINT);
-        return (NULL);
-    }
-    return (str);
+	str = ft_strdup(s);
+	if (!str)
+	{
+		print_error(errno, NULL, PRINT);
+		return (NULL);
+	}
+	return (str);
 }
 
-char    *safe_ft_strtrim(char *s, const char *set)
+char	*safe_ft_strtrim(char *s, const char *set)
 {
-    char *res;
+	char	*res;
 
-    res = ft_strtrim(s, set);
-    if (!res)
-    {
-        print_error(errno, NULL, PRINT);
-        return (NULL);
-    }
-    return (res);
+	res = ft_strtrim(s, set);
+	if (!res)
+	{
+		print_error(errno, NULL, PRINT);
+		return (NULL);
+	}
+	return (res);
 }
-
-
 
 // add duplicate double_pointers

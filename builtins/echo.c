@@ -6,16 +6,15 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:27 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/06 15:12:34 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 14:26:11 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../minishell_eichhoernchen.h"
 
 bool	is_only_n(char *str)
 {
-	size_t  i;
+	size_t	i;
 
 	i = 0;
 	if (str[i] == '-')
@@ -66,7 +65,7 @@ int	ft_echo(t_shell *shell, t_command *row)
 {
 	if (row->args[shell->i][4] == ' ')
 		echo_expanded(shell, row);
-	if (ft_strncmp(row->args[0], "echo",  ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 4)
+	if (ft_strncmp(row->args[0], "echo", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 4)
 	{
 		echo(shell, row);
 		return (0);

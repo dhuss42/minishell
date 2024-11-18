@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:50 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 12:11:48 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 15:08:52 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ char	**append_keys(char **tmp, t_shell *shell, t_command *row)
 	{
 		if (valid_key_name(row->args[shell->i]) && (key_exists(tmp, row->args[shell->i]) == -1))
 		{
-				tmp[shell->j] = safe_ft_strdup(row->args[shell->i]);
-				if (!tmp[shell->j])
-					return (clear_all(tmp), NULL);
+			tmp[shell->j] = safe_ft_strdup(row->args[shell->i]);
+			if (!tmp[shell->j])
+				return (clear_all(tmp), NULL);
 			shell->j++;
 		}
 		shell->i++;
@@ -70,10 +70,10 @@ char	**copy_new_envs(char **tmp, t_shell *shell, t_command *row)
 
 int	check_duplicate_keys(t_shell *shell, t_command *row)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
-	while(row->args[i] != NULL)
+	while (row->args[i] != NULL)
 	{
 		if (key_exists(shell->env, row->args[i]) != -1)
 		{
@@ -100,7 +100,7 @@ int	export_with_args(t_shell *shell, t_command *row)
 		return (-1);
 	tmp = safe_malloc(sizeof(char *) * (len + 1));
 	if (!tmp)
-	 	return (-1);
+		return (-1);
 	tmp = set_to_null(tmp, len);
 	if (check_duplicate_keys(shell, row) == -1)
 		return (-1);
@@ -140,4 +140,3 @@ int	ft_export(t_shell *shell, t_command *row)
 // copies these envs into tmp & appends the user's input if its valid
 // frees original envs
 // copies tmp into envs
-

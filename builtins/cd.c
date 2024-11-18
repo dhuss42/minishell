@@ -6,13 +6,13 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:34 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/14 15:23:36 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 14:28:20 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../executor.h"
 
-char *search_env(char **env, char *key)
+char	*search_env(char **env, char *key)
 {
 	size_t	i;
 	char	*str;
@@ -40,12 +40,12 @@ char *search_env(char **env, char *key)
 
 int	cd_no_args(t_shell *shell, t_command *row, char *current_dir)
 {
-	char *no_args;
+	char	*no_args;
 
 	no_args = search_env(shell->env, "HOME");
 	if (!no_args)
 		return (-1);
-	if (no_args[0] !='\0')
+	if (no_args[0] != '\0')
 	{
 		if (chdir(no_args) == -1)
 			return (print_error(errno, row->args[1], PRINT));
@@ -54,12 +54,12 @@ int	cd_no_args(t_shell *shell, t_command *row, char *current_dir)
 		return (-1);
 	if (update_pwd(shell) != 0)
 		return (-1);
-	if(no_args)
+	if (no_args)
 		free(no_args);
 	return (0);
 }
 
-int		ft_cd(t_shell *shell, t_command *row)
+int	ft_cd(t_shell *shell, t_command *row)
 {
 	char	*current_dir;
 
@@ -88,8 +88,5 @@ int		ft_cd(t_shell *shell, t_command *row)
 // functions checks whether cd has an argument
 // if cd has an argument it calls cd_no_args whcih moves the current directory to $HOME
 
-
 // ---- issues --- /
 // get malloc error for cd l, has to do with free_table
-
-

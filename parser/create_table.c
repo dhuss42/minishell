@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_table.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:00:48 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/30 10:59:50 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/18 14:39:17 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ size_t	count_lines_table(t_list *token_list)
 
 	tmp = token_list;
 	lines = 0;
-	while(tmp != NULL)
+	while (tmp != NULL)
 	{
 		current_token = (t_token *)tmp->content;
 		if (current_token->type == TOKEN_PIPE)

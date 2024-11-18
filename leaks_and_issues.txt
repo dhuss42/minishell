@@ -47,7 +47,13 @@ minishell: lsd: No such file or directory
 seems like cd is called multiple times here
 
 <------------------------------------------------------------------->
+export
 
+	when there is an invalid identifier export sill creates the remaining keys
+
+	export a=b b=c $=d f=a
+
+	creates all of them except $=d
 
 <------------------------------------------------------------------->
 issues with syntax errors, segfault for some reason randomly

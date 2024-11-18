@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 12:57:19 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 15:11:56 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ void	minishell_loop(t_shell *shell)
 {
 	char	*input;
 
-	while(1)
+	while (1)
 	{
 		handle_signals(0);
 		input = readline("minishell: ");
 		handle_signals(1);
 		if (!input)
-			return clear_all(shell->env);
+			return (clear_all(shell->env));
 		if (input[0] != '\0')
 		{
 			lexer(shell, input);
@@ -55,7 +55,7 @@ int	main(int argc, char *argv[], char **env)
 	int	error_code;
 
 	// printf("minishell started\n");
-	init_terminal();
+	// init_terminal();
 	shell.table = NULL;
 	shell.exit = false;
 	if (argc == 1)
@@ -71,4 +71,3 @@ int	main(int argc, char *argv[], char **env)
 	error_code = print_error(-1, NULL, NOTPRINT);
 	return (error_code);
 }
-

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_env.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/18 14:30:04 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/18 14:30:22 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../executor.h"
 
 int	copy_env(char **env, t_shell *shell)
 {
-	size_t i;
-	char **new_env;
+	size_t	i;
+	char	**new_env;
 
 	i = 0;
 	while (env[i] != NULL)
@@ -24,6 +36,5 @@ int	copy_env(char **env, t_shell *shell)
 	if (!shell->env)
 		return (clear_all(new_env), -1);
 	clear_all(new_env);
-	// shell->env = new_env; // probably have to duplicate here
 	return (0);
 }

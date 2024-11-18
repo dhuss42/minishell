@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:37 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/13 13:44:21 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 13:07:21 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	get_len_unset(t_shell *shell, t_command *row)
 		j = 0;
 		while (shell->env[j] != NULL)
 		{
-			if (ft_strncmp(row->args[k], shell->env[j], strlen_equal(shell->env[j])) == 0)
+			if (ft_strncmp(row->args[k], shell->env[j],
+					strlen_equal(shell->env[j])) == 0)
 				counter++;
 			j++;
 		}
@@ -49,7 +50,7 @@ int	finalise_unset(t_shell *shell, char **tmp)
 }
 // tidies up the allocates memory
 
-bool should_copy_env_var(t_command *row, char *var, size_t unset_index)
+bool	should_copy_env_var(t_command *row, char *var, size_t unset_index)
 {
 	while (row->args[unset_index] != NULL)
 	{
@@ -63,11 +64,10 @@ bool should_copy_env_var(t_command *row, char *var, size_t unset_index)
 // compares each variable in shell-env with row->args
 // if they match the variable should not be copied
 
-
 int	copy_unset_varibles(t_shell *shell, t_command *row, char **tmp)
 {
-	size_t  j;
-	size_t  k;
+	size_t	j;
+	size_t	k;
 
 	j = 0;
 	k = 0;
@@ -92,7 +92,7 @@ int	copy_unset_varibles(t_shell *shell, t_command *row, char **tmp)
 // iterates through envs calling should_copy_env_var to determine if current
 // variable should be copied into tmp
 
-int ft_unset(t_shell *shell, t_command *row)
+int	ft_unset(t_shell *shell, t_command *row)
 {
 	char	**tmp;
 

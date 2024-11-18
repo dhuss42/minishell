@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:37:20 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/06 15:07:14 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 14:27:17 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**duplicate_double_ptr(char **double_ptr)
 	while (double_ptr[i] != NULL)
 		i++;
 	duplicate = safe_malloc(sizeof(char *) * (i + 1));
-	if(!duplicate)
+	if (!duplicate)
 		return (NULL);
 	i = 0;
 	while (double_ptr[i] != NULL)
@@ -59,7 +59,7 @@ char	**special_dup(t_command *row, char **tmp)
 	while (row->args[j] != NULL)
 	{
 		tmp[i] = safe_ft_strdup(row->args[j]);
-		if(!tmp[i])
+		if (!tmp[i])
 			return (clear_all(tmp), NULL);
 		i++;
 		j++;
@@ -82,7 +82,7 @@ char	**tmp_args(t_command *row, char *separated)
 	size_t	i;
 
 	i = 0;
-	while(row->args[i] != NULL)
+	while (row->args[i] != NULL)
 		i++;
 	tmp = safe_malloc(sizeof(char *) * (i + 2));
 	if (!tmp)
@@ -91,7 +91,7 @@ char	**tmp_args(t_command *row, char *separated)
 	if (!tmp[0])
 		return (NULL);
 	// function handling -n -nnnn inside the remainder string
-	tmp[1] = safe_ft_strdup(separated); 
+	tmp[1] = safe_ft_strdup(separated);
 	if (!tmp[1])
 		return (clear_all(tmp), NULL);
 	tmp = special_dup(row, tmp);
@@ -114,4 +114,3 @@ void	echo_expanded(t_shell *shell, t_command *row)
 	clear_all(tmp);
 	free(separated);
 }
-

@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:19:30 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/06 10:21:26 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 14:30:52 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ char	*update_shlvl(t_shell *shell, char *new_shlvl, size_t *i)
 	*i = 0;
 	while (shell->env[*i] != NULL)
 	{
-		if (ft_strncmp(shell->env[*i], "SHLVL", strlen_equal(shell->env[*i])) == 0)
+		if (ft_strncmp(shell->env[*i], "SHLVL",
+				strlen_equal(shell->env[*i])) == 0)
 			break ;
 		(*i)++;
 	}
@@ -39,9 +40,9 @@ char	*update_shlvl(t_shell *shell, char *new_shlvl, size_t *i)
 
 int	shlvl(t_shell *shell)
 {
-	size_t 	i;
+	size_t	i;
 	char	*new_shlvl;
-	char 	*key;
+	char	*key;
 	char	*res;
 
 	new_shlvl = NULL;

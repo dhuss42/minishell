@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   populate_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:03:35 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/30 10:58:59 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/18 14:41:35 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	populate_red_array(t_shell *parsing, t_token *current_token, t_command *new_cmd)
 {
+
 	new_cmd->red_symbol[parsing->i] = safe_malloc(sizeof(char) * (ft_strlen(current_token->input) + 1));
 	if (!new_cmd->red_symbol[parsing->i])
 	{
@@ -86,7 +87,7 @@ t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 	parsing->j = 0;
 	parsing->tmp = tl_pos;
 	// printf("in populate cmd\n");
-	while(parsing->tmp != NULL)
+	while (parsing->tmp != NULL)
 	{
 		current_token = (t_token *)parsing->tmp->content;
 		if (parsing->tmp->next != NULL)
@@ -102,4 +103,3 @@ t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 	new_cmd->filename[parsing->i] = NULL;
 	return (new_cmd);
 }
-

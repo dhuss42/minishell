@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 12:04:44 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/10 16:28:18 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 14:38:29 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 
 int	is_redirection(t_token *current_token)
 {
-	if (current_token->type == TOKEN_REDIN || current_token->type == TOKEN_REDOUT
-		|| current_token->type == TOKEN_REDAPPEND || current_token->type == TOKEN_HEREDOC)
+	t_token_type	tokt;
+
+	tokt = current_token->type;
+	if (tokt == TOKEN_REDIN || tokt == TOKEN_REDOUT || tokt == TOKEN_REDAPPEND
+		|| tokt == TOKEN_HEREDOC)
 		return (1);
 	else
 		return (0);
@@ -23,9 +26,11 @@ int	is_redirection(t_token *current_token)
 
 int	is_filename(t_token *current_token)
 {
-	if (current_token->type == TOKEN_WORD || current_token->type == TOKEN_SQUOTES
-		|| current_token->type == TOKEN_DQUOTES || current_token->type == TOKEN_ARGS
-			|| current_token->type == TOKEN_EXITSTATUS)
+	t_token_type	tokt;
+
+	tokt = current_token->type;
+	if (tokt == TOKEN_WORD || tokt == TOKEN_SQUOTES || tokt == TOKEN_DQUOTES
+		|| tokt == TOKEN_ARGS || tokt == TOKEN_EXITSTATUS)
 		return (1);
 	else
 		return (0);
