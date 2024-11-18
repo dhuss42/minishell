@@ -68,6 +68,7 @@ int	custom_error_message(int err_no, char *str)
 		ft_putstr_fd("syntax error near unexpected token `", 2);
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd("\'\n", 2);
+		err_no = 2;
 	}
 	else if (err_no == E_NOTSET)
 	{
@@ -83,6 +84,14 @@ int	custom_error_message(int err_no, char *str)
 		ft_putstr_fd(" No such file or directory\n", 2);
 		err_no = 1;
 	}
+	else if (err_no == E_NOTVALIDIDENT)
+	{
+		ft_putstr_fd("export: `", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd("\': not a valid identifier\n", 2);
+		err_no = 1;
+	}
+	// printf("setting err_no = %d\n", err_no);
 	return (err_no);
 }
 
@@ -93,21 +102,32 @@ int	print_error(int err_no, char *str, int print)
 {
 	static int	exit_code = 0;
 
+	// printf(RED"in print_error\n"WHITE);
 	if (print == NOTPRINT && err_no >= 0)
 		exit_code = err_no;
 	else if (print == PRINT && err_no > 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		if (str && err_no != E_NUMERICARG && err_no != E_SYNTAXERROR && err_no != E_NOTSET && err_no != E_CDNOSUCHFOD) // etwas unschön gelöst von mir
+		if (str && err_no != E_NUMERICARG && err_no != E_SYNTAXERROR && err_no != E_NOTSET && err_no != E_CDNOSUCHFOD && err_no != E_NOTVALIDIDENT) // etwas unschön gelöst von mir
 		{
 			ft_putstr_fd(str, 2);
 			write(2, ": ", 2);
 		}
 		if (err_no > 106)
 		{
-			if (str)
+			if (str && (err_no == E_NUMERICARG || err_no == E_SYNTAXERROR || err_no == E_NOTSET || err_no == E_CDNOSUCHFOD || err_no == E_NOTVALIDIDENT))
+			{
+				// printf("going int custom_error_message\n");
+				// printf("str: %s\n", str);
 				exit_code = custom_error_message(err_no, str);
-			exit_code = custom_error(err_no);
+				// printf("exit code after custom error message = %d\n", exit_code);
+			}
+			else
+			{
+				// printf("going int custom_error\n");
+				exit_code = custom_error(err_no);
+				// printf("exit code after custom error = %d\n", exit_code);
+			}
 		}
 		else
 		{
@@ -119,10 +139,4 @@ int	print_error(int err_no, char *str, int print)
 	return (exit_code);
 }
 
-// int main()
-// {
-// 	print_error(E_FILENOEXIST, "test", PRINT);
-// 	print_error(5, NULL, NOTPRINT);
-// 	printf("Exit-code:%d\n", print_error(0, NULL, NOTPRINT));
-// 	return (0);
-// }
+

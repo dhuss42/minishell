@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:04 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/06 10:53:55 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 12:04:53 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../executor.h"
 
 bool	has_equal(const char *str)
 {
@@ -26,24 +26,32 @@ bool	has_equal(const char *str)
 	return (false);
 }
 
-bool	valid_key_name(const char *str)
+bool	valid_key_name(char *str)
 {
 	size_t i;
 
 	i = 0;
 	if (!ft_isalpha(str[i]) && str[i] != '_')
+	{
+		print_error(E_NOTVALIDIDENT, str, PRINT);
 		return (false);
+	}
 	i++;
 	while (str[i] != '\0' && str[i] != '=')
 	{
 		if (!(ft_isalnum(str[i]) || str[i] == '_'))
+		{
+			print_error(E_NOTVALIDIDENT, str, PRINT);
 			return (false);
+		}
 		i++;
 	}
 	return (true);
 }
 
 // checks if the key name is valid
+// key cnnot be numeric
+// key cannot contain a minus
 
 int	key_exists(char **env, char *key)
 {
@@ -63,9 +71,9 @@ int	key_exists(char **env, char *key)
 // returns index when match is found
 // returns -1 when they don't match
 
-size_t  get_len_new_env(char **env, t_command *row, size_t i)
+int  get_len_new_env(char **env, t_command *row, size_t i)
 {
-	size_t count;
+	int count;
 
 	count = 0;
 	while (env[count] != NULL)
@@ -79,6 +87,8 @@ size_t  get_len_new_env(char **env, t_command *row, size_t i)
 			// printf(GREEN"export count: %zu\n"WHITE, count);
 			count++;
 		}
+		else
+			return (-1);
 		i++;
 	}
 	// printf(YELLOW"count total: %zu\n"WHITE, count);

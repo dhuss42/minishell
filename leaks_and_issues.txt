@@ -17,70 +17,41 @@ bash output:
 -> returning all errors but bash returns only the first (I think)
 
 <------------------------------------------------------------------->
-[2.]
 
-Input:
-			minishell: export t="cho hallo"
-			minishell: e$t
+minishell: $EMPTY
 
-minishell output:
-			minishell: echo hallo: command not found
+output with debugging
 
-bash output:
-			bash: hallo
+exit_code is: 0
+error here in executor
+exit_code is: 13
+error wrapped here
 
- 				[----- solution idea -----]
---> don't check for strlen = 4 before calling ft_echo
-
-in the example e$t expands to a single string 'echo hallo'
--> meaning the strlen will be greater than 4
-ft_echo has the strlen = 4 check implemented after splitting the strings in two separate string 'echo' and 'hallo'
+				[----- solution idea -----]
+-> should be 0 but is set to 13 in executor
 
 <------------------------------------------------------------------->
 [3.]
-	Minishell tester does not work with init_terminal();
+	Minishell tester passes fewer tests with init terminal
 
 <------------------------------------------------------------------->
 [4.]
 
-Input:
-			minishell: cd /nonexistent
+minishell: cd lsd
 
-minishell output:
-			minishell: /nonexistent: No such file or directory
-			minishell: /nonexistent: No such file or directory
-			minishell: cd: command not found
 
-bash output:
-			bash: cd: /nonexistent: No such file or directory
+minishell: lsd: No such file or directory
+/usr/bin/cd: line 4: cd: lsd: No such file or directory
 
  				[----- solution idea -----]
 seems like cd is called multiple times here
 
 <------------------------------------------------------------------->
-5. Minishell tester has issues with exit codes, doesnt recognize our exit codes
---> I think the issue is in print_error or the way we are handling it
--> When I leave a debugging message in print_error 61 Tests work, when I remove the debugging message 0 Tests work
+
 
 <------------------------------------------------------------------->
-issues with syntax errors, segfault for some reason
+issues with syntax errors, segfault for some reason randomly
 
-
-AirvonSPAdmin:minishell david$ ./minishell
-minishell: |
-minishell: syntax error near unexpected token `|'
-exit_code is: 258
-exit_code is: 0
-minishell: echo $?
-exit_code is: 0
-exit_code is: 0
-exit_code is: 0
-0
-minishell: |
-minishell: syntax error near unexpected token `|'
-exit_code is: 258
-exit_code is: 0
-Segmentation fault: 11
 
 <------------------------------------------------------------------->
 <------------------------------------------------------------------->

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_eichhoernchen.h                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/14 12:24:34 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/18 11:52:28 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,10 +144,10 @@ void    *safe_ft_calloc(size_t count, size_t size);
 //----------------helpers----------------//
 	//--> builtins
 bool    has_equal(const char *str);
-bool    valid_key_name(const char *str);
+bool    valid_key_name(char *str);
 int    	key_exists(char **env, char *key);
 char 	**set_to_null(char **tmp, size_t len);
-size_t  get_len_new_env(char **env, t_command *row, size_t i);
+int  get_len_new_env(char **env, t_command *row, size_t i);
 int	update_pwd(t_shell *shell);
 int	update_oldpwd(t_shell *shell, char *content);
 char	**duplicate_double_ptr(char **double_ptr);

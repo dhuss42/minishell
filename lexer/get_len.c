@@ -100,9 +100,9 @@
 // --top-- for debugging ------- //
 // --bottom-- correct function --//
 
-void    get_len_ws(t_shell *nbr, char *str)
+void	get_len_ws(t_shell *nbr, char *str)
 {
-    nbr->len++;
+	nbr->len++;
 	while (is_wspace(str[nbr->i]) && str[nbr->i] != '\0')
 		nbr->i++;
 }
@@ -124,7 +124,7 @@ void    get_len_quotes(t_shell *nbr, char *str, t_shell *shell)
     {
 		shell->syntax_error = true;
 		print_error(E_SYNTAXERROR, quotes, PRINT);
-		return ; 
+		return ;
     }
 	if (str[nbr->i] == quotes[0])
 	{

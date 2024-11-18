@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:50 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/06 15:12:37 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 12:11:48 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,17 @@ int	check_duplicate_keys(t_shell *shell, t_command *row)
 int	export_with_args(t_shell *shell, t_command *row)
 {
 	char	**tmp;
+	int		len;
 
+	len = 0;
 	tmp = NULL;
-	shell->len = get_len_new_env(shell->env, row, shell->i);
-	tmp = safe_malloc(sizeof(char *) * (shell->len + 1));
+	len = get_len_new_env(shell->env, row, shell->i);
+	if (len == -1)
+		return (-1);
+	tmp = safe_malloc(sizeof(char *) * (len + 1));
 	if (!tmp)
 	 	return (-1);
-	tmp = set_to_null(tmp, shell->len);
+	tmp = set_to_null(tmp, len);
 	if (check_duplicate_keys(shell, row) == -1)
 		return (-1);
 	tmp = copy_new_envs(tmp, shell, row);

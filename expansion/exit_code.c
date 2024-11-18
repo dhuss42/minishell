@@ -77,6 +77,7 @@ int	get_exit_code(char *tmp, t_command *row, t_shell *expand)
 	int len;
 
 	exit_code = print_error(-1, NULL, NOTPRINT);
+	// printf("exit_code: %d\n", exit_code);
 	len = get_int_length(exit_code);
 
 	len += ft_strlen(row->args[expand->i]) - 2;

@@ -25,9 +25,7 @@ int	builtins(t_shell *shell, t_command *row)
 	}
 	else if (ft_strlen(row->args[0]) == 4)
 	{
-		if (ft_strncmp(row->args[0], "echo", 4) == 0)
-			return (ft_echo(shell, row));
-		else if (ft_strncmp(row->args[0], "exit", 4) == 0)
+		if (ft_strncmp(row->args[0], "exit", 4) == 0)
 			return (ft_exit(shell,row));
 	}
 	else if (ft_strlen(row->args[0]) == 5)
@@ -40,12 +38,17 @@ int	builtins(t_shell *shell, t_command *row)
 		if (ft_strncmp(row->args[0], "export", 6) == 0)
 			return (ft_export(shell, row));
 	}
+	if (ft_strncmp(row->args[0], "echo", 4) == 0)
+		return (ft_echo(shell, row));
 	return (1);
 }
 
 int	check_builtins(t_shell *shell, t_command *row)
 {
-	if (builtins(shell, row) == 0)
+	int	is_builtin;
+
+	is_builtin = builtins(shell, row);
+	if (is_builtin == 0)
 	{
 		// printf("---------------IS BUILTIN---------------\n");
 		// usleep(30000);
@@ -53,11 +56,12 @@ int	check_builtins(t_shell *shell, t_command *row)
 		dup2(row->original_stdin, STDIN_FILENO);
 		return (0);
 	}
-	else if (builtins(shell, row) < 0)
+	else if (is_builtin < 0)
 	{
 		dup2(row->original_stdout, STDOUT_FILENO);
 		dup2(row->original_stdin, STDIN_FILENO);
-		return (print_error(E_BUILTIN, NULL, PRINT));
+		return (-1);
+		// return (print_error(E_BUILTIN, NULL, PRINT));
 	}
 	return (1);
 }

@@ -6,22 +6,19 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:50:24 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/10 11:19:11 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/18 10:14:23 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../executor.h"
 
-t_token *create_token(t_token_type type, char *input)
+t_token	*create_token(t_token_type type, char *input)
 {
-	t_token *new;
+	t_token	*new;
 
-	new = malloc(sizeof(t_token));
-	if(!new)
-	{
-		// print_error(errno, NULL);
+	new = safe_malloc(sizeof(t_token));
+	if (!new)
 		return (NULL);
-	}
 	new->type = type;
 	new->input = ft_strdup(input);
 	return (new);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:59:03 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/30 11:00:16 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/18 11:07:43 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,5 @@ bool	syntax_errors(t_list *token_list)
 	return (false);
 }
 
-// handle syntax errors properly
-//	what gets set to print_error
-//	stop the string from moving further in minishell loop
+// random segmentation fault when typing: |
+
