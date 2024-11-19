@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:59:03 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 11:07:43 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 11:12:41 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,3 @@ bool	syntax_errors(t_list *token_list)
 }
 
 // random segmentation fault when typing: |
-

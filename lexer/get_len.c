@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_len.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/19 11:18:04 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/19 11:20:32 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../executor.h"
 
@@ -96,7 +107,6 @@
 // 	return (nbr.len);
 // }
 
-
 // --top-- for debugging ------- //
 // --bottom-- correct function --//
 
@@ -107,9 +117,9 @@ void	get_len_ws(t_shell *nbr, char *str)
 		nbr->i++;
 }
 
-void    get_len_quotes(t_shell *nbr, char *str, t_shell *shell)
+void	get_len_quotes(t_shell *nbr, char *str, t_shell *shell)
 {
-    char	quotes[2];
+	char	quotes[2];
 
 	quotes[0] = str[nbr->i];
 	quotes[1] = '\0';
@@ -121,11 +131,11 @@ void    get_len_quotes(t_shell *nbr, char *str, t_shell *shell)
 		nbr->len++;
 	}
 	if (str[nbr->i] == '\0')
-    {
+	{
 		shell->syntax_error = true;
 		print_error(E_SYNTAXERROR, quotes, PRINT);
 		return ;
-    }
+	}
 	if (str[nbr->i] == quotes[0])
 	{
 		nbr->i++;
@@ -133,9 +143,10 @@ void    get_len_quotes(t_shell *nbr, char *str, t_shell *shell)
 	}
 }
 
-void    get_len_special(t_shell *nbr, char *str)
+void	get_len_special(t_shell *nbr, char *str)
 {
-    if (nbr->i != 0 && !is_wspace(str[nbr->i - 1]) && !is_special_no_quotes(str[nbr->i - 1]))
+	if (nbr->i != 0 && !is_wspace(str[nbr->i - 1])
+		&& !is_special_no_quotes(str[nbr->i - 1]))
 		nbr->len++;
 	nbr->len ++;
 	if (str[nbr->i + 1] != '\0' && !is_wspace(str[nbr->i + 1]))
@@ -143,9 +154,10 @@ void    get_len_special(t_shell *nbr, char *str)
 	nbr->i ++;
 }
 
-void    get_len_double_red(t_shell *nbr, char *str)
+void	get_len_double_red(t_shell *nbr, char *str)
 {
-	if (nbr->i != 0 && !is_wspace(str[nbr->i - 1]) && !is_special_no_quotes(str[nbr->i - 1]))
+	if (nbr->i != 0 && !is_wspace(str[nbr->i - 1])
+		&& !is_special_no_quotes(str[nbr->i - 1]))
 		nbr->len++;
 	nbr->len += 2;
 	if (str[nbr->i + 2] != '\0' && !is_wspace(str[nbr->i + 2]))
@@ -162,13 +174,14 @@ size_t	get_len(char *str, t_shell *shell)
 	while (str[nbr.i] != '\0')
 	{
 		if (is_wspace(str[nbr.i]))
-            get_len_ws(&nbr, str);
+			get_len_ws(&nbr, str);
 		else if (str[nbr.i] == '\'' || str[nbr.i] == '\"')
 			get_len_quotes(&nbr, str, shell);
-		else if ((str[nbr.i] == '<' && str[nbr.i + 1] == '<') || (str[nbr.i] == '>' && str[nbr.i + 1] == '>'))
-            get_len_double_red(&nbr, str);
+		else if ((str[nbr.i] == '<' && str[nbr.i + 1] == '<')
+			|| (str[nbr.i] == '>' && str[nbr.i + 1] == '>'))
+			get_len_double_red(&nbr, str);
 		else if (is_special_no_quotes(str[nbr.i]))
-            get_len_special(&nbr, str);
+			get_len_special(&nbr, str);
 		else
 		{
 			nbr.len++;
@@ -177,27 +190,3 @@ size_t	get_len(char *str, t_shell *shell)
 	}
 	return (nbr.len);
 }
-
-
-// ls -la|echo$PATH
-// echo hallo"welt     "hallo
-// echo $PATHhome$HOME" .   hallo $?"     >>'$$?'<<infile>out|$
-// --> not adding ws before quote in get_len
-// 			--> removing quotes from is_special_no_quotes solved it
-// 			--> however it affects something else so the spaces inside the quotes are trimmed
-// 			-------solved-------
-// --> not splitting correct after quote also
-// 			------solved-------
-
-// "$?      "<'""'|   "out"        <<in
-
-// "asd" "'    fgd  "t t | sa $TEST $sa
-// --> not splitting correct
-// 			------solved-------
-// --> setting isspace flag to false solved it
-
-// halla < >ads>
-// --> funktioniert wirft syntax error wegen < >
-// test "asd"asd"asds"
-// --> funktioniert
-// "asd" "'    fgd  "t t | sa $TEST $sa echo hallo"welt    "hallo""

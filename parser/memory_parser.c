@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:21:11 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:33:15 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 11:22:38 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	free_table_parser(t_shell *parsing)
 	while (tmp != NULL)
 	{
 		next = tmp->next;
-		free_command((t_command*)tmp->content);
+		free_command((t_command *)tmp->content);
 		free(tmp);
 		tmp = next;
 	}

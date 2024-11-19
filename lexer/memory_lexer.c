@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:16:00 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/06 12:14:11 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 11:13:32 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ void	clear_all(char **to_clear)
 
 void	free_token(void *content)
 {
-	t_token *tok = (t_token *)content;
+	t_token	*tok;
+
+	tok = (t_token *)content;
 	if (tok)
 	{
 		free(tok->input);
@@ -37,12 +39,12 @@ void	free_token(void *content)
 	}
 }
 
-void    free_three(char *str, char *str2, char *str3)
+void	free_three(char *str, char *str2, char *str3)
 {
-    if (str)
-        free(str);
-    if (str2)
-        free(str2);
-    if (str3)
-        free(str3);
+	if (str)
+		free(str);
+	if (str2)
+		free(str2);
+	if (str3)
+		free(str3);
 }

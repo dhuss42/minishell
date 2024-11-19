@@ -12,9 +12,9 @@
 
 #include "../executor.h"
 
-void handle_quotes(t_shell *trim, char *input)
+void	handle_quotes(t_shell *trim, char *input)
 {
-	char quote;
+	char	quote;
 
 	// if (trim->j > 0 && (!is_wspace(trim->res[trim->j - 1]))) // if not the beginning of res and the prior space is not ws
 	// 	trim->res[trim->j++] = ' ';
@@ -50,28 +50,22 @@ void	handle_op(t_shell *trim, char *input)
 		trim->i++;
 		return ;
 	}
-	if (/* input[trim->i] != '$' && */ input[trim->i + 1] != '\0')
+	if (input[trim->i + 1] != '\0')
 		trim->res[trim->j++] = ' ';
 }
 
 void	handle_special(t_shell *trim, char *input)
 {
-/* 	char tmp; */
-
 	if ((input[trim->i] == '\'') || (input[trim->i] == '\"'))
-		{
-			handle_quotes(trim, input);
-			trim->isspace = false;
-		}
-	else if (input[trim->i] == '|' || input[trim->i] == '>' || input[trim->i] == '<' /* || input[trim->i] == '$' */)
-		{
-			/* tmp = input[trim->i]; */
-			handle_op(trim, input);
-/* 			if (tmp == '$')
-				trim->isspace = false;
-			else */
-				trim->isspace = true;
-		}
+	{
+		handle_quotes(trim, input);
+		trim->isspace = false;
+	}
+	else if (input[trim->i] == '|' || input[trim->i] == '>' || input[trim->i] == '<')
+	{
+		handle_op(trim, input);
+		trim->isspace = true;
+	}
 }
 
 void	populate_trim_str(t_shell *trim, char *input)
@@ -103,8 +97,7 @@ void	populate_trim_str(t_shell *trim, char *input)
 	trim->res[trim->j] = '\0';
 }
 
-
-char *trim_spaces(char *input, t_shell *shell)
+char	*trim_spaces(char *input, t_shell *shell)
 {
 	t_shell	trim;
 	char	*trim_inpt;
@@ -122,13 +115,11 @@ char *trim_spaces(char *input, t_shell *shell)
 	trim.res = ft_calloc(sizeof(char), (trim.len + 1));
 	if (!trim.res)
 	{
-	 	print_error(errno, NULL, PRINT);
+		print_error(errno, NULL, PRINT);
 		return (free(trim_inpt), NULL);
 	}
 	populate_trim_str(&trim, trim_inpt);
-	if(trim_inpt)
+	if (trim_inpt)
 		free(trim_inpt);
 	return (trim.res);
 }
-
-

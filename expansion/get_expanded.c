@@ -3,42 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   get_expanded.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:27 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/30 11:00:36 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/19 11:35:45 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_eichhoernchen.h"
 
-size_t  get_len_exp(t_command *row, char *exp, t_shell *expand)
+size_t	get_len_exp(t_command *row, char *exp, t_shell *expand)
 {
-	size_t  j;
-	size_t  len;
+	size_t	j;
+	size_t	len;
 
 	j = 0;
 	len = 0;
-	while(j < expand->k)
+	while (j < expand->k)
 	{
 		len++;
 		j++;
 	}
-	// printf(BLUE"len up to k: %zu\n"WHITE, len);
 	while (row->args[expand->i][j] == '$')
 		j++;
-	// printf(BLUE"len after $ skip: %zu\n"WHITE, len);
-	while(row->args[expand->i][j] != '\0' && !is_quotes(row->args[expand->i][j]) && row->args[expand->i][j] != '$' && !is_wspace(row->args[expand->i][j]))
+	while (row->args[expand->i][j] != '\0' && !is_quotes(row->args[expand->i][j]) && row->args[expand->i][j] != '$' && !is_wspace(row->args[expand->i][j]))
 		j++;
-	// printf(BLUE"len after variale name skip: %zu\n"WHITE, len);
-	while(row->args[expand->i][j] != '\0')
+	while (row->args[expand->i][j] != '\0')
 	{
 		j++;
 		len++;
 	}
-	// printf(BLUE"len with remainder: %zu\n"WHITE, len);
 	len += ft_strlen(exp);
-	// printf(BLUE"len with exp: %zu\n"WHITE, len);
 	return (len);
 }
 
@@ -56,10 +51,10 @@ char	*copy_into_tmp(t_command *row, char *exp, t_shell *expand, char *tmp)
 	expand->j = 0;
 	iterate = 0;
 	index = 0;
-	while(expand->j < expand->k)
+	while (expand->j < expand->k)
 		tmp[iterate++] = row->args[expand->i][expand->j++];
 	expand->j++;
-	while(row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != '$' && !is_quotes(row->args[expand->i][expand->j]) && !is_wspace(row->args[expand->i][expand->j]))
+	while (row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != '$' && !is_quotes(row->args[expand->i][expand->j]) && !is_wspace(row->args[expand->i][expand->j]))
 		expand->j++;
 	while (exp[index] != '\0')
 		tmp[iterate++] = exp[index++];
@@ -88,10 +83,10 @@ int	switcheroo(t_command *row, char *exp, t_shell *expand)
 	char	*tmp;
 
 	expand->len = get_len_exp(row, exp, expand);
-	tmp = safe_ft_calloc(expand->len + 1, sizeof(char)); // tmp is allocated
+	tmp = safe_ft_calloc(expand->len + 1, sizeof(char));
 	if (!tmp)
 		return (-1);
-	tmp = copy_into_tmp(row, exp, expand, tmp); // exp is freed
+	tmp = copy_into_tmp(row, exp, expand, tmp);
 	if (row->args[expand->i])
 	{
 		free(row->args[expand->i]);
@@ -100,11 +95,10 @@ int	switcheroo(t_command *row, char *exp, t_shell *expand)
 	row->args[expand->i] = safe_ft_strdup(tmp);
 	if (!row->args[expand->i])
 		return (free(tmp), -1);
-	if (tmp) // tmp is freed
+	if (tmp)
 		free(tmp);
 	return (0);
 }
-
 
 // switcheroo
 // gets len of the complete expanded string
@@ -120,7 +114,7 @@ char	*get_key(t_command *row, t_shell *expand)
 
 	tmp = NULL;
 	index = expand->k;
-	while (row->args[expand->i][index] == '$' /* || */ /* is_wspace(row->args[expand->i][index]) */) // need to handle when there are chars before the variable in the quote
+	while (row->args[expand->i][index] == '$')
 		index++;
 	expand->j = index;
 	while (row->args[expand->i][expand->j] != '\0' && !is_quotes(row->args[expand->i][expand->j]) && row->args[expand->i][expand->j] != '$' && !is_wspace(row->args[expand->i][expand->j]))
@@ -141,7 +135,8 @@ char	*get_key(t_command *row, t_shell *expand)
 
 // tmp_dolalr
 // creates a searchable variable name to compare to the env variable list
-// index copies the position of index expand->k this is necessary so that expand-> remembers the starting position of variable for later use
+// index copies the position of index expand->k this is necessary
+// so that expand-> remembers the starting position of variable for later use
 // skipps adjancent $ ($$PATH)
 // gets the length of the string ($PATH)
 // allocates the tmp string
@@ -150,8 +145,9 @@ char	*get_key(t_command *row, t_shell *expand)
 
 int	get_expanded(char *key, char **env, t_command *row, t_shell *expand)
 {
-	char	*exp = NULL;
+	char	*exp;
 
+	exp = NULL;
 	key = get_key(row, expand);
 	if (!key)
 		return (-1);
@@ -172,5 +168,6 @@ int	get_expanded(char *key, char **env, t_command *row, t_shell *expand)
 
 // moves past the dollar so variable becomes searchable (PATH)
 // compares with env list
-// if exp is empty because there is no match then it should be an empty string ($PATHaaaa)
+// if exp is empty because there is no match
+// then it should be an empty string ($PATHaaaa)
 // calls the switch

@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit_code.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/19 11:36:31 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/19 11:38:48 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../executor.h"
 
 int	get_int_length(int num)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	if (num == 0)
@@ -23,8 +34,8 @@ int	get_int_length(int num)
 
 char	*copy_exit_code(t_shell *expand, t_command *row, char *tmp)
 {
-	size_t len;
-	size_t index;
+	size_t	len;
+	size_t	index;
 	char	*tmp_ec;
 
 	len = 0;
@@ -33,8 +44,6 @@ char	*copy_exit_code(t_shell *expand, t_command *row, char *tmp)
 	while (expand->j < expand->k)
 		tmp[len++] = row->args[expand->i][expand->j++];
 	expand->j += 2;
-	// printf(MAGENTA"tmp before exit code: %s\n"WHITE, tmp);
-
 	tmp_ec = ft_itoa(print_error(-1, NULL, NOTPRINT));
 	if (!tmp_ec)
 	{
@@ -42,15 +51,11 @@ char	*copy_exit_code(t_shell *expand, t_command *row, char *tmp)
 		return (NULL); // not sure if tmp should be freed
 	}
 	expand->k += ft_strlen(tmp_ec);
-	// printf(RED"exit_code tmp_ec: %s\n"WHITE, tmp_ec);
-
-	while(tmp_ec[index] != '\0')
+	while (tmp_ec[index] != '\0')
 		tmp[len++] = tmp_ec[index++];
-	// printf(MAGENTA"tmp after copying exitcode: %s\n"WHITE, tmp);
 	free(tmp_ec);
 	while (row->args[expand->i][expand->j] != '\0')
 		tmp[len++] = row->args[expand->i][expand->j++];
-	// printf(MAGENTA"tmp after copying remainder: %s\n"WHITE, tmp);
 	tmp[len] = '\0';
 	return (tmp);
 }
@@ -62,7 +67,6 @@ int	update_arg_and_free(t_shell *expand, t_command *row, char *tmp)
 	row->args[expand->i] = safe_ft_strdup(tmp);
 	if (!row->args[expand->i])
 		return (free(tmp), -1);
-	// printf("tmp: %s\n", tmp);
 	if (tmp)
 	{
 		free(tmp);
@@ -73,25 +77,20 @@ int	update_arg_and_free(t_shell *expand, t_command *row, char *tmp)
 
 int	get_exit_code(char *tmp, t_command *row, t_shell *expand)
 {
-	int exit_code;
-	int len;
+	int	exit_code;
+	int	len;
 
 	exit_code = print_error(-1, NULL, NOTPRINT);
-	// printf("exit_code: %d\n", exit_code);
 	len = get_int_length(exit_code);
-
 	len += ft_strlen(row->args[expand->i]) - 2;
-	tmp = safe_malloc(sizeof(char) * (len + 1)); // tmp is allocated
+	tmp = safe_malloc(sizeof(char) * (len + 1));
 	if (!tmp)
 		return (-1);
-
 	tmp = copy_exit_code(expand, row, tmp);
 	if (!tmp)
 		return (-1);
-	if (update_arg_and_free(expand, row, tmp) == -1) // tmp is freed
+	if (update_arg_and_free(expand, row, tmp) == -1)
 		return (-1);
-
-	// move expand->k accordingly
 	return (0);
 }
 

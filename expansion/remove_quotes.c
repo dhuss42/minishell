@@ -6,70 +6,69 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:47:50 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/21 16:05:18 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 11:29:58 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell_eichhoernchen.h"
 
-void	get_len_no_quotes(t_command *row, t_shell *expand)
+void	get_len_no_quotes(t_command *r, t_shell *ex)
 {
-	expand->quote = '\0';
-	expand->j = 0;
-	expand->len = 0;
-	while (row->args[expand->i][expand->j] != '\0')
+	ex->quote = '\0';
+	ex->j = 0;
+	ex->len = 0;
+	while (r->args[ex->i][ex->j] != '\0')
 	{
-		if (row->args[expand->i][expand->j] == '$' && is_quotes(row->args[expand->i][expand->j + 1]))
-			expand->j++;
-		if (is_quotes(row->args[expand->i][expand->j]))
+		if (r->args[ex->i][ex->j] == '$' && is_quotes(r->args[ex->i][ex->j + 1]))
+			ex->j++;
+		if (is_quotes(r->args[ex->i][ex->j]))
 		{
-			expand->quote = row->args[expand->i][expand->j];
-			expand->j++;
-			while (row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != expand->quote)
+			ex->quote = r->args[ex->i][ex->j];
+			ex->j++;
+			while (r->args[ex->i][ex->j] != '\0' && r->args[ex->i][ex->j] != ex->quote)
 			{
-				expand->len++;
-				expand->j++;
+				ex->len++;
+				ex->j++;
 			}
-			expand->j++;
+			ex->j++;
 		}
 		else
 		{
-			expand->len++;
-			expand->j++;
+			ex->len++;
+			ex->j++;
 		}
 	}
-	// printf(MAGENTA"len no quotes: %zu\n"WHITE, expand->len);
 }
 
-int	remove_outer_quotes(t_command *row, t_shell *expand)
+int	remove_outer_quotes(t_command *r, t_shell *ex)
 {
 	char	*no_quotes;
-	
-	get_len_no_quotes(row, expand);
-	no_quotes = safe_ft_calloc(expand->len + 1, sizeof(char));
+
+	get_len_no_quotes(r, ex);
+	no_quotes = safe_ft_calloc(ex->len + 1, sizeof(char));
 	if (!no_quotes)
 		return (-1);
-	expand->j = 0;
-	expand->k = 0;
-	while (row->args[expand->i][expand->j] != '\0')
+	ex->j = 0;
+	ex->k = 0;
+	while (r->args[ex->i][ex->j] != '\0')
 	{
-		if (row->args[expand->i][expand->j] == '$' && is_quotes(row->args[expand->i][expand->j + 1]))
-			expand->j++;
-		if (is_quotes(row->args[expand->i][expand->j]))
+		if (r->args[ex->i][ex->j] == '$' && is_quotes(r->args[ex->i][ex->j + 1]))
+			ex->j++;
+		if (is_quotes(r->args[ex->i][ex->j]))
 		{
-			expand->quote = row->args[expand->i][expand->j];
-			expand->j++;
-			while (row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != expand->quote)
-				no_quotes[expand->k++] = row->args[expand->i][expand->j++];
-			expand->j++;
+			ex->quote = r->args[ex->i][ex->j];
+			ex->j++;
+			while (r->args[ex->i][ex->j] != '\0' && r->args[ex->i][ex->j] != ex->quote)
+				no_quotes[ex->k++] = r->args[ex->i][ex->j++];
+			ex->j++;
 		}
 		else
-			no_quotes[expand->k++] = row->args[expand->i][expand->j++];
+			no_quotes[ex->k++] = r->args[ex->i][ex->j++];
 	}
-	if (row->args[expand->i])
-		free (row->args[expand->i]);
-	row->args[expand->i] = safe_ft_strdup(no_quotes);
-	if (!row->args[expand->i])
+	if (r->args[ex->i])
+		free (r->args[ex->i]);
+	r->args[ex->i] = safe_ft_strdup(no_quotes);
+	if (!r->args[ex->i])
 		return (free(no_quotes), -1);
 	if (no_quotes)
 		free(no_quotes);
@@ -78,11 +77,12 @@ int	remove_outer_quotes(t_command *row, t_shell *expand)
 
 // function allocates memory for a string without quotes
 // loops until end
-// if it finds a quote it skips it in the og string, then it copies into no_quotes until it finds the matching closing quote
+// if it finds a quote it skips it in the og string,
+// then it copies into no_quotes until it finds the matching closing quote
 // skips the closing quote in og
-// frees the relevant string in args** and replaces it with the string without quotes
+// frees the relevant string in args** and
+// replaces it with the string without quotes
 // frees the no_quotes string
-
 
 int	remove_quotes(t_list *table)
 {
@@ -92,7 +92,7 @@ int	remove_quotes(t_list *table)
 	expand.tmp = table;
 	while (expand.tmp != NULL)
 	{
-		row = (t_command*) expand.tmp->content;
+		row = (t_command *) expand.tmp->content;
 		expand.i = 0;
 		while (row->args[expand.i] != NULL)
 		{
