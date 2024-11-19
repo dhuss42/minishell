@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:30:04 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:30:22 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:09:57 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 int	copy_env(char **env, t_shell *shell)
 {

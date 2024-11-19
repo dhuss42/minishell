@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:04 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:03:47 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:27 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 bool	has_equal(const char *str)
 {

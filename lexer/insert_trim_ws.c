@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 void	handle_quotes(t_shell *trim, char *input)
 {

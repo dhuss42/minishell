@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 11:38:59 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:40:18 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:08:59 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 size_t	strlen_equal(char *str)
 {

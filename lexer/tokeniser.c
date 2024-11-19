@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:50:24 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:06:20 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:11:14 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 t_token	*create_token(t_token_type type, char *input)
 {

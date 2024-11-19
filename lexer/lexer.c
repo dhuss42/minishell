@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 11:14:37 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:14:40 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:58 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 void	lexer(t_shell *shell, char *input)
 {

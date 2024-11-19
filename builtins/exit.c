@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:16:35 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:08:50 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:24 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 bool	is_numeric(char *str)
 {

@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:20 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:12:31 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:21 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 int	ft_env(t_shell *shell)
 {

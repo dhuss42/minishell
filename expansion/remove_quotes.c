@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:47:50 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:29:58 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:09:17 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 void	get_len_no_quotes(t_command *r, t_shell *ex)
 {

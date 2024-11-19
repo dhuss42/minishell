@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:21:11 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:22:38 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:11:44 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 void	free_command(t_command *cmd)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 size_t  get_len_exp_hd(char *line, char *exp, size_t index)
 {

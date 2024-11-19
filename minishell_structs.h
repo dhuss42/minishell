@@ -1,35 +1,80 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
+/*   minishell_structs.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/18 11:41:16 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:21:45 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTOR_H
-# define EXECUTOR_H
-
-# include <unistd.h>
-# include <stdio.h>
-# include <signal.h>
-# include <termios.h>
-# include <sys/wait.h>
-# include <sys/stat.h>
-# include <stdlib.h>
-# include <errno.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-
-# include "./libft/libft.h"
-# include "minishell_eichhoernchen.h"
+#ifndef MINISHELL_STRUCTS_H
+# define MINISHELL_STRUCTS_H
 
 # ifndef BASE_PATH
 #  define BASE_PATH "executor/tmp/heredoc_temp"
 # endif
+
+//----------------structs--------------//
+
+typedef enum e_token_type
+{
+	TOKEN_PIPE,
+	TOKEN_REDIN,
+	TOKEN_REDOUT,
+	TOKEN_HEREDOC,
+	TOKEN_REDAPPEND,
+	TOKEN_SQUOTES,
+	TOKEN_DQUOTES,
+	TOKEN_ARGS,
+	TOKEN_EXITSTATUS,
+	TOKEN_WORD,
+}	t_token_type;
+
+typedef struct s_token
+{
+	t_token_type	type;
+	char			*input;
+}	t_token;
+
+typedef struct s_command
+{
+	char	**args;
+	char	**filename;
+	char	**red_symbol;
+	int		id;
+	char	*path;				//to free
+	char	*final_infile;
+	char	*final_outfile;
+	char	*final_in_red;
+	char	*final_out_red;
+	int		original_stdout;
+	int		original_stdin;
+	char	*heredoc_file_path;	//to free
+}	t_command;
+
+typedef struct s_shell
+{
+	size_t	i;
+	size_t	j;
+	size_t	k;
+	size_t	len;
+	size_t	lines;
+	size_t	words;
+	size_t	reds;
+	size_t	filenames;
+	t_list	*tmp;
+	t_list	*list;
+	t_list	*table;
+	bool	isspace;
+	bool	syntax_error;
+	bool	exit;
+	char	quote;
+	char	*res;
+	char	**env;
+}	t_shell;
 
 typedef enum e_custom_err
 {
@@ -85,32 +130,5 @@ typedef enum e_print_err
 // 	// char	*final_in_red;
 // 	// char	*final_out_red;
 // }					t_exec;
-
-
-//-----------------executor-----------------------
-char	*get_path(char *cmd, char **envp);
-void	free_paths(char **split_paths, char **append);
-// int		print_error(int err_no, char *str, int print);
-int		check_files(t_command *row);
-int		exec_redirections(t_command *row);
-void	free_double(char **to_free);
-int		free_row(t_command *example);
-// int		execute_pipechain(char **envp, t_list *table, int nbr_pipes, t_shell *shell);
-int		handle_stuff(char **envp, t_command *row);
-int		get_check_path(t_command *row, char **envp);
-int		free_table(t_list *table);
-int		handle_heredoc(t_list *table, char **env);
-int		heredoc_expansion(char *line, char **env);
-int		redirect_input(t_command row, int *fd);
-int		redirect_output(t_command row, int *fd);
-void	reset_redirections(t_command row);
-int		executor(char **envp, t_list *table, t_shell *shell);
-int		pipechain_loop(t_list *table, pid_t *pid, int (*fd)[2], t_shell *shell);
-int		pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes);
-void	free_child_exit(t_shell *shell, int exit_code);
-
-//-------------signals---------
-void	handle_signals(int is_child);
-void	init_terminal(void);
 
 #endif

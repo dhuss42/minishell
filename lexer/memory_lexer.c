@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:16:00 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:13:32 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:11:02 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 void	clear_all(char **to_clear)
 {

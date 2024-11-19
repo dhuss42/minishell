@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:42:40 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:43:45 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:02:23 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
+#include "minishell.h"
 
 void	*safe_malloc(size_t size)
 {

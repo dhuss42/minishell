@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 11:18:04 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:20:32 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:47 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 // ---for-debugging------/
 // size_t	get_len(char *str)

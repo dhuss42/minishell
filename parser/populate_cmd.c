@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:03:35 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:41:35 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:11:51 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 int	populate_red_array(t_shell *parsing, t_token *current_token, t_command *new_cmd)
 {

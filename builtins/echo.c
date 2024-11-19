@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:27 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:26:11 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:18 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 bool	is_only_n(char *str)
 {

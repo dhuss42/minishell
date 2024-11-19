@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:19:30 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:30:52 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:00 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 char	*update_shlvl(t_shell *shell, char *new_shlvl, size_t *i)
 {

@@ -1,5 +1,5 @@
 
-#include "minishell_eichhoernchen.h"
+#include "minishell.h"
 
 size_t  nbr_of(char **str)
 {

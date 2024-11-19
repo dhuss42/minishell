@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:44:37 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:08:52 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 int	double_quotes(t_command *row, t_shell *expand, char **env)
 {

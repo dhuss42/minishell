@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:00:48 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:39:17 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:11:36 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 t_command	*create_cmd_block(void)
 {

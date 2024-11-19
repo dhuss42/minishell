@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:49:09 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:11:33 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:11:05 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 void	count_tokens_quotes(char *str, size_t *i, size_t *counter)
 {

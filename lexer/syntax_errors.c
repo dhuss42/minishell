@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:59:03 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:12:41 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:11:11 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 bool	syntax_error_red(t_list *tl_pos)
 {

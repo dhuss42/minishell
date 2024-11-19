@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 12:04:44 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:38:29 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:11:40 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 int	is_redirection(t_token *current_token)
 {

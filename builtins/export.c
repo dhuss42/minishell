@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:50 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:00:30 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:33 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 int	replace_key(t_shell *shell, t_command *row, size_t index, size_t j)
 {

@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:37 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 13:07:21 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:38 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 void	get_len_unset(t_shell *shell, t_command *row)
 {

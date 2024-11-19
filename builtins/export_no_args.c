@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:57 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:52:39 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:29 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 void	put_str_n(char *str, size_t n, size_t i)
 {

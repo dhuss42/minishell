@@ -1,5 +1,5 @@
 
-#include "minishell_eichhoernchen.h"
+#include "minishell.h"
 
 void	print_token(t_token *tok)
 {

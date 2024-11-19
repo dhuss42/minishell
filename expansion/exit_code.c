@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 11:36:31 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:38:48 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:09:03 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 int	get_int_length(int num)
 {

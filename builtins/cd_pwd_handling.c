@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:28:36 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 14:28:59 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:10 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../executor.h"
+#include "../minishell.h"
 
 int	replace_pwd(t_shell *shell, char *key, char *content)
 {

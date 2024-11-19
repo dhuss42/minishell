@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:21 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 11:36:11 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:09:06 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 void	expansion(t_shell *shell, char **env)
 {
