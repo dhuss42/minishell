@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:00:48 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:11:36 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 14:17:05 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ t_command	*allocate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing)
 	return (new_cmd);
 }
 
-int	create_table(t_shell *shell, t_list *new_node, t_command *new_cmd, t_list *tmp)
+int	create_table(t_shell *shell, t_list *new_node, t_command *cmd, t_list *tmp)
 {
 	t_list		*tmp2;
 
@@ -108,18 +108,18 @@ int	create_table(t_shell *shell, t_list *new_node, t_command *new_cmd, t_list *t
 	shell->lines = count_lines_table(shell->list);
 	while (shell->lines > 0 && tmp != NULL)
 	{
-		new_cmd = create_cmd_block();
-		if (!new_cmd)
+		cmd = create_cmd_block();
+		if (!cmd)
 			return (free_table_parser(shell), -1);
-		new_node = ft_lstnew((void *)new_cmd);
+		new_node = ft_lstnew((void *)cmd);
 		if (!new_node)
-			return (memory_parser(shell, new_cmd), print_error(errno, NULL, PRINT));
+			return (memory_parser(shell, cmd), print_error(errno, NULL, PRINT));
 		tmp2 = tmp;
 		set_to_zero(shell);
 		nbr_words_redirections(shell, &tmp);
-		new_cmd = allocate_cmd(new_cmd, tmp2, shell);
-		if (!new_cmd)
-			return (memory_parser(shell, new_cmd), -1);
+		cmd = allocate_cmd(cmd, tmp2, shell);
+		if (!cmd)
+			return (memory_parser(shell, cmd), -1);
 		ft_lstadd_back(&shell->table, new_node);
 		if (tmp == NULL)
 			break ;

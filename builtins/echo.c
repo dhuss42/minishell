@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:27 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:10:18 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:36:55 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ int	ft_echo(t_shell *shell, t_command *row)
 {
 	if (row->args[shell->i][4] == ' ')
 		echo_expanded(shell, row);
-	if (ft_strncmp(row->args[0], "echo", ft_strlen(row->args[shell->i])) == 0 && ft_strlen(row->args[shell->i]) == 4)
+	if (ft_strncmp(row->args[0], "echo", ft_strlen(row->args[shell->i])) == 0
+		&& ft_strlen(row->args[shell->i]) == 4)
 	{
 		echo(shell, row);
 		return (0);
@@ -77,6 +78,7 @@ int	ft_echo(t_shell *shell, t_command *row)
 // check for empty string
 // if so print newline
 // check if next argument is -n or -nnnnnnnn
-// if so check in while loop if the following i arguments are also -n or -nnnnn and skipp them
+// if so check in while loop if the
+// following i arguments are also -n or -nnnnn and skipp them
 // printf everything until NULL
 // print newline if true

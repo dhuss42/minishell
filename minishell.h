@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:21:10 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 14:18:46 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,9 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <stdarg.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <termios.h>
-# include <unistd.h>
 
 //----------------colors--------------//
 # define RESET       "\033[0m"
@@ -48,6 +44,7 @@ int			shlvl(t_shell *shell);
 int			ft_pwd(void);
 int			ft_env(t_shell *shell);
 int			ft_export(t_shell *shell, t_command *row);
+int			export_with_args(t_shell *shell, t_command *row);
 int			export_no_argument(t_shell *shell);
 int			ft_echo(t_shell *shell, t_command *row);
 void		echo_expanded(t_shell *shell, t_command *row);
@@ -65,7 +62,7 @@ bool		syntax_errors(t_list *token_list);
 
 //----------------parser----------------//
 void		parser(t_shell *shell);
-int			create_table(t_shell *shell, t_list *new_node, t_command *new_cmd, t_list *tmp);
+int			create_table(t_shell *shell, t_list *new_node, t_command *cmd, t_list *tmp);
 t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing);
 
 //----------------expansion----------------//

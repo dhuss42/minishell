@@ -34,6 +34,7 @@ CFILES = minishell.c\
 	builtins/env.c\
 	builtins/pwd.c\
 	builtins/export.c\
+	builtins/export_args.c\
 	builtins/export_helpers.c\
 	builtins/export_no_args.c\
 	builtins/echo.c\

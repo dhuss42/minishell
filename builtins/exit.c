@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:16:35 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:10:24 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:36:00 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,5 @@ int	ft_exit(t_shell *shell, t_command *row)
 			shell->exit = false;
 		}
 	}
-	// ft_printf("Exiting with status %d\n", print_error(-1, NULL, NOTPRINT));
 	return (0);
 }

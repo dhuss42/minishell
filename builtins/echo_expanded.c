@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:37:20 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:10:16 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:37:32 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ char	**tmp_args(t_command *row, char *separated)
 	tmp[0] = safe_ft_strdup("echo");
 	if (!tmp[0])
 		return (NULL);
-	// function handling -n -nnnn inside the remainder string
 	tmp[1] = safe_ft_strdup(separated);
 	if (!tmp[1])
 		return (clear_all(tmp), NULL);

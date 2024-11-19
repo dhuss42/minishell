@@ -6,29 +6,32 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:27 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:09:10 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 14:54:19 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-size_t	get_len_exp(t_command *row, char *exp, t_shell *expand)
+size_t	get_len_exp(t_command *row, char *exp, t_shell *ex)
 {
 	size_t	j;
 	size_t	len;
 
 	j = 0;
 	len = 0;
-	while (j < expand->k)
+	while (j < ex->k)
 	{
 		len++;
 		j++;
 	}
-	while (row->args[expand->i][j] == '$')
+	while (row->args[ex->i][j] == '$')
 		j++;
-	while (row->args[expand->i][j] != '\0' && !is_quotes(row->args[expand->i][j]) && row->args[expand->i][j] != '$' && !is_wspace(row->args[expand->i][j]))
+	while (row->args[ex->i][j] != '\0' && !is_quotes(row->args[ex->i][j])
+		&& row->args[ex->i][j] != '$' && !is_wspace(row->args[ex->i][j]))
+	{
 		j++;
-	while (row->args[expand->i][j] != '\0')
+	}
+	while (row->args[ex->i][j] != '\0')
 	{
 		j++;
 		len++;
@@ -43,29 +46,30 @@ size_t	get_len_exp(t_command *row, char *exp, t_shell *expand)
 // gets the len of the remainder of the string ($HOME$a)
 // adds the length of the expanded string
 
-char	*copy_into_tmp(t_command *row, char *exp, t_shell *expand, char *tmp)
+char	*copy_into_tmp(t_command *r, char *var, t_shell *e, char *tmp)
 {
 	size_t	iterate;
-	size_t	index;
+	size_t	inde;
 
-	expand->j = 0;
+	e->j = 0;
 	iterate = 0;
-	index = 0;
-	while (expand->j < expand->k)
-		tmp[iterate++] = row->args[expand->i][expand->j++];
-	expand->j++;
-	while (row->args[expand->i][expand->j] != '\0' && row->args[expand->i][expand->j] != '$' && !is_quotes(row->args[expand->i][expand->j]) && !is_wspace(row->args[expand->i][expand->j]))
-		expand->j++;
-	while (exp[index] != '\0')
-		tmp[iterate++] = exp[index++];
-	if (exp)
-		free(exp);
-	expand->k = iterate;
-	while (iterate < expand->len)
+	inde = 0;
+	while (e->j < e->k)
+		tmp[iterate++] = r->args[e->i][e->j++];
+	e->j++;
+	while (r->args[e->i][e->j] != '\0' && r->args[e->i][e->j] != '$'
+		&& !is_quotes(r->args[e->i][e->j]) && !is_wspace(r->args[e->i][e->j]))
+		e->j++;
+	while (var[inde] != '\0')
+		tmp[iterate++] = var[inde++];
+	if (var)
+		free(var);
+	e->k = iterate;
+	while (iterate < e->len)
 	{
-		tmp[iterate] = row->args[expand->i][expand->j];
+		tmp[iterate] = r->args[e->i][e->j];
 		iterate++;
-		expand->j++;
+		e->j++;
 	}
 	tmp[iterate] = '\0';
 	return (tmp);
@@ -107,29 +111,30 @@ int	switcheroo(t_command *row, char *exp, t_shell *expand)
 // strdups tmp into the now free position in args **
 // frees tmp
 
-char	*get_key(t_command *row, t_shell *expand)
+char	*get_key(t_command *r, t_shell *ex)
 {
 	char	*tmp;
 	size_t	index;
 
 	tmp = NULL;
-	index = expand->k;
-	while (row->args[expand->i][index] == '$')
+	index = ex->k;
+	while (r->args[ex->i][index] == '$')
 		index++;
-	expand->j = index;
-	while (row->args[expand->i][expand->j] != '\0' && !is_quotes(row->args[expand->i][expand->j]) && row->args[expand->i][expand->j] != '$' && !is_wspace(row->args[expand->i][expand->j]))
-		expand->j++;
-	tmp = safe_malloc(sizeof(char) * (expand->j + 1));
+	ex->j = index;
+	while (r->args[ex->i][ex->j] != '\0' && !is_quotes(r->args[ex->i][ex->j])
+		&& r->args[ex->i][ex->j] != '$' && !is_wspace(r->args[ex->i][ex->j]))
+		ex->j++;
+	tmp = safe_malloc(sizeof(char) * (ex->j + 1));
 	if (!tmp)
 		return (NULL);
-	expand->j = 0;
-	while (row->args[expand->i][index] != '\0' && row->args[expand->i][index] != '\"' && row->args[expand->i][index] != '\'' && row->args[expand->i][index] != '$' && !is_wspace(row->args[expand->i][index]))
-		tmp[expand->j++] = row->args[expand->i][index++];
-	tmp[expand->j] = '\0';
-	if (row->args[expand->i][index] == expand->quote)
+	ex->j = 0;
+	while (r->args[ex->i][index] != '\0' && r->args[ex->i][index] != '\"'
+		&& r->args[ex->i][index] != '\'' && r->args[ex->i][index] != '$'
+			&& !is_wspace(r->args[ex->i][index]))
+		tmp[ex->j++] = r->args[ex->i][index++];
+	tmp[ex->j] = '\0';
+	if (r->args[ex->i][index] == ex->quote)
 		index++;
-	// printf(GREEN"tmp: %s\n"WHITE, tmp);
-	// printf(GREEN"len tmp: %zu\n"WHITE, ft_strlen(tmp));
 	return (tmp);
 }
 

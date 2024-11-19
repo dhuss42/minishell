@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:59:03 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:11:11 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 14:35:19 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ bool	syntax_error_pipe(t_list *tl_pos)
 	return (false);
 }
 
-bool	syntax_errors(t_list *token_list)
+bool	syntax_inital_pipe(t_list *token_list)
 {
 	t_list	*tmp;
 	t_token	*current_token;
@@ -74,6 +74,18 @@ bool	syntax_errors(t_list *token_list)
 		print_error(258, "|", PRINT);
 		return (true);
 	}
+	return (false);
+}
+
+bool	syntax_errors(t_list *token_list)
+{
+	t_list	*tmp;
+	t_token	*current_token;
+
+	current_token = NULL;
+	tmp = token_list;
+	if (syntax_inital_pipe(token_list) == true)
+		return (true);
 	while (tmp != NULL)
 	{
 		current_token = (t_token *)tmp->content;

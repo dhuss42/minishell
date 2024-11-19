@@ -6,72 +6,88 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:47:50 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:09:17 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 15:34:09 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	get_len_no_quotes(t_command *r, t_shell *ex)
+void	get_len_no_quotes(t_command *r, t_shell *e)
 {
-	ex->quote = '\0';
-	ex->j = 0;
-	ex->len = 0;
-	while (r->args[ex->i][ex->j] != '\0')
+	e->quote = '\0';
+	e->j = 0;
+	e->len = 0;
+	while (r->args[e->i][e->j] != '\0')
 	{
-		if (r->args[ex->i][ex->j] == '$' && is_quotes(r->args[ex->i][ex->j + 1]))
-			ex->j++;
-		if (is_quotes(r->args[ex->i][ex->j]))
+		if (r->args[e->i][e->j] == '$' && is_quotes(r->args[e->i][e->j + 1]))
+			e->j++;
+		if (is_quotes(r->args[e->i][e->j]))
 		{
-			ex->quote = r->args[ex->i][ex->j];
-			ex->j++;
-			while (r->args[ex->i][ex->j] != '\0' && r->args[ex->i][ex->j] != ex->quote)
+			e->quote = r->args[e->i][e->j];
+			e->j++;
+			while (r->args[e->i][e->j] != '\0'
+				&& r->args[e->i][e->j] != e->quote)
 			{
-				ex->len++;
-				ex->j++;
+				e->len++;
+				e->j++;
 			}
-			ex->j++;
+			e->j++;
 		}
 		else
 		{
-			ex->len++;
-			ex->j++;
+			e->len++;
+			e->j++;
 		}
 	}
 }
 
-int	remove_outer_quotes(t_command *r, t_shell *ex)
+int	quotes_copy_free(t_command *r, t_shell *e, char *no_quotes)
 {
-	char	*no_quotes;
-
-	get_len_no_quotes(r, ex);
-	no_quotes = safe_ft_calloc(ex->len + 1, sizeof(char));
-	if (!no_quotes)
-		return (-1);
-	ex->j = 0;
-	ex->k = 0;
-	while (r->args[ex->i][ex->j] != '\0')
-	{
-		if (r->args[ex->i][ex->j] == '$' && is_quotes(r->args[ex->i][ex->j + 1]))
-			ex->j++;
-		if (is_quotes(r->args[ex->i][ex->j]))
-		{
-			ex->quote = r->args[ex->i][ex->j];
-			ex->j++;
-			while (r->args[ex->i][ex->j] != '\0' && r->args[ex->i][ex->j] != ex->quote)
-				no_quotes[ex->k++] = r->args[ex->i][ex->j++];
-			ex->j++;
-		}
-		else
-			no_quotes[ex->k++] = r->args[ex->i][ex->j++];
-	}
-	if (r->args[ex->i])
-		free (r->args[ex->i]);
-	r->args[ex->i] = safe_ft_strdup(no_quotes);
-	if (!r->args[ex->i])
+	if (r->args[e->i])
+		free (r->args[e->i]);
+	r->args[e->i] = safe_ft_strdup(no_quotes);
+	if (!r->args[e->i])
 		return (free(no_quotes), -1);
 	if (no_quotes)
 		free(no_quotes);
+	return (0);
+}
+
+void	remove_quotes_loop(t_command *r, t_shell *e, char *no_quotes)
+{
+	while (r->args[e->i][e->j] != '\0')
+	{
+		if (r->args[e->i][e->j] == '$' && is_quotes(r->args[e->i][e->j + 1]))
+			e->j++;
+		if (is_quotes(r->args[e->i][e->j]))
+		{
+			e->quote = r->args[e->i][e->j];
+			e->j++;
+			while (r->args[e->i][e->j] != '\0'
+				&& r->args[e->i][e->j] != e->quote)
+			{
+				no_quotes[e->k++] = r->args[e->i][e->j++];
+			}
+			e->j++;
+		}
+		else
+			no_quotes[e->k++] = r->args[e->i][e->j++];
+	}
+}
+
+int	remove_outer_quotes(t_command *r, t_shell *e)
+{
+	char	*no_quotes;
+
+	get_len_no_quotes(r, e);
+	no_quotes = safe_ft_calloc(e->len + 1, sizeof(char));
+	if (!no_quotes)
+		return (-1);
+	e->j = 0;
+	e->k = 0;
+	remove_quotes_loop(r, e, no_quotes);
+	if (quotes_copy_free(r, e, no_quotes) == -1)
+		return (-1);
 	return (0);
 }
 

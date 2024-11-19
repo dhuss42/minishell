@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:34 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:10:14 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:38:19 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ char	*search_env(char **env, char *key)
 	{
 		if (ft_strncmp(env[i], key, strlen_equal(env[i])) == 0)
 		{
-			str = safe_ft_substr(env[i], strlen_equal(env[i]) + 1, ft_strlen(env[i]) - strlen_equal(env[i]) - 1);
+			str = safe_ft_substr(env[i], strlen_equal(env[i]) + 1,
+					ft_strlen(env[i]) - strlen_equal(env[i]) - 1);
 			if (!str)
 				return (NULL);
 			return (str);
@@ -86,7 +87,5 @@ int	ft_cd(t_shell *shell, t_command *row)
 }
 
 // functions checks whether cd has an argument
-// if cd has an argument it calls cd_no_args whcih moves the current directory to $HOME
-
-// ---- issues --- /
-// get malloc error for cd l, has to do with free_table
+// if cd has an argument it calls cd_no_args
+// whcih moves the current directory to $HOME
