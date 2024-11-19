@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:50 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 15:08:52 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 11:00:30 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,10 @@ int	export_with_args(t_shell *shell, t_command *row)
 
 	len = 0;
 	tmp = NULL;
+
 	len = get_len_new_env(shell->env, row, shell->i);
-	if (len == -1)
-		return (-1);
+	// if (len == -1)
+	// 	return (-1);
 	tmp = safe_malloc(sizeof(char *) * (len + 1));
 	if (!tmp)
 		return (-1);

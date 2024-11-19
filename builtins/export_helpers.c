@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:04 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/18 16:00:29 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 11:03:47 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ bool	valid_key_name(char *str)
 	i = 0;
 	if (!ft_isalpha(str[i]) && str[i] != '_')
 	{
-		print_error(E_NOTVALIDIDENT, str, PRINT);
 		return (false);
 	}
 	i++;
@@ -41,7 +40,6 @@ bool	valid_key_name(char *str)
 	{
 		if (!(ft_isalnum(str[i]) || str[i] == '_'))
 		{
-			print_error(E_NOTVALIDIDENT, str, PRINT);
 			return (false);
 		}
 		i++;
@@ -87,10 +85,9 @@ int	get_len_new_env(char **env, t_command *row, size_t i)
 			// printf(GREEN"export count: %zu\n"WHITE, count);
 			count++;
 		}
-		else // this is wrong
+		else if (!valid_key_name(row->args[i]))
 		{
-			printf("returning here\n");
-			return (-1);
+			print_error(E_NOTVALIDIDENT, row->args[i], PRINT);
 		}
 		i++;
 	}
