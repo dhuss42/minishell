@@ -46,20 +46,21 @@ char	*copy_into_tmp_hd(char *line, char *exp, size_t index, char *tmp, size_t le
 {
 	size_t	iterate;
 	size_t		j;
+	int			i;
 
 	j = 0;
 	iterate = 0;
-	index = 0;
+	i = 0;
 	while(j < index)
 		tmp[iterate++] = line[j++];
 	j++;
 	while(line[j] != '\0' && line[j] != '$' && !is_quotes(line[j]) && !is_wspace(line[j]))
 		j++;
-	while (exp[index] != '\0')
-		tmp[iterate++] = exp[index++];
+	while (exp[i] != '\0')
+		tmp[iterate++] = exp[i++];
 	if (exp)
 		free(exp);
-	index = iterate;
+	// index = iterate;
 	while (iterate < len)
 	{
 		tmp[iterate] = line[j];
@@ -75,19 +76,23 @@ int	switcheroo_hd(char *line, char *exp, size_t index)
 	char		*tmp;
 	size_t		len;
 
-	len= get_len_exp_hd(line, exp, index);
-	tmp = safe_ft_calloc(len+ 1, sizeof(char)); // tmp is allocated
+	len = get_len_exp_hd(line, exp, index);
+	printf(GREEN"len: %ld\n"WHITE, len);
+	tmp = safe_ft_calloc(len + 1, sizeof(char)); // tmp is allocated
 	if (!tmp)
 		return (-1);
 	tmp = copy_into_tmp_hd(line, exp, index, tmp, len); // exp is freed
+	printf(GREEN"line: %s\n"WHITE, line);
 	if (line)
 	{
 		free(line);
 		line = NULL;
 	}
+	printf(GREEN"tmp: %s\n"WHITE, tmp);
 	line = safe_ft_strdup(tmp);
 	if (!line)
 		return (free(tmp), -1);
+	printf(GREEN"line: %s\n"WHITE, line);
 	if (tmp) // tmp is freed
 		free(tmp);
 	return (0);
@@ -152,6 +157,7 @@ int	get_expanded_hd(char *tmp, char **env, char *line, size_t index)
 	exp = compare_with_env(key, env, exp); // exp is allocated
 	if (!exp)
 		return (free(key), -1);
+	// printf(GREEN"exp: %s\n"WHITE, exp);
 	if (switcheroo_hd(line, exp, index) == -1)
 		return (free(key), -1);
 	if (key)
@@ -162,6 +168,8 @@ int	get_expanded_hd(char *tmp, char **env, char *line, size_t index)
 	(void) tmp; //kann weg?
 	return (0);
 }
+
+
 
 int	heredoc_expansion(char *line, char **env)
 {
