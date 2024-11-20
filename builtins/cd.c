@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:34 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:38:19 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/20 12:18:04 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	ft_cd(t_shell *shell, t_command *row)
 	else if (row->args[1])
 	{
 		if (chdir(row->args[1]) == -1)
-			return (free(current_dir), print_error(errno, row->args[1], PRINT));
+			return (free(current_dir),
+				print_error(E_DIRNOEXIST, row->args[1], PRINT), -1);
 		if (update_oldpwd(shell, current_dir) != 0)
 			return (free(current_dir), -1);
 		if (update_pwd(shell) != 0)

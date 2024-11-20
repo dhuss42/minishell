@@ -32,6 +32,11 @@ int	custom_error(int err_no)
 		ft_putstr_fd("no such file or directory\n", 2);
 		return (127);
 	}
+	else if(err_no == E_DIRNOEXIST)
+	{
+		ft_putstr_fd("no such file or directory\n", 2);
+		return (1);
+	}
 	else if(err_no == E_NOPERMISSION_PATH)
 	{
 		ft_putstr_fd("Permission denied\n", 2);
