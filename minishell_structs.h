@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_structs.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/19 12:21:45 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/20 11:27:36 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ typedef enum e_custom_err
 	E_CUSTOM_ARGC = 107,
 	E_PATH,
 	E_FILENOEXIST,
-	E_NOPERMISSION,
+	E_NOPERMISSION_PATH,
+	E_NOPERMISSION_FILE,
 	E_CMD_ISDIRECTORY,
 	E_FILE_ISDIRECTORY,
 	E_TOOMANYARG,

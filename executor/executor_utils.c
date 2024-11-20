@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/19 12:09:38 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/20 11:27:14 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	get_check_path(t_command *row, char **envp)
 			return (print_error(127, row->args[0], PRINT));
 	}
 	else if (access(row->path, X_OK) != 0)
-		return (print_error(E_NOPERMISSION, row->args[0], PRINT));
+		return (print_error(E_NOPERMISSION_PATH, row->args[0], PRINT));
 	return (0);
 }
 

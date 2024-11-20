@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/19 12:09:35 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/20 11:31:16 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ static void	pipe_child(t_command *row, int (*fd)[2], t_list *table, t_shell *she
 	int	nbr_pipes;
 	int	ret;
 
+	if (check_files(row))
+		free_child_exit(shell, print_error(-1, NULL, NOTPRINT));
 	nbr_pipes = ft_lstsize(table) - 1;
 	if (close_fds(fd, row->id, nbr_pipes))
 		free_child_exit(shell, errno);
@@ -133,7 +135,6 @@ int	pipechain_loop(t_list *table, pid_t *pid, int (*fd)[2], t_shell *shell)
 	while (tmp != NULL)
 	{
 		row = (t_command*) tmp->content;
-		check_files(row);
 		pid[n] = fork();
 		if (pid[n] == -1)
 			return (print_error(errno, NULL, PRINT));

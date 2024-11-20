@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_files.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/19 12:09:23 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/20 11:28:18 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	check_output_files(t_command *row, int i)
 	if (S_ISDIR(filestat.st_mode))
 		return (print_error(E_FILE_ISDIRECTORY, row->filename[i], PRINT));
 	if (access(row->filename[i], W_OK) == -1)
-		return (print_error(E_NOPERMISSION, row->filename[i], PRINT));
+		return (print_error(E_NOPERMISSION_FILE, row->filename[i], PRINT));
 	row->final_outfile = row->filename[i];
 	row->final_out_red = row->red_symbol[i];
 	return (0);
