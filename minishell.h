@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 14:18:46 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/20 16:28:30 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int			handle_stuff(char **envp, t_command *row);
 int			get_check_path(t_command *row, char **envp);
 int			free_table(t_list *table);
 int			handle_heredoc(t_list *table, char **env);
-int			heredoc_expansion(char *line, char **env);
+char		*heredoc_expansion(char *line, char **env);
 int			redirect_input(t_command row, int *fd);
 int			redirect_output(t_command row, int *fd);
 void		reset_redirections(t_command row);

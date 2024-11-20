@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/19 12:09:49 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/20 16:58:38 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ char*	generate_file_path(int id)
 	return (full_path);
 }
 
+/*-------------------------------------------------------------
+Handle heredoc parent
+---------------------------------------------------------------*/
 int	heredoc_parent(pid_t pid)
 {
 	int	wstatus;
@@ -43,6 +46,14 @@ int	heredoc_parent(pid_t pid)
 	return (exit_code);
 }
 
+/*-------------------------------------------------------------
+Handle child of heredoc
+get input from readline
+expand line
+write until delimiter into file
+the funciton readline has memory issues (still reachable)
+see with valgrind --leak-check=full --show-leak-kinds=all
+---------------------------------------------------------------*/
 void	heredoc_child(char *delimiter, int fd, char **env)
 {
 	char	*line;
@@ -54,7 +65,7 @@ void	heredoc_child(char *delimiter, int fd, char **env)
 		line = readline("> ");
 		if (line == NULL)
 			break ;
-		heredoc_expansion(line, env);
+		line = heredoc_expansion(line, env);
 		if (ft_strlen(line) == ft_strlen(delimiter)
 			&&ft_strncmp(line, delimiter, ft_strlen(line)) == 0)
 		{
@@ -70,9 +81,7 @@ void	heredoc_child(char *delimiter, int fd, char **env)
 
 /*-------------------------------------------------------------
 create one temporary file for each row if there is a heredoc
-write until delimiter into file
-the funciton readline has memory issues (still reachable)
-see with valgrind --leak-check=full --show-leak-kinds=all
+new process is needed to handle SIGINT (ctrl * C)
 ---------------------------------------------------------------*/
 static int	handle_heredoc_input(char *delimiter, t_command *row, char **env)
 {
