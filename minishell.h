@@ -72,6 +72,7 @@ int			get_expanded(char *variable, char **env, t_command *row, t_shell *expand);
 char		*compare_with_env(char *variable, char **env, char *exp);
 int			get_exit_code(char *tmp, t_command *row, t_shell *expand);
 int			remove_quotes(t_list *table);
+char		*quote_heredoc(char *str);
 
 //-------------------utils------------------//
 void		*safe_malloc(size_t size);
