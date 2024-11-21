@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/19 12:09:41 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/21 15:34:18 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ void	single_child(char *path, char **envp, t_command *row, t_shell *shell)
 {
 	if (execve(path, row->args, envp))
 		{
-			free_child_exit(shell, errno);
+			print_error(127, row->args[0], PRINT);
+			free_child_exit(shell, 127);
 		}
 }
 

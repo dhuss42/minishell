@@ -1,29 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/21 15:07:24 by maustel           #+#    #+#             */
+/*   Updated: 2024/11/21 15:16:59 by maustel          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	builtins(t_shell *shell, t_command *row)
+/*-------------------------------------------------------------
+Check if command is builtin with more than 3 characters
+---------------------------------------------------------------*/
+static int	builtins_2(t_shell *shell, t_command *row)
 {
-	// t_command   *row;
-
-	if (shell->table == NULL)
-		return (-1);
-	// row = (t_command*) shell->table->content;
-	shell->i = 0;
-	if (row->args[0] == NULL)
-		return (1);
-	if (ft_strlen(row->args[0]) == 2)
-	{
-		if (ft_strncmp(row->args[0], "cd", 2) == 0)
-			return (ft_cd(shell, row));
-	}
-	else if (ft_strlen(row->args[0]) == 3)
-	{
-		if (ft_strncmp(row->args[0], "pwd", 3) == 0)
-			return (ft_pwd());
-		else if (ft_strncmp(row->args[0], "env", 3) == 0)
-			return (ft_env(shell));
-	}
-	else if (ft_strlen(row->args[0]) == 4)
+	if (ft_strlen(row->args[0]) == 4)
 	{
 		if (ft_strncmp(row->args[0], "exit", 4) == 0)
 			return (ft_exit(shell,row));
@@ -43,15 +37,46 @@ int	builtins(t_shell *shell, t_command *row)
 	return (1);
 }
 
+/*-------------------------------------------------------------
+Check if command is builtin with less than 4 characters
+---------------------------------------------------------------*/
+static int	builtins_1(t_shell *shell, t_command *row)
+{
+	if (shell->table == NULL)
+		return (-1);
+	shell->i = 0;
+	if (row->args[0] == NULL)
+		return (1);
+	if (ft_strlen(row->args[0]) == 2)
+	{
+		if (ft_strncmp(row->args[0], "cd", 2) == 0)
+			return (ft_cd(shell, row));
+	}
+	else if (ft_strlen(row->args[0]) == 3)
+	{
+		if (ft_strncmp(row->args[0], "pwd", 3) == 0)
+			return (ft_pwd());
+		else if (ft_strncmp(row->args[0], "env", 3) == 0)
+			return (ft_env(shell));
+	}
+	return (1);
+}
+
+/*-------------------------------------------------------------
+Check if command is builtin and call function, if it is.
+Redirect to normal stdin / stdout (necessary for single command,
+because builtins are called in main process, not in child)
+---------------------------------------------------------------*/
 int	check_builtins(t_shell *shell, t_command *row)
 {
 	int	is_builtin;
 
-	is_builtin = builtins(shell, row);
+	if (ft_strlen(row->args[0]) < 4)
+		is_builtin = builtins_1(shell, row);
+	else if (ft_strlen(row->args[0]) >= 4)
+		is_builtin = builtins_2(shell, row);
 	if (is_builtin == 0)
 	{
-		// printf("---------------IS BUILTIN---------------\n");
-		// usleep(30000);
 		dup2(row->original_stdout, STDOUT_FILENO);
 		dup2(row->original_stdin, STDIN_FILENO);
 		return (0);
@@ -61,7 +86,6 @@ int	check_builtins(t_shell *shell, t_command *row)
 		dup2(row->original_stdout, STDOUT_FILENO);
 		dup2(row->original_stdin, STDIN_FILENO);
 		return (-1);
-		// return (print_error(E_BUILTIN, NULL, PRINT));
 	}
 	return (1);
 }

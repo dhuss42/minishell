@@ -14,8 +14,6 @@
 
 void	free_child_exit(t_shell *shell, int exit_code)
 {
-	// if (exit_code == 0)
-	// 	print_error(0, NULL, NOTPRINT);
 	ft_lstclear(&shell->list, free_token);
 	free_table(shell->table);
 	exit (exit_code);

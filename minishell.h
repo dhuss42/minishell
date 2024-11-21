@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/21 11:28:51 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/21 15:38:31 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ int			check_files(t_command *row);
 int			exec_redirections(t_command *row);
 void		free_double(char **to_free);
 int			free_row(t_command *example);
-int			handle_stuff(char **envp, t_command *row);
 int			get_check_path(t_command *row, char **envp);
 int			free_table(t_list *table);
 int			handle_heredoc(t_list *table, char **env);

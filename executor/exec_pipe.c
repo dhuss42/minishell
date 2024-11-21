@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/20 11:31:16 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/21 15:35:27 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,10 @@ static void	pipe_child(t_command *row, int (*fd)[2], t_list *table, t_shell *she
 	if (!row->path)
 		free_child_exit(shell, 0);
 	if (execve(row->path, row->args, shell->env))
-		free_child_exit(shell, 0);
+	{
+		print_error(127, row->args[0], PRINT);
+		free_child_exit(shell, 127);
+	}
 }
 
 /*-------------------------------------------------------------
