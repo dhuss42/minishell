@@ -52,11 +52,6 @@ int	custom_error(int err_no)
 		ft_putstr_fd("is a directory\n", 2);
 		return (1);
 	}
-	else if(err_no == E_CMD_ISDIRECTORY)
-	{
-		ft_putstr_fd("is a directory\n", 2);
-		return (126);
-	}
 	else if (err_no == E_TOOMANYARG)
 	{
 		ft_putstr_fd("exit: too many arguments\n", 2);

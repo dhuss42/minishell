@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/20 12:16:24 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/21 10:38:42 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ typedef enum e_custom_err
 	E_DIRNOEXIST,
 	E_NOPERMISSION_PATH,
 	E_NOPERMISSION_FILE,
-	E_CMD_ISDIRECTORY,
 	E_FILE_ISDIRECTORY,
 	E_TOOMANYARG,
 	E_NOCLOSINGQUOTE,
