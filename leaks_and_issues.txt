@@ -63,4 +63,5 @@ minishell(52160,0x113749dc0) malloc: *** set a breakpoint in malloc_error_break 
 Abort trap: 6
 
 <------------------------------------------------------------------->
+echo hi > outfile not working
 <------------------------------------------------------------------->
