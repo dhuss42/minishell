@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/21 15:34:18 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/21 16:27:19 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ WIFEXITED(wstatus) macro checks if the process exited normally
 WEXITwSTATUS(wstatus) extracts the exit wstatus value from the wstatus argument
 if (WIFSIGNALED(wstatus)): if interrupted with signal
 ---------------------------------------------------------------*/
-int	single_parent(pid_t id, char* cmd)
+int	single_parent(pid_t id, char *cmd)
 {
 	int	wstatus;
 	int	exit_code;
@@ -51,11 +51,11 @@ int	single_parent(pid_t id, char* cmd)
 	if (waitpid(id, &wstatus, 0) == -1)
 		return (1);
 	if (WIFEXITED(wstatus))
-			exit_code = WEXITSTATUS(wstatus);
+		exit_code = WEXITSTATUS(wstatus);
 	if (WIFSIGNALED(wstatus))
 		exit_code = WTERMSIG(wstatus) + 128;
 	if (exit_code > 0)
-		return(print_error(exit_code, cmd, NOTPRINT));
+		return (print_error(exit_code, cmd, NOTPRINT));
 	return (exit_code);
 }
 
@@ -68,10 +68,10 @@ if it doesnt fail, exit code is 0
 void	single_child(char *path, char **envp, t_command *row, t_shell *shell)
 {
 	if (execve(path, row->args, envp))
-		{
-			print_error(127, row->args[0], PRINT);
-			free_child_exit(shell, 127);
-		}
+	{
+		print_error(127, row->args[0], PRINT);
+		free_child_exit(shell, 127);
+	}
 }
 
 /*-------------------------------------------------------------
@@ -122,7 +122,7 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 	nbr_pipes = ft_lstsize(table) - 1;
 	if (nbr_pipes == 0)
 	{
-		current_cmd = (t_command*) table->content;
+		current_cmd = (t_command *) table->content;
 		if (execute_single_command(envp, current_cmd, shell))
 		{
 			reset_redirections(*current_cmd);

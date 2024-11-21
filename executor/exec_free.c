@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/19 12:09:32 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/21 16:22:18 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,14 @@ Free and set to NULL all pointers of whole table
 ---------------------------------------------------------------*/
 int	free_table(t_list *table)
 {
-	t_list	*tmp;
-	t_list	*del;
-	t_command *cmd;
+	t_list		*tmp;
+	t_list		*del;
+	t_command	*cmd;
 
 	tmp = table;
 	while (tmp != NULL)
 	{
-		cmd = (t_command*)tmp->content;
-		// printf("ID: %d\n", cmd->id);
+		cmd = (t_command *) tmp->content;
 		if (cmd)
 			free_row(cmd);
 		del = tmp;

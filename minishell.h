@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/21 15:38:31 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/21 16:37:55 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,9 @@ int			get_check_path(t_command *row, char **envp);
 int			free_table(t_list *table);
 int			handle_heredoc(t_list *table, char **env);
 char		*heredoc_expansion(char *line, char **env);
+int			heredoc_parent(pid_t pid);
+char*		generate_file_path(int id);
+size_t		get_len_exp_hd(char *line, char *exp, size_t index);
 int			redirect_input(t_command row, int *fd);
 int			redirect_output(t_command row, int *fd);
 void		reset_redirections(t_command row);

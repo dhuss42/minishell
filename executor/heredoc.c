@@ -6,45 +6,11 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/20 16:58:38 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/21 16:39:50 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-/*-------------------------------------------------------------
-create filepath for each heredoc-temp-file
----------------------------------------------------------------*/
-char*	generate_file_path(int id)
-{
-	char	*full_path;
-	char	*nbr;
-
-	nbr = ft_itoa(id);
-	full_path = ft_strjoin(BASE_PATH, nbr);
-	free (nbr);
-	return (full_path);
-}
-
-/*-------------------------------------------------------------
-Handle heredoc parent
----------------------------------------------------------------*/
-int	heredoc_parent(pid_t pid)
-{
-	int	wstatus;
-	int	exit_code;
-
-	exit_code = 0;
-	if (waitpid(pid, &wstatus, 0) == -1)
-		return (1);
-	if (WIFEXITED(wstatus))
-			exit_code = WEXITSTATUS(wstatus);
-	if (WIFSIGNALED(wstatus))
-		exit_code = WTERMSIG(wstatus) + 128;
-	if (exit_code > 0)
-		return(print_error(exit_code, NULL, NOTPRINT));
-	return (exit_code);
-}
 
 /*-------------------------------------------------------------
 Handle child of heredoc
@@ -85,7 +51,7 @@ new process is needed to handle SIGINT (ctrl * C)
 ---------------------------------------------------------------*/
 static int	handle_heredoc_input(char *delimiter, t_command *row, char **env)
 {
-	pid_t pid;
+	pid_t	pid;
 	int		fd;
 
 	row->heredoc_file_path = generate_file_path(row->id);
@@ -94,7 +60,7 @@ static int	handle_heredoc_input(char *delimiter, t_command *row, char **env)
 		return (print_error(errno, row->heredoc_file_path, PRINT));
 	pid = fork();
 	if (pid == -1)
-			return (print_error(errno, NULL, PRINT));
+		return (print_error(errno, NULL, PRINT));
 	else if (pid == 0)
 		heredoc_child(delimiter, fd, env);
 	heredoc_parent(pid);
@@ -106,12 +72,12 @@ static int	handle_heredoc_input(char *delimiter, t_command *row, char **env)
 /*-------------------------------------------------------------
 check if symbol is heredoc, then handle heredoc input
 ---------------------------------------------------------------*/
-static int go_through_heredoc_files(t_command *row, char **env)
+static int	go_through_heredoc_files(t_command *row, char **env)
 {
 	int	i;
 
 	i = 0;
-	while(row->red_symbol[i] && row->filename[i])
+	while (row->red_symbol[i] && row->filename[i])
 	{
 		if (row->red_symbol[i][0] == '<' && row->red_symbol[i][1] == '<')
 		{
@@ -123,7 +89,7 @@ static int go_through_heredoc_files(t_command *row, char **env)
 	return (0);
 }
 
-void init_content(t_command *row)
+void	init_content(t_command *row)
 {
 	row->heredoc_file_path = NULL;
 	row->path = NULL;
@@ -145,7 +111,7 @@ int	handle_heredoc(t_list *table, char **env)
 	tmp = table;
 	id = 0;
 	signal(SIGINT, SIG_IGN);
-	while(tmp)
+	while (tmp)
 	{
 		row = (t_command *) tmp->content;
 		row->id = id;

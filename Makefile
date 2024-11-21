@@ -54,6 +54,7 @@ CFILES = minishell.c\
 	executor/executor.c\
 	executor/find_path.c\
 	executor/heredoc.c\
+	executor/heredoc_utils.c\
 	executor/heredoc_expansion.c\
 	executor/redirections.c\
 	signals/handle_signals.c\

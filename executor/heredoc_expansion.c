@@ -13,39 +13,11 @@
 #include "../minishell.h"
 
 /*-------------------------------------------------------------
-Get length of expansion for example $USER -> maustel -> len = 7
----------------------------------------------------------------*/
-size_t  get_len_exp_hd(char *line, char *exp, size_t index)
-{
-	size_t  j;
-	size_t  len;
-
-	j = 0;
-	len = 0;
-	while(j < index)
-	{
-		len++;
-		j++;
-	}
-	while (line[j] == '$')
-		j++;
-	while(line[j] != '\0' && !is_quotes(line[j]) && line[j] != '$' && !is_wspace(line[j]))
-		j++;
-	while(line[j] != '\0')
-	{
-		j++;
-		len++;
-	}
-	len += ft_strlen(exp);
-	return (len);
-}
-
-/*-------------------------------------------------------------
 puts everything together into tmp
 ---------------------------------------------------------------*/
 char	*copy_into_tmp_hd(char *line, char *exp, size_t index, char *tmp)
 {
-	size_t	iterate;
+	size_t		iterate;
 	size_t		j;
 	size_t		i;
 	size_t		len;
@@ -54,12 +26,12 @@ char	*copy_into_tmp_hd(char *line, char *exp, size_t index, char *tmp)
 	j = 0;
 	i = 0;
 	len = get_len_exp_hd(line, exp, index);
-	while(j < index)
+	while (j < index)
 		tmp[iterate++] = line[j++];
 	j++;
-	while(line[j] != '\0' && line[j] != '$' && !is_quotes(line[j])
+	while (line[j] != '\0' && line[j] != '$' && !is_quotes(line[j])
 		&& !is_wspace(line[j]))
-			j++;
+		j++;
 	while (exp[i] != '\0')
 		tmp[iterate++] = exp[i++];
 	while (iterate < len)
@@ -109,8 +81,8 @@ moves og string past closing quote if there is one
 char	*get_key_hd(char *line, size_t index)
 {
 	char	*tmp;
-	size_t		j;
-	size_t		i;
+	size_t	j;
+	size_t	i;
 
 	i = index;
 	tmp = NULL;
@@ -119,14 +91,14 @@ char	*get_key_hd(char *line, size_t index)
 	j = i;
 	while (line[j] != '\0' && !is_quotes(line[j]) && line[j] != '$'
 		&& !is_wspace(line[j]))
-			j++;
+		j++;
 	tmp = safe_malloc(sizeof(char) * (j + 1));
 	if (!tmp)
 		return (NULL);
 	j = 0;
 	while (line[i] != '\0' && line[i] != '\"' && line[i] != '\''
 		&& line[i] != '$' && !is_wspace(line[i]))
-			tmp[j++] = line[i++];
+		tmp[j++] = line[i++];
 	tmp[j] = '\0';
 	if (line[i] == '\0')
 		i++;

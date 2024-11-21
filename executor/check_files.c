@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:07:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/20 11:28:18 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/21 16:20:55 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	check_input_files(t_command *row, int i)
 			return (print_error(EPERM, row->filename[i], PRINT));
 		row->final_infile = row->filename[i];
 	}
-	else if(row->red_symbol[i][1] == '<')
+	else if (row->red_symbol[i][1] == '<')
 		row->final_infile = row->heredoc_file_path;
 	row->final_in_red = row->red_symbol[i];
 	return (0);
@@ -56,7 +56,7 @@ check if there is permission to write into file
 ---------------------------------------------------------------*/
 int	check_output_files(t_command *row, int i)
 {
-	struct stat filestat;
+	struct stat	filestat;
 
 	if (access(row->filename[i], F_OK) == -1)
 	{
@@ -74,24 +74,12 @@ int	check_output_files(t_command *row, int i)
 }
 
 /*-------------------------------------------------------------
-initialize final files and redirection symbols to NULL
----------------------------------------------------------------*/
-// void	init_final_red_files(t_command *row)
-// {
-// 	row->final_infile = NULL;
-// 	row->final_outfile = NULL;
-// 	row->final_in_red = NULL;
-// 	row->final_out_red = NULL;
-// }
-
-/*-------------------------------------------------------------
 Check all files of the row
 ---------------------------------------------------------------*/
 int	check_files(t_command *row)
 {
-	int			i;
+	int	i;
 
-	// init_final_red_files(row);
 	if (!row->filename || !row->red_symbol)
 		return (0);
 	i = 0;
