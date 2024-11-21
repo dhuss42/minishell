@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/21 10:38:42 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/21 11:18:35 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,22 +78,18 @@ typedef struct s_shell
 
 typedef enum e_custom_err
 {
-	E_CUSTOM_ARGC = 107,
-	E_PATH,
+	E_PATH = 107,
 	E_FILENOEXIST,
 	E_DIRNOEXIST,
 	E_NOPERMISSION_PATH,
 	E_NOPERMISSION_FILE,
+	E_INIT_TERMINAL,
+	E_BUILTIN,
 	E_FILE_ISDIRECTORY,
 	E_TOOMANYARG,
-	E_NOCLOSINGQUOTE,
-	E_NOTSET,
-	E_CDNOSUCHFOD,
-	E_INIT_TERMINAL,
-	E_PARENT,
-	E_BUILTIN,
 	E_NOTVALIDIDENT,
-	E_SIGINT = 130,
+	E_CDNOSUCHFOD,
+	E_NOTSET,
 	E_NUMERICARG = 255,
 	E_SYNTAXERROR = 258
 }			t_custom_err;

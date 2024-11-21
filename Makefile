@@ -44,8 +44,9 @@ CFILES = minishell.c\
 	builtins/cd.c\
 	builtins/cd_pwd_handling.c\
 	builtins/exit.c\
+	errors/error_handling.c\
+	errors/error_handling_utils.c\
 	executor/check_files.c\
-	executor/error_handling.c\
 	executor/exec_free.c\
 	executor/exec_pipe.c\
 	executor/exec_free_child.c\

@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/20 16:28:30 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/21 11:28:51 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,15 +108,17 @@ bool		contains_dollar(char *str, size_t i);
 size_t		strlen_equal(char *str);
 int			get_int_length(int num);
 
+//----------------errors--------------------------
+int	print_error(int err_no, char *str, int print);
+int	custom_error_print_2(int err_no);
+
 //-----------------executor-----------------------
 char		*get_path(char *cmd, char **envp);
 void		free_paths(char **split_paths, char **append);
-// int		print_error(int err_no, char *str, int print);
 int			check_files(t_command *row);
 int			exec_redirections(t_command *row);
 void		free_double(char **to_free);
 int			free_row(t_command *example);
-// int		execute_pipechain(char **envp, t_list *table, int nbr_pipes, t_shell *shell);
 int			handle_stuff(char **envp, t_command *row);
 int			get_check_path(t_command *row, char **envp);
 int			free_table(t_list *table);
@@ -141,7 +143,6 @@ void		memory_parser(t_shell *parsing, t_command *cmd);
 void		free_table_parser(t_shell *parsing);
 void		free_command(t_command *cmd);
 void		free_three(char *str, char *str2, char *str3);
-int			print_error(int err_no, char *str, int print);
 
 //------------extra-shit-----------//
 void		print_token(t_token *tok);
