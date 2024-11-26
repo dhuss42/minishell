@@ -35,6 +35,16 @@ error wrapped here
 	Minishell tester passes fewer tests with init terminal
 
 <------------------------------------------------------------------->
+[4.]
+
+minishell: cd lsd
+
+
+minishell: lsd: No such file or directory
+/usr/bin/cd: line 4: cd: lsd: No such file or directory
+
+ 				[----- solution idea -----]
+seems like cd is called multiple times here
 
 <------------------------------------------------------------------->
 
@@ -67,15 +77,15 @@ Solution: executor_utils.c @ line 46: when check access of F_OK, before that
 just transform the command to lowercase.
 
 <------------------------------------------------------------------->
-here doc in general makes segmentations
+##here doc in general makes segmentations
 <<eof and while waiting for input do ctrl-C (makes segmentation fault)
 <<eof and while waiting for input do ctrl-D (makes segmentation fault)
 
 <------------------------------------------------------------------->
-./lexer/ (or other directories) should give exit code == 126 (?)
+##./lexer/ (or other directories) should give exit code == 126 (?)
 
 <------------------------------------------------------------------->
-ctrl+D is correct: technically prints out "exit" - not really important
+##ctrl+D is correct: technically prints out "exit" - not really important
 
 <------------------------------------------------------------------->
 Just check: what if every variable is unset?
@@ -95,12 +105,32 @@ Really strange error: I thought it was related to stdin and stdout with builtins
 but with echo, pwd or others, it works correctly.
 
 <------------------------------------------------------------------->
->helloworld should create a file: well, it is created but makes segmentation fault
+##>helloworld should create a file: well, it is created but makes segmentation fault
 
 <------------------------------------------------------------------->
-I create a file named like a bash command "ls" (which internally does something
+##I create a file named like a bash command "ls" (which internally does something
 random, like echo "This is my script!"). If i then type "ls" should execute /bin/bash/ls,
 but if I type "./ls" should execute the file I created.
 Solution: before checking the $PATH, check if before the command there are "." or "/":
 in those cases DON´T LOOK for the PATH variable and build the absolute path, but instead
 execute is as it is.
+
+<------------------------------------------------------------------->
+When I start minishell from the directory before minishell and start
+minishell again from there, then exit gives double-free-error
+
+:/mnt/c/Users/milen/Desktop/42$ ./minishell/minishell
+minishell: ./minishell/minishell
+minishell:
+exit
+free(): double free detected in tcache 2
+Aborted (core dumped)
+
+as well with
+minishell: ./minishell/ls
+This is my Script!
+free(): double free detected in tcache 2
+Aborted (core dumped)
+<------------------------------------------------------------------->
+
+<------------------------------------------------------------------->

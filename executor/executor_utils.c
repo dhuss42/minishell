@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/26 16:14:34 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/26 17:00:08 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int	get_check_path(t_command *row, char **envp)
 		return (0);
 	ft_memset(&filestat, 0, sizeof(filestat));
 	stat(row->args[0], &filestat);
-	if (row->args[0][0] == '.' && row->args[0][1] == '/')
+	if (row->args[0][0] == '.' && (row->args[0][1] == '/'
+		|| (row->args[0][1] == '.' && row->args[0][2] == '/')))
 	{
 		if (S_ISDIR(filestat.st_mode))
 			return (print_error(E_ISDIRECTORY, row->args[0], PRINT));
