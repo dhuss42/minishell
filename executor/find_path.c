@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:24:16 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/24 13:49:43 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/26 16:16:59 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ char	*get_path(char *cmd, char **envp)
 	char	*move;
 	char	*path;
 
+	if (cmd[0] == '.' && cmd[1] == '/')
+		return (cmd);
 	append = NULL;
 	if (envp[0] == NULL)
 		return (NULL);

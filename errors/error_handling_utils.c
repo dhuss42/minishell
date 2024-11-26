@@ -19,6 +19,11 @@ int	custom_error_print_2(int err_no)
 {
 	if (err_no == E_INIT_TERMINAL)
 		ft_putstr_fd("error in init_terminal\n", 2);
+	else if (err_no == E_ISDIRECTORY)
+	{
+		ft_putstr_fd("is a directory\n", 2);
+		return (126);
+	}
 	else if (err_no == E_BUILTIN)
 		ft_putstr_fd("error in builtins\n", 2);
 	else if(err_no == E_FILE_ISDIRECTORY)
