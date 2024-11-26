@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 15:07:24 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/26 15:55:42 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/26 17:28:57 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static int	builtins_1(t_shell *shell, t_command *row)
 {
 	if (shell->table == NULL)
 		return (-1);
-	shell->i = 0;
 	if (row->args[0] == NULL)
 		return (1);
 	if (ft_strlen(row->args[0]) == 2)
@@ -71,6 +70,7 @@ int	check_builtins(t_shell *shell, t_command *row)
 {
 	int	is_builtin;
 
+	shell->i = 0;
 	if (row->args[0])
 	{
 		if (ft_strlen(row->args[0]) < 4)
