@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/26 15:17:22 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/26 15:53:18 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	execute_pipechain(t_list *table, int nbr_pipes, t_shell *shell)
 	int		fd[nbr_pipes][2];
 	pid_t	pid[nbr_pipes + 1];
 	int		n;
- 
+
 	n = 0;
 	while (n < nbr_pipes)
 	{

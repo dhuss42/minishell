@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 15:07:24 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/26 14:57:12 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/26 15:55:42 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,21 +71,24 @@ int	check_builtins(t_shell *shell, t_command *row)
 {
 	int	is_builtin;
 
-	if (ft_strlen(row->args[0]) < 4)
-		is_builtin = builtins_1(shell, row);
-	else if (ft_strlen(row->args[0]) >= 4)
-		is_builtin = builtins_2(shell, row);
-	if (is_builtin == 0)
+	if (row->args[0])
 	{
-		dup2(row->original_stdout, STDOUT_FILENO);
-		dup2(row->original_stdin, STDIN_FILENO);
-		return (0);
-	}
-	else if (is_builtin < 0)
-	{
-		dup2(row->original_stdout, STDOUT_FILENO);
-		dup2(row->original_stdin, STDIN_FILENO);
-		return (-1);
+		if (ft_strlen(row->args[0]) < 4)
+			is_builtin = builtins_1(shell, row);
+		else if (ft_strlen(row->args[0]) >= 4)
+			is_builtin = builtins_2(shell, row);
+		if (is_builtin == 0)
+		{
+			dup2(row->original_stdout, STDOUT_FILENO);
+			dup2(row->original_stdin, STDIN_FILENO);
+			return (0);
+		}
+		else if (is_builtin < 0)
+		{
+			dup2(row->original_stdout, STDOUT_FILENO);
+			dup2(row->original_stdin, STDIN_FILENO);
+			return (-1);
+		}
 	}
 	return (1);
 }
