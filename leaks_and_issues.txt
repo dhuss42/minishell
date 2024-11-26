@@ -35,16 +35,6 @@ error wrapped here
 	Minishell tester passes fewer tests with init terminal
 
 <------------------------------------------------------------------->
-[4.]
-
-minishell: cd lsd
-
-
-minishell: lsd: No such file or directory
-/usr/bin/cd: line 4: cd: lsd: No such file or directory
-
- 				[----- solution idea -----]
-seems like cd is called multiple times here
 
 <------------------------------------------------------------------->
 
