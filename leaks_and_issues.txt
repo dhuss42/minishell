@@ -64,4 +64,53 @@ Abort trap: 6
 
 <------------------------------------------------------------------->
 echo hi > outfile not working
+
 <------------------------------------------------------------------->
+env -i ./minishell (means run minishell without environment variables) - segmentation fault
+POssible: check if env[0] exists (because env for sure exists).
+Expected: probably some variables are still created; check the real bash by doing "env -i bash"
+
+<------------------------------------------------------------------->
+LS, ECHO, Ls, eCHo, etc etc (and in general commands are case insensitive)
+should work. Check it before!
+Solution: executor_utils.c @ line 46: when check access of F_OK, before that
+just transform the command to lowercase.
+
+<------------------------------------------------------------------->
+here doc in general makes segmentations
+<<eof and while waiting for input do ctrl-C (makes segmentation fault)
+<<eof and while waiting for input do ctrl-D (makes segmentation fault)
+
+<------------------------------------------------------------------->
+./lexer/ (or other directories) should give exit code == 126 (?)
+
+<------------------------------------------------------------------->
+ctrl+D is correct: technically prints out "exit" - not really important
+
+<------------------------------------------------------------------->
+Just check: what if every variable is unset?
+
+<------------------------------------------------------------------->
+unset PATH should unset it, and after it, in case of trying a command like
+ls, it should not be found; in that case only /bin/ls would work, because
+an absolute path is given.
+Solution: the problem is line 107 @ find_path.c, where getenv() is used.
+getenv() check in the outside environment, while you should check in YOURS.
+Therefor you need to re-create a custom getenv() which checks your actual
+environment.
+
+<------------------------------------------------------------------->
+export | grep USER or export | grep SHLVL or something else doesnt work
+Really strange error: I thought it was related to stdin and stdout with builtins,
+but with echo, pwd or others, it works correctly.
+
+<------------------------------------------------------------------->
+>helloworld should create a file: well, it is created but makes segmentation fault
+
+<------------------------------------------------------------------->
+I create a file named like a bash command "ls" (which internally does something
+random, like echo "This is my script!"). If i then type "ls" should execute /bin/bash/ls,
+but if I type "./ls" should execute the file I created.
+Solution: before checking the $PATH, check if before the command there are "." or "/":
+in those cases DON´T LOOK for the PATH variable and build the absolute path, but instead
+execute is as it is.
