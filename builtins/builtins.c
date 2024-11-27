@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 15:07:24 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/27 16:00:14 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 16:57:02 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static int	builtins_2(t_shell *shell, t_command *row)
 	if (ft_strlen(row->args[0]) == 4)
 	{
 		if (ft_strncmp(row->args[0], "exit", 4) == 0)
-			return (ft_exit(shell,row));
+			return (ft_exit(shell, row));
 	}
 	else if (ft_strlen(row->args[0]) == 5)
 	{
 		if (ft_strncmp(row->args[0], "unset", 5) == 0)
-		return (ft_unset(shell, row));
+			return (ft_unset(shell, row));
 	}
 	else if (ft_strlen(row->args[0]) == 6)
 	{

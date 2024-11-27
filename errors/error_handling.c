@@ -12,8 +12,6 @@
 
 #include "../minishell.h"
 
-
-
 /*-------------------------------------------------------------
 Print custom errors 1
 ---------------------------------------------------------------*/
@@ -21,22 +19,22 @@ static int	custom_error_print_1(int err_no)
 {
 	if (err_no == E_PATH)
 		ft_putstr_fd("function get_path failed\n", 2);
-	else if(err_no == E_FILENOEXIST)
+	else if (err_no == E_FILENOEXIST)
 	{
 		ft_putstr_fd("no such file or directory\n", 2);
 		return (127);
 	}
-	else if(err_no == E_DIRNOEXIST)
+	else if (err_no == E_DIRNOEXIST)
 	{
 		ft_putstr_fd("no such file or directory\n", 2);
 		return (1);
 	}
-	else if(err_no == E_NOPERMISSION_PATH)
+	else if (err_no == E_NOPERMISSION_PATH)
 	{
 		ft_putstr_fd("Permission denied\n", 2);
 		return (126);
 	}
-	else if(err_no == E_NOPERMISSION_FILE)
+	else if (err_no == E_NOPERMISSION_FILE)
 	{
 		ft_putstr_fd("Permission denied\n", 2);
 		return (1);
@@ -91,8 +89,8 @@ static int	custom_error_message_1(int err_no, char *str)
 static int	custom_err(int err_no, char *str)
 {
 	if (str && (err_no == E_NOTSET || err_no == E_CDNOSUCHFOD
-		|| err_no == E_NOTVALIDIDENT))
-			return (custom_error_message_1(err_no, str));
+			|| err_no == E_NOTVALIDIDENT))
+		return (custom_error_message_1(err_no, str));
 	else if (str && (err_no == E_NUMERICARG || err_no == E_SYNTAXERROR))
 		return (custom_error_message_2(err_no, str));
 	else if (err_no <= E_INIT_TERMINAL)
@@ -131,5 +129,3 @@ int	print_error(int err_no, char *str, int print)
 	}
 	return (exit_code);
 }
-
-

@@ -53,7 +53,7 @@ void	handle_sigint(int sig)
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 		print_error(130, NULL, NOTPRINT);
@@ -67,8 +67,8 @@ won't respond to the QUIT character (usually Ctrl+) in the terminal.
 ---------------------------------------------------------------*/
 void	handle_signals(int after_readline)
 {
-	struct sigaction sa_int;
-	struct sigaction sa_quit;
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 
 	if (after_readline)
 	{

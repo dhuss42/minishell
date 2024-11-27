@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:39:47 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 15:51:42 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 16:47:58 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	get_len_no_quotes(char **input, t_shell *e)
 {

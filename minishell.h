@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 16:17:37 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 16:47:21 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int			get_expanded(char *variable, char **env, t_command *row, t_shell *expand);
 char		*compare_with_env(char *variable, char **env, char *exp);
 int			get_exit_code(char *tmp, t_command *row, t_shell *expand);
 int			remove_quotes(t_list *table, t_shell *shell);
-char		*quote_heredoc(char *str);
+int			process_quotes(char **array, t_shell *expand);
 
 //-------------------utils------------------//
 void		*safe_malloc(size_t size);

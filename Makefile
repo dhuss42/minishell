@@ -29,6 +29,7 @@ CFILES = minishell.c\
 	expansion/exit_code.c\
 	expansion/compare_with_env.c\
 	expansion/remove_quotes.c\
+	expansion/process_quotes.c\
 	expansion/helper_expansion.c\
 	builtins/builtins.c\
 	builtins/env.c\
