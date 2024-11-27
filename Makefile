@@ -58,6 +58,7 @@ CFILES = minishell.c\
 	executor/heredoc_expansion.c\
 	executor/redirections.c\
 	signals/handle_signals.c\
+	free_minishell.c\
 	print_tokenlist.c\
 	print_table.c
 

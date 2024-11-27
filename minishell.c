@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/26 15:56:29 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 11:13:05 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,10 @@ void	minishell_loop(t_shell *shell)
 			// print_table(shell);
 			expansion(shell, shell->env);
 			// print_table(shell);
-			if (shell->syntax_error == false)
-				print_error(0, NULL, NOTPRINT);
 			executor(shell->env, shell->table, shell);
 			add_history(input);
-			ft_lstclear(&shell->list, free_token);
-			free_table(shell->table);
-			free(input);
-			// printf("Debug: Exit Code: %d\n", print_error(-1, NULL, NOTPRINT));
+			free_minishell(shell, input);
+
 			if (shell->exit == true)
 				break ;
 		}

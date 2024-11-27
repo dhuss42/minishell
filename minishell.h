@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/21 16:37:55 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 11:09:26 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int	custom_error_print_2(int err_no);
 
 //-----------------executor-----------------------
 char		*get_path(char *cmd, char **envp);
-void		free_paths(char **split_paths, char **append);
+void		free_paths(char **split_paths, char **append, char *big_path);
 int			check_files(t_command *row);
 int			exec_redirections(t_command *row);
 void		free_double(char **to_free);
@@ -146,6 +146,7 @@ void		memory_parser(t_shell *parsing, t_command *cmd);
 void		free_table_parser(t_shell *parsing);
 void		free_command(t_command *cmd);
 void		free_three(char *str, char *str2, char *str3);
+void		free_minishell(t_shell *shell, char *input);
 
 //------------extra-shit-----------//
 void		print_token(t_token *tok);

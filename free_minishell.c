@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion.c                                        :+:      :+:    :+:   */
+/*   free_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/18 14:41:21 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 11:12:39 by dhuss            ###   ########.fr       */
+/*   Created: 2024/11/27 10:55:34 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/27 11:10:59 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
-void	expansion(t_shell *shell, char **env)
+void	free_minishell(t_shell *shell, char *input)
 {
-	if (shell->syntax_error == true)
-		return ;
-	if (iterate_table(shell->table, env) == -1)
-		return ;
-	if (remove_quotes(shell->table) == -1)
-		return ;
+	free(input);
+	ft_lstclear(&shell->list, free_token);
 	if (shell->syntax_error == false)
-		print_error(0, NULL, NOTPRINT);
+		free_table(shell->table);
+	if (shell->exit == true)
+		clear_all(shell->env);
 }
-
-// split check_for_expansion

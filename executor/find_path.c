@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:24:16 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/26 16:16:59 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 11:07:39 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ char	*get_path(char *cmd, char **envp)
 		return (NULL);
 	append = add_slash_cmd(split_paths, cmd);
 	path = ft_strdup(check_cmd(append));
-	free_paths(split_paths, append);
+	free_paths(split_paths, append, big_path);
 	if (path == NULL)
 		return (ft_strdup(cmd));
 	return (path);

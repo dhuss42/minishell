@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/21 16:22:18 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 11:08:22 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,17 @@ void	free_double(char **to_free)
 /*-------------------------------------------------------------
 Used in find_path
 ---------------------------------------------------------------*/
-void	free_paths(char **split_paths, char **append)
+void	free_paths(char **split_paths, char **append, char *big_path)
 {
 	if (split_paths)
 		free_double (split_paths);
 	if (append)
 		free_double(append);
+	if (big_path)
+	{
+		free(big_path);
+		big_path = NULL;
+	}
 }
 
 /*-------------------------------------------------------------
