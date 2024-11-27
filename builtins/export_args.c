@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 12:32:40 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:34:46 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:49:20 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	replace_key(t_shell *shell, t_command *row, size_t index, size_t j)
 	shell->env[index] = safe_ft_strdup(row->args[j]);
 	if (!shell->env[index])
 	{
-		// unsure about freeing
 		return (-1);
 	}
 	return (0);

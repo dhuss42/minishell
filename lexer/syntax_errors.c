@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:59:03 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 14:35:19 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:57:47 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@ bool	syntax_error_red(t_list *tl_pos)
 			print_error(258, next_token->input, PRINT);
 			return (true);
 		}
-/* 		if (!is_filename(next_token))
-		{
-			printf("\033[31mSYYYNTAX ERROR! WRONG FILENAME\n\033[0m");
-			exit(EXIT_FAILURE); // change
-		} */ // removed because wrong filename is not a syntax error
 	}
 	else if (tmp->next == NULL)
 	{
