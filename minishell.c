@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 13:13:03 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:10:08 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int	main(int argc, char *argv[], char **env)
 		minishell_loop(&shell);
 	}
 	(void) argv;
-	// printf("exiting minishell\n");
 	error_code = print_error(-1, NULL, NOTPRINT);
 	return (error_code);
 }

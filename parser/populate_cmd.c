@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:03:35 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 13:11:04 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:26:17 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ int	populate_args_array(t_shell *pa, t_token *ct, t_command *cmd)
 		ft_strlcpy_lowercase(cmd->args[pa->j], ct->input, len + 1);
 	else
 		ft_strlcpy(cmd->args[pa->j], ct->input, len + 1);
-	// copy characters into string
-	// if the character is upper case convert it to lower case
 	pa->j++;
 	return (0);
 }

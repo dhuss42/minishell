@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 10:55:34 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 11:10:59 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:15:18 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	free_minishell(t_shell *shell, char *input)
 {
 	free(input);
+	input = NULL;
 	ft_lstclear(&shell->list, free_token);
 	if (shell->syntax_error == false)
 		free_table(shell->table);
