@@ -106,9 +106,10 @@ char	*get_path(char *cmd, char **envp)
 	append = NULL;
 	if (envp[0] == NULL)
 		return (NULL);
-	big_path = getenv("PATH"); // -------------------> BUG
+	big_path = search_env(envp, "PATH");
+	// big_path = getenv("PATH"); // -------------------> BUG
 	if (big_path == NULL)
-		return (NULL);
+		return (cmd);
 	move = ft_strchr(big_path, '/');
 	split_paths = ft_split(move, ':');
 	if (!split_paths)

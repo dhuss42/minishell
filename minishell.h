@@ -91,6 +91,7 @@ int			get_len_new_env(char **env, t_command *row, size_t i);
 int			update_pwd(t_shell *shell);
 int			update_oldpwd(t_shell *shell, char *content);
 char		**duplicate_double_ptr(char **double_ptr);
+char		*search_env(char **env, char *key);
 
 	//--> lexer
 bool		is_special(char input);

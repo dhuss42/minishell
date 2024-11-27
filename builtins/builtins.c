@@ -71,6 +71,7 @@ int	check_builtins(t_shell *shell, t_command *row)
 	int	is_builtin;
 
 	shell->i = 0;
+	is_builtin = 0;
 	if (row->args[0])
 	{
 		if (ft_strlen(row->args[0]) < 4)
