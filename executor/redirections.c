@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:38:08 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/27 15:58:07 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 17:04:21 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	reset_redirections(t_command row)
 {
 	dup2(row.original_stdout, STDOUT_FILENO);
 	dup2(row.original_stdin, STDIN_FILENO);
+	dup2(row.original_stderr, STDERR_FILENO);
 }
 
 /*-------------------------------------------------------------
@@ -74,8 +75,11 @@ int	exec_redirections(t_command *row)
 {
 	int	fd;
 
-	row->original_stdout = dup(STDOUT_FILENO);
+	row->original_stdin = 0;
+	row->original_stdout = 1;
+	row->original_stderr = 2;
 	row->original_stdin = dup(STDIN_FILENO);
+	row->original_stdout = dup(STDOUT_FILENO);
 	row->original_stderr = dup(STDERR_FILENO);
 	if (row->final_outfile && row->final_out_red)
 	{

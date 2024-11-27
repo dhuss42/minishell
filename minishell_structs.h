@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/27 15:55:49 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 17:10:03 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ typedef struct s_command
 	char	*final_out_red;
 	int		original_stdout;
 	int		original_stdin;
-	int		original_stderr;
 	char	*heredoc_file_path;	//to free
 }	t_command;
 
