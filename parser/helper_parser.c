@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 12:04:44 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 12:57:42 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:26:34 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,3 @@ size_t	ft_strlcpy_lowercase(char *dst, const char *src, size_t dstsize)
 		j++;
 	return (j);
 }
-
