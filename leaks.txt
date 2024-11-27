@@ -41,5 +41,3 @@ minishell: echo hello | grep h | cat -e | cat -e | cat -e
 hello$$$
 
 <------------------------------------------------>
-
-

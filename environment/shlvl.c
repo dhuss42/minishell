@@ -6,12 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:19:30 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 15:00:19 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:46:14 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 void	find_index(t_shell *shell, int *i)
 {

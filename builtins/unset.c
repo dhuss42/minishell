@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:37 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:27:17 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:47:26 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	ft_unset(t_shell *shell, t_command *row)
 	if (!tmp)
 		return (-1);
 	if (copy_unset_varibles(shell, row, tmp) == -1)
-		return (-1); // free tmp?
+		return (-1);
 	return (finalise_unset(shell, tmp));
 }
 

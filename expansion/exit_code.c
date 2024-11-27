@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 11:36:31 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:09:03 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:45:14 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*copy_exit_code(t_shell *expand, t_command *row, char *tmp)
 	if (!tmp_ec)
 	{
 		print_error(errno, NULL, PRINT);
-		return (NULL); // not sure if tmp should be freed
+		return (free(tmp), NULL);
 	}
 	expand->k += ft_strlen(tmp_ec);
 	while (tmp_ec[index] != '\0')
