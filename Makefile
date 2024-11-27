@@ -47,6 +47,7 @@ CFILES = minishell.c\
 	errors/error_handling_utils.c\
 	executor/check_files.c\
 	executor/exec_free.c\
+	executor/exec_fd_pid.c\
 	executor/exec_pipe.c\
 	executor/exec_free_child.c\
 	executor/executor_utils.c\

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_structs.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/27 12:38:37 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:55:49 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_command
 	char	*final_out_red;
 	int		original_stdout;
 	int		original_stdin;
+	int		original_stderr;
 	char	*heredoc_file_path;	//to free
 }	t_command;
 
@@ -75,6 +76,8 @@ typedef struct s_shell
 	char	quote;
 	char	*res;
 	char	**env;
+	pid_t	*pid;	//free required
+	int		**fd;	//double free required
 }	t_shell;
 
 typedef enum e_custom_err

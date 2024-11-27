@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 15:07:24 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/26 17:28:57 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 16:00:14 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,14 @@ int	check_builtins(t_shell *shell, t_command *row)
 		{
 			dup2(row->original_stdout, STDOUT_FILENO);
 			dup2(row->original_stdin, STDIN_FILENO);
+			dup2(row->original_stderr, STDERR_FILENO);
 			return (0);
 		}
 		else if (is_builtin < 0)
 		{
 			dup2(row->original_stdout, STDOUT_FILENO);
 			dup2(row->original_stdin, STDIN_FILENO);
+			dup2(row->original_stderr, STDERR_FILENO);
 			return (-1);
 		}
 	}

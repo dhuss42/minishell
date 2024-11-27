@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/27 12:01:17 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 15:39:56 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*-------------------------------------------------------------
 Close all opened filedescriptors from piping, we won't need
 ---------------------------------------------------------------*/
-static int	close_fds(int (*fd)[2], int id, int nbr_pipes)
+static int	close_fds(int **fd, int id, int nbr_pipes)
 {
 	int	i;
 
@@ -40,7 +40,7 @@ static int	close_fds(int (*fd)[2], int id, int nbr_pipes)
 /*-------------------------------------------------------------
 Parent handler for pipechain
 ---------------------------------------------------------------*/
-int	pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes)
+int	pipe_parent(pid_t *pid, int **fd, t_list *table, int nbr_pipes)
 {
 	int		wstatus;
 	int		exit_code;
@@ -70,7 +70,7 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes)
 /*-------------------------------------------------------------
 Redirect input / output for pipechild
 ---------------------------------------------------------------*/
-static int	duplicate_fd(t_command *row, int (*fd)[2], int nbr_pipes)
+static int	duplicate_fd(t_command *row, int **fd, int nbr_pipes)
 {
 	if (row->id != 0 && row->final_infile == NULL)
 	{
@@ -100,7 +100,7 @@ static int	duplicate_fd(t_command *row, int (*fd)[2], int nbr_pipes)
 /*-------------------------------------------------------------
 Child handler for pipechain
 ---------------------------------------------------------------*/
-static void	pipe_child(t_command *row, int (*fd)[2], t_list *table,
+static void	pipe_child(t_command *row, int **fd, t_list *table,
 	t_shell *shell)
 {
 	int	nbr_pipes;
@@ -130,7 +130,7 @@ static void	pipe_child(t_command *row, int (*fd)[2], t_list *table,
 /*-------------------------------------------------------------
 Loop through all the pipes
 ---------------------------------------------------------------*/
-int	pipechain_loop(t_list *table, pid_t *pid, int (*fd)[2], t_shell *shell)
+int	pipechain_loop(t_list *table, pid_t *pid, int **fd, t_shell *shell)
 {
 	int			n;
 	t_command	*row;
