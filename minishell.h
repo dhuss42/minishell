@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 12:01:11 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 12:58:20 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int			iterate_table(t_list *table, char **env);
 int			get_expanded(char *variable, char **env, t_command *row, t_shell *expand);
 char		*compare_with_env(char *variable, char **env, char *exp);
 int			get_exit_code(char *tmp, t_command *row, t_shell *expand);
-int			remove_quotes(t_list *table);
+int			remove_quotes(t_list *table, t_shell *shell);
 char		*quote_heredoc(char *str);
 
 //-------------------utils------------------//
@@ -102,6 +102,7 @@ bool		is_wspace(char input);
 int			is_filename(t_token *current_token);
 int			is_redirection(t_token *current_token);
 void		set_to_zero(t_shell *nbr);
+size_t		ft_strlcpy_lowercase(char *dst, const char *src, size_t dstsize);
 
 	//--> expansion
 bool		is_quotes(char c);

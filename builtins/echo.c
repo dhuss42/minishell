@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:27 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 12:32:17 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 12:49:52 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	echo(t_shell *shell, t_command *row)
 
 int	ft_echo(t_shell *shell, t_command *row)
 {
-	if (row->args[shell->i][4] == ' ') // should check for echo and whether string is longer than 4 nad quote removed flag is false
+	if (row->args[shell->i][4] == ' ' && shell->rem == false)
 		echo_expanded(shell, row);
 	if (ft_strncmp(row->args[0], "echo", ft_strlen(row->args[shell->i])) == 0
 		&& ft_strlen(row->args[shell->i]) == 4)
@@ -84,12 +84,3 @@ int	ft_echo(t_shell *shell, t_command *row)
 // following i arguments are also -n or -nnnnn and skipp them
 // printf everything until NULL
 // print newline if true
-
-
-// problem is that "echo hi" and e$t -> echo hi are identical strings
-// --> no way to differntiate between the two.
-// the first one should return command not found and the second one should write hi
-// I need a flag that check whether quotes have been removed.
-// if quotes have not been removed it should enter echo_expanded
-// else it should return an error
-

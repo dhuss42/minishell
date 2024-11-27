@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_structs.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/26 16:11:31 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 12:38:37 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_shell
 	bool	isspace;
 	bool	syntax_error;
 	bool	exit;
+	bool	rem;
 	char	quote;
 	char	*res;
 	char	**env;

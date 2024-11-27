@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:47:50 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 15:34:09 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 12:43:10 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	remove_quotes_loop(char **input, t_shell *e, char *no_quotes)
 			e->j++;
 		if (is_quotes(input[e->i][e->j]))
 		{
+			e->rem = true;
 			e->quote = input[e->i][e->j];
 			e->j++;
 			while (input[e->i][e->j] != '\0'
@@ -103,20 +104,20 @@ int	process_quotes(char **array, t_shell *expand)
 	return (0);
 }
 
-int	remove_quotes(t_list *table)
+int	remove_quotes(t_list *table, t_shell *expand)
 {
-	t_shell		expand;
 	t_command	*row;
 
-	expand.tmp = table;
-	while (expand.tmp != NULL)
+	expand->rem = false;
+	expand->tmp = table;
+	while (expand->tmp != NULL)
 	{
-		row = (t_command *) expand.tmp->content;
-		if (process_quotes(row->args, &expand) == -1)
+		row = (t_command *) expand->tmp->content;
+		if (process_quotes(row->args, expand) == -1)
 			return (-1);
-		if (process_quotes(row->filename, &expand) == -1)
+		if (process_quotes(row->filename, expand) == -1)
 			return (-1);
-		expand.tmp = expand.tmp->next;
+		expand->tmp = expand->tmp->next;
 	}
 	return (0);
 }

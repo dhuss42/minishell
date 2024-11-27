@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:21 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 11:12:39 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 12:50:06 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	expansion(t_shell *shell, char **env)
 		return ;
 	if (iterate_table(shell->table, env) == -1)
 		return ;
-	if (remove_quotes(shell->table) == -1)
+	if (remove_quotes(shell->table, shell) == -1)
 		return ;
 	if (shell->syntax_error == false)
 		print_error(0, NULL, NOTPRINT);
