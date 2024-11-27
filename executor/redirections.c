@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:38:08 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/19 12:09:52 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 12:02:54 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,21 @@ int	redirect_input(t_command row, int *fd)
 }
 
 /*-------------------------------------------------------------
-duplicate fd from final outfile to stdout
+duplicate fd from pipe outfiles to stdout and stderr
+---------------------------------------------------------------*/
+int	redirect_output_pipe(int *fd)
+{
+	if (dup2(*fd, STDOUT_FILENO) == -1)
+		return (print_error(errno, NULL, PRINT));
+	if (dup2(*fd, STDERR_FILENO) == -1)
+		return (print_error(errno, NULL, PRINT));
+	if (close(*fd) == -1)
+		return (print_error(errno, NULL, PRINT));
+	return (0);
+}
+
+/*-------------------------------------------------------------
+duplicate fd from final outfile to stdout and stderr
 ---------------------------------------------------------------*/
 int	redirect_output(t_command row, int *fd)
 {
@@ -45,6 +59,8 @@ int	redirect_output(t_command row, int *fd)
 	if (*fd == -1)
 		return (print_error(errno, NULL, PRINT));
 	if (dup2(*fd, STDOUT_FILENO) == -1)
+		return (print_error(errno, NULL, PRINT));
+	if (dup2(*fd, STDERR_FILENO) == -1)
 		return (print_error(errno, NULL, PRINT));
 	if (close(*fd) == -1)
 		return (print_error(errno, NULL, PRINT));

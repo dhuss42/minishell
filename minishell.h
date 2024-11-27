@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 11:09:26 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 12:01:11 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ char*		generate_file_path(int id);
 size_t		get_len_exp_hd(char *line, char *exp, size_t index);
 int			redirect_input(t_command row, int *fd);
 int			redirect_output(t_command row, int *fd);
+int			redirect_output_pipe(int *fd);
 void		reset_redirections(t_command row);
 int			executor(char **envp, t_list *table, t_shell *shell);
 int			pipechain_loop(t_list *table, pid_t *pid, int (*fd)[2], t_shell *shell);
