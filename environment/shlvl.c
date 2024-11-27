@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:19:30 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:10:00 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 11:42:58 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	shlvl(t_shell *shell)
 	char	*key;
 	char	*res;
 
+	if (shell->env[0] == NULL)
+		return (0);
 	new_shlvl = NULL;
 	new_shlvl = update_shlvl(shell, new_shlvl, &i);
 	if (!new_shlvl)
