@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 10:37:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/21 16:39:50 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 15:39:23 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ static int	handle_heredoc_input(char *delimiter, t_command *row, char **env)
 	fd = open(row->heredoc_file_path, O_RDWR | O_CREAT | O_TRUNC, 0600);
 	if (fd == -1)
 		return (print_error(errno, row->heredoc_file_path, PRINT));
+	free(row->heredoc_file_path);
+	row->heredoc_file_path = NULL;
 	pid = fork();
 	if (pid == -1)
 		return (print_error(errno, NULL, PRINT));

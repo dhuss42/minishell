@@ -6,27 +6,11 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:13:49 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/28 15:20:32 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 15:31:20 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	free_double_int(int **to_free, int nbr_pipes)
-{
-	int	i;
-
-	i = 0;
-	while (i <= nbr_pipes)
-	{
-		free (to_free[i]);
-		to_free[i] = NULL;
-		i++;
-	}
-	if (to_free)
-		free (to_free);
-	to_free = NULL;
-}
 
 void	free_fd_pid(t_shell *shell, int nbr_pipes)
 {
@@ -49,7 +33,6 @@ void	free_fd_pid(t_shell *shell, int nbr_pipes)
 		free (shell->fd);
 		shell->fd = NULL;
 	}
-		// free_double_int(shell->fd, nbr_pipes);
 }
 
 /*-------------------------------------------------------------
