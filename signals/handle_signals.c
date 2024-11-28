@@ -67,8 +67,8 @@ won't respond to the QUIT character (usually Ctrl+) in the terminal.
 ---------------------------------------------------------------*/
 void	handle_signals(int after_readline)
 {
-	struct sigaction sa_int;
-	struct sigaction sa_quit;
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 
 	if (after_readline)
 	{

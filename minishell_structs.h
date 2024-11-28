@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/26 16:11:31 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 17:10:03 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,12 @@ typedef struct s_shell
 	bool	isspace;
 	bool	syntax_error;
 	bool	exit;
+	bool	rem;
 	char	quote;
 	char	*res;
 	char	**env;
+	pid_t	*pid;	//free required
+	int		**fd;	//double free required
 }	t_shell;
 
 typedef enum e_custom_err

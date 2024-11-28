@@ -43,8 +43,6 @@ echo "Hello World" | grep "World" > output.txt
 
 cat input.txt | tr 'a-z' 'A-Z' | grep "HELLO" > output.txt
 
-echo this but her "  $HOME "'$SHLVL'|cat -e >>outfile
-
 export a b=hi $=not_this_one c=but_this_one
 
 //------ More complex Testcases --------//
@@ -75,7 +73,6 @@ echo "$MYVAR"
 # Complex Test Case 6: cd to not existing directory
 cd /nonexistent
 # Expected Output: cd: /nonexistent: No such file or directory
---> does not work
 
 # Complex Test Case 7: Pipe, environment variable, and redirection
 export PHRASE="Hello, MiniShell!"

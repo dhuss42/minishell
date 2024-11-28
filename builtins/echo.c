@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:07:27 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/26 17:27:18 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 12:49:52 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	echo(t_shell *shell, t_command *row)
 
 int	ft_echo(t_shell *shell, t_command *row)
 {
-	if (row->args[shell->i][4] == ' ')
+	if (row->args[shell->i][4] == ' ' && shell->rem == false)
 		echo_expanded(shell, row);
 	if (ft_strncmp(row->args[0], "echo", ft_strlen(row->args[shell->i])) == 0
 		&& ft_strlen(row->args[shell->i]) == 4)
@@ -72,7 +72,9 @@ int	ft_echo(t_shell *shell, t_command *row)
 		return (0);
 	}
 	else
-		return (-1);
+	{
+		return (print_error(127, row->args[shell->i], PRINT), -1);
+	}
 }
 
 // check for empty string

@@ -29,7 +29,7 @@ CFILES = minishell.c\
 	expansion/exit_code.c\
 	expansion/compare_with_env.c\
 	expansion/remove_quotes.c\
-	expansion/quote_removal_heredoc.c\
+	expansion/process_quotes.c\
 	expansion/helper_expansion.c\
 	builtins/builtins.c\
 	builtins/env.c\
@@ -48,6 +48,7 @@ CFILES = minishell.c\
 	errors/error_handling_utils.c\
 	executor/check_files.c\
 	executor/exec_free.c\
+	executor/exec_fd_pid.c\
 	executor/exec_pipe.c\
 	executor/exec_free_child.c\
 	executor/executor_utils.c\
@@ -58,6 +59,7 @@ CFILES = minishell.c\
 	executor/heredoc_expansion.c\
 	executor/redirections.c\
 	signals/handle_signals.c\
+	free_minishell.c\
 	print_tokenlist.c\
 	print_table.c
 

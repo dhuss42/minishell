@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 14:24:16 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/26 16:16:59 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 11:27:34 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,20 +102,20 @@ char	*get_path(char *cmd, char **envp)
 	char	*path;
 
 	if (cmd[0] == '.' && cmd[1] == '/')
-		return (cmd);
+		return (ft_strdup(cmd));
 	append = NULL;
 	if (envp[0] == NULL)
 		return (NULL);
-	big_path = getenv("PATH"); // -------------------> BUG
+	big_path = search_env(envp, "PATH");
 	if (big_path == NULL)
-		return (NULL);
+		return (ft_strdup(cmd));
 	move = ft_strchr(big_path, '/');
 	split_paths = ft_split(move, ':');
 	if (!split_paths)
 		return (NULL);
 	append = add_slash_cmd(split_paths, cmd);
 	path = ft_strdup(check_cmd(append));
-	free_paths(split_paths, append);
+	free_paths(split_paths, append, big_path);
 	if (path == NULL)
 		return (ft_strdup(cmd));
 	return (path);

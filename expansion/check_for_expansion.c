@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 14:41:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 15:07:05 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:37:17 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,30 @@ void	skip_single_quotes(t_command *row, t_shell *ex)
 	}
 }
 
+int	which_expansion(t_command *r, t_shell *e, char **env, char *tmp)
+{
+	if (r->args[e->i][e->k] == '\"' && contains_dollar(r->args[e->i], e->k))
+	{
+		if (double_quotes(r, e, env) == -1)
+			return (-1);
+	}
+	else if (r->args[e->i][e->k] == '\'')
+		skip_single_quotes(r, e);
+	else if (r->args[e->i][e->k] == '$' && ft_isalnum(r->args[e->i][e->k + 1]))
+	{
+		if (get_expanded(tmp, env, r, e) == -1)
+			return (-1);
+	}
+	else if (r->args[e->i][e->k] == '$' && (r->args[e->i][e->k + 1] == '?'))
+	{
+		if (get_exit_code(tmp, r, e) == -1)
+			return (-1);
+	}
+	else
+		e->k++;
+	return (0);
+}
+
 int	check_for_expansion(t_command *r, t_shell *e, char **env)
 {
 	char	*tmp;
@@ -71,25 +95,8 @@ int	check_for_expansion(t_command *r, t_shell *e, char **env)
 	tmp = NULL;
 	while (r->args[e->i][e->k] != '\0')
 	{
-		if (r->args[e->i][e->k] == '\"' && contains_dollar(r->args[e->i], e->k))
-		{
-			if (double_quotes(r, e, env) == -1)
-				return (-1);
-		}
-		else if (r->args[e->i][e->k] == '\'')
-			skip_single_quotes(r, e);
-		else if (r->args[e->i][e->k] == '$' && ft_isalnum(r->args[e->i][e->k + 1]))
-		{
-			if (get_expanded(tmp, env, r, e) == -1)
-				return (-1);
-		}
-		else if (r->args[e->i][e->k] == '$' && (r->args[e->i][e->k + 1] == '?'))
-		{
-			if (get_exit_code(tmp, r, e) == -1)
-				return (-1);
-		}
-		else
-			e->k++;
+		if (which_expansion(r, e, env, tmp) == -1)
+			return (-1);
 	}
 	return (0);
 }

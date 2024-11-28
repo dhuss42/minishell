@@ -6,17 +6,14 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:19:30 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:10:00 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:46:14 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*update_shlvl(t_shell *shell, char *new_shlvl, size_t *i)
+void	find_index(t_shell *shell, int *i)
 {
-	int		shlvl;
-	char	*pos;
-
 	*i = 0;
 	while (shell->env[*i] != NULL)
 	{
@@ -25,6 +22,16 @@ char	*update_shlvl(t_shell *shell, char *new_shlvl, size_t *i)
 			break ;
 		(*i)++;
 	}
+	if (shell->env[*i] == NULL)
+		(*i) = -2;
+}
+
+char	*update_shlvl(t_shell *shell, char *new_shlvl, int *i)
+{
+	int		shlvl;
+	char	*pos;
+
+	find_index(shell, i);
 	pos = ft_strchr(shell->env[*i], '=');
 	pos++;
 	shlvl = ft_atoi(pos);
@@ -40,14 +47,16 @@ char	*update_shlvl(t_shell *shell, char *new_shlvl, size_t *i)
 
 int	shlvl(t_shell *shell)
 {
-	size_t	i;
+	int		i;
 	char	*new_shlvl;
 	char	*key;
 	char	*res;
 
+	if (shell->env[0] == NULL)
+		return (0);
 	new_shlvl = NULL;
 	new_shlvl = update_shlvl(shell, new_shlvl, &i);
-	if (!new_shlvl)
+	if (!new_shlvl && i != -2)
 		return (-1);
 	key = safe_malloc(sizeof(char) * (ft_strlen("SHLVL=") + 1));
 	if (!key)

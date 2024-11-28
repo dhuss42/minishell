@@ -1,29 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   free_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 14:07:20 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 15:50:01 by dhuss            ###   ########.fr       */
+/*   Created: 2024/11/27 10:55:34 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/27 15:32:53 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
-int	ft_env(t_shell *shell)
+void	free_minishell(t_shell *shell, char *input)
 {
-	size_t	i;
-
-	if (shell->env == NULL)
-		return (-1);
-	i = 0;
-	while (shell->env[i] != NULL)
-	{
-		if (has_equal(shell->env[i]))
-			ft_printf("%s\n", shell->env[i]);
-		i++;
-	}
-	return (0);
+	free(input);
+	input = NULL;
+	ft_lstclear(&shell->list, free_token);
+	if (shell->syntax_error == false)
+		free_table(shell->table);
+	if (shell->exit == true)
+		clear_all(shell->env);
 }

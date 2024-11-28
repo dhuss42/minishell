@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/21 16:37:55 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 17:10:18 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ int			iterate_table(t_list *table, char **env);
 int			get_expanded(char *variable, char **env, t_command *row, t_shell *expand);
 char		*compare_with_env(char *variable, char **env, char *exp);
 int			get_exit_code(char *tmp, t_command *row, t_shell *expand);
-int			remove_quotes(t_list *table);
-char		*quote_heredoc(char *str);
+int			remove_quotes(t_list *table, t_shell *shell);
+int			process_quotes(char **array, t_shell *expand);
 
 //-------------------utils------------------//
 void		*safe_malloc(size_t size);
@@ -91,6 +91,7 @@ int			get_len_new_env(char **env, t_command *row, size_t i);
 int			update_pwd(t_shell *shell);
 int			update_oldpwd(t_shell *shell, char *content);
 char		**duplicate_double_ptr(char **double_ptr);
+char		*search_env(char **env, char *key);
 
 	//--> lexer
 bool		is_special(char input);
@@ -101,6 +102,7 @@ bool		is_wspace(char input);
 int			is_filename(t_token *current_token);
 int			is_redirection(t_token *current_token);
 void		set_to_zero(t_shell *nbr);
+size_t		ft_strlcpy_lowercase(char *dst, const char *src, size_t dstsize);
 
 	//--> expansion
 bool		is_quotes(char c);
@@ -114,7 +116,7 @@ int	custom_error_print_2(int err_no);
 
 //-----------------executor-----------------------
 char		*get_path(char *cmd, char **envp);
-void		free_paths(char **split_paths, char **append);
+void		free_paths(char **split_paths, char **append, char *big_path);
 int			check_files(t_command *row);
 int			exec_redirections(t_command *row);
 void		free_double(char **to_free);
@@ -128,11 +130,14 @@ char*		generate_file_path(int id);
 size_t		get_len_exp_hd(char *line, char *exp, size_t index);
 int			redirect_input(t_command row, int *fd);
 int			redirect_output(t_command row, int *fd);
+int			redirect_output_pipe(int *fd);
 void		reset_redirections(t_command row);
 int			executor(char **envp, t_list *table, t_shell *shell);
-int			pipechain_loop(t_list *table, pid_t *pid, int (*fd)[2], t_shell *shell);
-int			pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes);
+int			pipechain_loop(t_list *table, pid_t *pid, int **fd, t_shell *shell);
+int			pipe_parent(pid_t *pid, int **fd, t_list *table, int nbr_pipes);
 void		free_child_exit(t_shell *shell, int exit_code);
+int			init_fd_pid(t_shell *shell, int nbr_pipes);
+void		free_fd_pid(t_shell *shell, int nbr_pipes);
 
 //-------------signals---------
 void		handle_signals(int is_child);
@@ -145,6 +150,7 @@ void		memory_parser(t_shell *parsing, t_command *cmd);
 void		free_table_parser(t_shell *parsing);
 void		free_command(t_command *cmd);
 void		free_three(char *str, char *str2, char *str3);
+void		free_minishell(t_shell *shell, char *input);
 
 //------------extra-shit-----------//
 void		print_token(t_token *tok);

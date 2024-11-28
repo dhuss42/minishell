@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 12:04:44 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:11:40 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:26:34 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,26 @@ void	set_to_zero(t_shell *nbr)
 	nbr->words = 0;
 	nbr->reds = 0;
 	nbr->filenames = 0;
+}
+
+size_t	ft_strlcpy_lowercase(char *dst, const char *src, size_t dstsize)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	if (dstsize != '\0')
+	{
+		while (dstsize > 1 && src[i] != '\0')
+		{
+			dst[i] = ft_tolower(src[i]);
+			i++;
+			dstsize--;
+		}
+		dst[i] = '\0';
+	}
+	while (src[j] != '\0')
+		j++;
+	return (j);
 }

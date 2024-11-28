@@ -30,7 +30,6 @@ char	*search_env(char **env, char *key)
 		}
 		i++;
 	}
-	print_error(E_NOTSET, "HOME", PRINT);
 	return (NULL);
 }
 
@@ -45,7 +44,7 @@ int	cd_no_args(t_shell *shell, t_command *row, char *current_dir)
 
 	no_args = search_env(shell->env, "HOME");
 	if (!no_args)
-		return (-1);
+		return (print_error(E_NOTSET, "HOME", PRINT), -1);
 	if (no_args[0] != '\0')
 	{
 		if (chdir(no_args) == -1)

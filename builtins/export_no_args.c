@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:06:57 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:10:29 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 12:26:43 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int	export_no_argument(t_shell *shell)
 	size_t	i;
 	char	**sorted;
 
+	if (shell->env[0] == NULL)
+		return (0);
 	i = 0;
 	sorted = sorter(shell);
 	if (!sorted)
@@ -97,7 +99,7 @@ int	export_no_argument(t_shell *shell)
 			write(1, "\"", 1);
 			put_str_n(sorted[i], ft_strlen(sorted[i]),
 				strlen_equal(sorted[i]) + 1);
-			write(1, "\"", 2);
+			write(1, "\"", 1);
 		}
 		ft_printf("\n");
 		i++;

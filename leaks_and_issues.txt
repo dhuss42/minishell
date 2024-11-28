@@ -35,34 +35,6 @@ error wrapped here
 	Minishell tester passes fewer tests with init terminal
 
 <------------------------------------------------------------------->
-[4.]
-
-minishell: cd lsd
-
-
-minishell: lsd: No such file or directory
-/usr/bin/cd: line 4: cd: lsd: No such file or directory
-
- 				[----- solution idea -----]
-seems like cd is called multiple times here
-
-<------------------------------------------------------------------->
-
-<------------------------------------------------------------------->
-issues with syntax errors, segfault for some reason randomly
-
-
-<------------------------------------------------------------------->
-
-minishell: a<
-
-
-minishell: syntax error near unexpected token `newline'
-minishell(52160,0x113749dc0) malloc: *** error for object 0x7f98af704180: pointer being freed was not allocated
-minishell(52160,0x113749dc0) malloc: *** set a breakpoint in malloc_error_break to debug
-Abort trap: 6
-
-<------------------------------------------------------------------->
 env -i ./minishell (means run minishell without environment variables) - segmentation fault
 POssible: check if env[0] exists (because env for sure exists).
 Expected: probably some variables are still created; check the real bash by doing "env -i bash"
@@ -77,15 +49,6 @@ just transform the command to lowercase.
 Just check: what if every variable is unset?
 
 <------------------------------------------------------------------->
-unset PATH should unset it, and after it, in case of trying a command like
-ls, it should not be found; in that case only /bin/ls would work, because
-an absolute path is given.
-Solution: the problem is line 107 @ find_path.c, where getenv() is used.
-getenv() check in the outside environment, while you should check in YOURS.
-Therefor you need to re-create a custom getenv() which checks your actual
-environment.
-
-<------------------------------------------------------------------->
 export | grep USER or export | grep SHLVL or something else doesnt work
 Really strange error: I thought it was related to stdin and stdout with builtins,
 but with echo, pwd or others, it works correctly.
@@ -93,30 +56,9 @@ but with echo, pwd or others, it works correctly.
 <------------------------------------------------------------------->
 ---end of Nico testing---
 <------------------------------------------------------------------->
-
-When I start minishell from the directory before minishell and start
-minishell again from there, then exit gives double-free-error
-
-:/mnt/c/Users/milen/Desktop/42$ ./minishell/minishell
-minishell: ./minishell/minishell
-minishell:
-exit
-free(): double free detected in tcache 2
-Aborted (core dumped)
-
-as well with
-minishell: ./minishell/ls
-This is my Script!
-free(): double free detected in tcache 2
-Aborted (core dumped)
-
--->in general, if we are not in the minishell directory amd an error occurs,
-it makes double free.
-Maybe the problem is line 107 @ find_path.c, where getenv()
-
-<------------------------------------------------------------------->
 echoalskajsas
 --> not printing error message
 
 <------------------------------------------------------------------->
+
 <------------------------------------------------------------------->

@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/24 14:09:33 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 16:54:18 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*-------------------------------------------------------------
 Close all opened filedescriptors from piping, we won't need
 ---------------------------------------------------------------*/
-static int	close_fds(int (*fd)[2], int id, int nbr_pipes)
+static int	close_fds(int **fd, int id, int nbr_pipes)
 {
 	int	i;
 
@@ -40,7 +40,7 @@ static int	close_fds(int (*fd)[2], int id, int nbr_pipes)
 /*-------------------------------------------------------------
 Parent handler for pipechain
 ---------------------------------------------------------------*/
-int	pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes)
+int	pipe_parent(pid_t *pid, int **fd, t_list *table, int nbr_pipes)
 {
 	int		wstatus;
 	int		exit_code;
@@ -67,11 +67,14 @@ int	pipe_parent(pid_t *pid, int (*fd)[2], t_list *table, int nbr_pipes)
 	return (exit_code);
 }
 
-static int	duplicate_fd(t_command *row, int (*fd)[2], int nbr_pipes)
+/*-------------------------------------------------------------
+Redirect input / output for pipechild
+---------------------------------------------------------------*/
+static int	duplicate_fd(t_command *row, int **fd, int nbr_pipes)
 {
 	if (row->id != 0 && row->final_infile == NULL)
 	{
-		if (dup2(fd[row->id - 1][0], 0) == -1)
+		if (dup2(fd[row->id - 1][0], STDIN_FILENO) == -1)
 			return (print_error(errno, NULL, PRINT));
 		if (close(fd[row->id - 1][0]) == -1)
 			return (print_error(errno, NULL, PRINT));
@@ -83,10 +86,8 @@ static int	duplicate_fd(t_command *row, int (*fd)[2], int nbr_pipes)
 	}
 	if (row->id != nbr_pipes && row->final_outfile == NULL)
 	{
-		if (dup2(fd[row->id][1], 1) == -1)
-			return (print_error(errno, NULL, PRINT));
-		if (close(fd[row->id][1]) == -1)
-			return (print_error(errno, NULL, PRINT));
+		if (redirect_output_pipe(&fd[row->id][1]))
+			return (errno);
 	}
 	if (row->final_outfile)
 	{
@@ -99,7 +100,7 @@ static int	duplicate_fd(t_command *row, int (*fd)[2], int nbr_pipes)
 /*-------------------------------------------------------------
 Child handler for pipechain
 ---------------------------------------------------------------*/
-static void	pipe_child(t_command *row, int (*fd)[2], t_list *table,
+static void	pipe_child(t_command *row, int **fd, t_list *table,
 	t_shell *shell)
 {
 	int	nbr_pipes;
@@ -129,7 +130,7 @@ static void	pipe_child(t_command *row, int (*fd)[2], t_list *table,
 /*-------------------------------------------------------------
 Loop through all the pipes
 ---------------------------------------------------------------*/
-int	pipechain_loop(t_list *table, pid_t *pid, int (*fd)[2], t_shell *shell)
+int	pipechain_loop(t_list *table, pid_t *pid, int **fd, t_shell *shell)
 {
 	int			n;
 	t_command	*row;
@@ -146,6 +147,7 @@ int	pipechain_loop(t_list *table, pid_t *pid, int (*fd)[2], t_shell *shell)
 		if (pid[n] == 0)
 			pipe_child(row, fd, table, shell);
 		tmp = tmp->next;
+		printf("%d\n", n);
 		n++;
 	}
 	return (0);

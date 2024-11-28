@@ -6,7 +6,7 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:03:35 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/19 12:59:30 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/27 15:26:17 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ int	populate_args_array(t_shell *pa, t_token *ct, t_command *cmd)
 		free_command(cmd);
 		return (-1);
 	}
-	ft_strlcpy(cmd->args[pa->j], ct->input, len + 1);
+	if (cmd->args[pa->j] == cmd->args[0])
+		ft_strlcpy_lowercase(cmd->args[pa->j], ct->input, len + 1);
+	else
+		ft_strlcpy(cmd->args[pa->j], ct->input, len + 1);
 	pa->j++;
 	return (0);
 }

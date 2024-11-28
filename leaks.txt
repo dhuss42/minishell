@@ -1,0 +1,43 @@
+<------------------------------------------------>
+
+minishell: echo hello | grep h | cat -e | cat -e | cat -e
+==717== Syscall param dup2(oldfd) contains uninitialised byte(s)
+==717==    at 0x49A6A17: dup2 (syscall-template.S:120)
+==717==    by 0x10DD19: check_builtins (builtins.c:83)
+==717==    by 0x111164: pipe_child (exec_pipe.c:116)
+==717==    by 0x1112D9: pipechain_loop (exec_pipe.c:148)
+==717==    by 0x1116CF: execute_pipechain (executor.c:31)
+==717==    by 0x111ABD: executor (executor.c:134)
+==717==    by 0x1093C6: minishell_loop (minishell.c:36)
+==717==    by 0x109477: main (minishell.c:61)
+==717==
+==717== Syscall param dup2(oldfd) contains uninitialised byte(s)
+==717==    at 0x49A6A17: dup2 (syscall-template.S:120)
+==717==    by 0x10DD2C: check_builtins (builtins.c:84)
+==717==    by 0x111164: pipe_child (exec_pipe.c:116)
+==717==    by 0x1112D9: pipechain_loop (exec_pipe.c:148)
+==717==    by 0x1116CF: execute_pipechain (executor.c:31)
+==717==    by 0x111ABD: executor (executor.c:134)
+==717==    by 0x1093C6: minishell_loop (minishell.c:36)
+==717==    by 0x109477: main (minishell.c:61)
+==717==
+==717==
+==717== HEAP SUMMARY:
+==717==     in use at exit: 228,456 bytes in 245 blocks
+==717==   total heap usage: 579 allocs, 334 frees, 246,090 bytes allocated
+==717==
+==717== LEAK SUMMARY:
+==717==    definitely lost: 0 bytes in 0 blocks
+==717==    indirectly lost: 0 bytes in 0 blocks
+==717==      possibly lost: 0 bytes in 0 blocks
+==717==    still reachable: 228,456 bytes in 245 blocks
+==717==         suppressed: 0 bytes in 0 blocks
+==717== Reachable blocks (those to which a pointer was found) are not shown.
+==717== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==717==
+==717== Use --track-origins=yes to see where uninitialised values come from
+==717== For lists of detected and suppressed errors, rerun with: -s
+==717== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+hello$$$
+
+<------------------------------------------------>

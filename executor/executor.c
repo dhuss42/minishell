@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/26 15:53:18 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/27 16:15:10 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,20 @@ Handle pipechain
 ---------------------------------------------------------------*/
 int	execute_pipechain(t_list *table, int nbr_pipes, t_shell *shell)
 {
-	int		fd[nbr_pipes][2];
-	pid_t	pid[nbr_pipes + 1];
 	int		n;
 
+	if (init_fd_pid(shell, nbr_pipes))
+		return (1);
 	n = 0;
 	while (n < nbr_pipes)
 	{
-		if (pipe(fd[n]) == -1)
+		if (pipe(shell->fd[n]) == -1)
 			return (print_error(errno, NULL, PRINT));
 		n++;
 	}
-	if (pipechain_loop(table, pid, fd, shell))
+	if (pipechain_loop(table, shell->pid, shell->fd, shell))
 		return (1);
-	if (pipe_parent(pid, fd, table, nbr_pipes))
+	if (pipe_parent(shell->pid, shell->fd, table, nbr_pipes))
 		return (2);
 	return (0);
 }
@@ -132,7 +132,11 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 	else if (nbr_pipes > 0)
 	{
 		if (execute_pipechain(table, nbr_pipes, shell))
+		{
+			free_fd_pid(shell, nbr_pipes);
 			return (4);
+		}
+		free_fd_pid(shell, nbr_pipes);
 	}
 	return (0);
 }

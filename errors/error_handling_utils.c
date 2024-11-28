@@ -26,7 +26,7 @@ int	custom_error_print_2(int err_no)
 	}
 	else if (err_no == E_BUILTIN)
 		ft_putstr_fd("error in builtins\n", 2);
-	else if(err_no == E_FILE_ISDIRECTORY)
+	else if (err_no == E_FILE_ISDIRECTORY)
 	{
 		ft_putstr_fd("is a directory\n", 2);
 		return (1);
