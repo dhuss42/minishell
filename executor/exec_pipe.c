@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/28 11:35:57 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 14:05:17 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,12 @@ Redirect input / output for pipechild
 ---------------------------------------------------------------*/
 static int	duplicate_fd(t_command *row, int **fd, int nbr_pipes)
 {
+	row->original_stdin = 0;//probably not necessary
+	row->original_stdout = 1;
+	row->original_stderr = 2;
+	row->original_stdin = dup(STDIN_FILENO);
+	row->original_stdout = dup(STDOUT_FILENO);
+	row->original_stderr = dup(STDERR_FILENO);
 	if (row->id != 0 && row->final_infile == NULL)
 	{
 		if (dup2(fd[row->id - 1][0], STDIN_FILENO) == -1)

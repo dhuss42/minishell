@@ -14,6 +14,10 @@
 
 void	free_child_exit(t_shell *shell, int exit_code)
 {
+	int			nbr_pipes;
+
+	nbr_pipes = ft_lstsize(shell->table) - 1;
+	free_fd_pid(shell, nbr_pipes);
 	ft_lstclear(&shell->list, free_token);
 	free_table(shell->table);
 	exit (exit_code);

@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:13:49 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/27 17:01:56 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 14:32:04 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	free_double_int(int **to_free, int nbr_pipes)
 	int	i;
 
 	i = 0;
-	while (i < nbr_pipes)
+	while (i <= nbr_pipes)
 	{
 		free (to_free[i]);
 		to_free[i] = NULL;
@@ -55,7 +55,7 @@ int	init_fd_pid(t_shell *shell, int nbr_pipes)
 	if (!shell->fd)
 		return (2);
 	i = 0;
-	while (i < nbr_pipes)
+	while (i <= nbr_pipes)
 	{
 		shell->fd[i] = NULL;
 		shell->fd[i] = malloc(sizeof(int) * 2);
