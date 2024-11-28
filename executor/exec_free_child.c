@@ -20,5 +20,6 @@ void	free_child_exit(t_shell *shell, int exit_code)
 	free_fd_pid(shell, nbr_pipes);
 	ft_lstclear(&shell->list, free_token);
 	free_table(shell->table);
+	rl_clear_history();
 	exit (exit_code);
 }
