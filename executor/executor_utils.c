@@ -6,11 +6,21 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:41:26 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/27 11:24:38 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 16:52:27 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*-------------------------------------------------------------
+initialize original stdin etc to re-redirect after builtins
+---------------------------------------------------------------*/
+void	set_original_std(t_command *row)
+{
+	row->original_stdin = dup(STDIN_FILENO);
+	row->original_stdout = dup(STDOUT_FILENO);
+	row->original_stderr = dup(STDERR_FILENO);
+}
 
 /*-------------------------------------------------------------
 check if command is a path f.e.: /bin/ls

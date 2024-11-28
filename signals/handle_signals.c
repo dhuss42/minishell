@@ -36,7 +36,6 @@ void	new_line(int signal)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
-		// print_error(130, NULL, NOTPRINT);
 	}
 	return ;
 }

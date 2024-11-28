@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/28 14:55:58 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 17:06:22 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,15 @@ bool		syntax_errors(t_list *token_list);
 
 //----------------parser----------------//
 void		parser(t_shell *shell);
-int			create_table(t_shell *shell, t_list *new_node, t_command *cmd, t_list *tmp);
+int			create_table(t_shell *shell, t_list *new_node,
+				t_command *cmd, t_list *tmp);
 t_command	*populate_cmd(t_command *new_cmd, t_list *tl_pos, t_shell *parsing);
 
 //----------------expansion----------------//
 void		expansion(t_shell *shell, char **env);
 int			iterate_table(t_list *table, char **env);
-int			get_expanded(char *variable, char **env, t_command *row, t_shell *expand);
+int			get_expanded(char *variable, char **env, t_command *row,
+				t_shell *expand);
 char		*compare_with_env(char *variable, char **env, char *exp);
 int			get_exit_code(char *tmp, t_command *row, t_shell *expand);
 int			remove_quotes(t_list *table, t_shell *shell);
@@ -111,8 +113,8 @@ size_t		strlen_equal(char *str);
 int			get_int_length(int num);
 
 //----------------errors--------------------------
-int	print_error(int err_no, char *str, int print);
-int	custom_error_print_2(int err_no);
+int			print_error(int err_no, char *str, int print);
+int			custom_error_print_2(int err_no);
 
 //-----------------executor-----------------------
 char		*get_path(char *cmd, char **envp);
@@ -126,7 +128,7 @@ int			free_table(t_list *table);
 int			handle_heredoc(t_list *table, char **env);
 char		*heredoc_expansion(char *line, char **env);
 int			heredoc_parent(pid_t pid);
-char*		generate_file_path(int id);
+char		*generate_file_path(int id);
 size_t		get_len_exp_hd(char *line, char *exp, size_t index);
 int			redirect_input(t_command row, int *fd);
 int			redirect_output(t_command row, int *fd);
@@ -138,6 +140,7 @@ int			pipe_parent(t_shell *shell, t_list *table, int nbr_pipes);
 void		free_child_exit(t_shell *shell, int exit_code);
 int			init_fd_pid(t_shell *shell, int nbr_pipes);
 void		free_fd_pid(t_shell *shell, int nbr_pipes);
+void		set_original_std(t_command *row);
 
 //-------------signals---------
 void		handle_signals(int is_child);

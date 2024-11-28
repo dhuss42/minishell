@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/28 15:18:30 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 16:58:14 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ if it doesnt fail, exit code is 0
 ---------------------------------------------------------------*/
 void	single_child(char *path, char **envp, t_command *row, t_shell *shell)
 {
-	// handle_signals(0);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	if (execve(path, row->args, envp))
@@ -95,7 +94,6 @@ int	execute_single_command(char **envp, t_command *row, t_shell *shell)
 	if (row->args[0])
 	{
 		id = fork();
-		// handle_signals(1);
 		if (id == -1)
 			return (print_error(errno, NULL, PRINT));
 		else if (id == 0)
@@ -139,10 +137,7 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 	else if (nbr_pipes > 0)
 	{
 		if (execute_pipechain(table, nbr_pipes, shell))
-		{
-			free_fd_pid(shell, nbr_pipes);
-			return (4);
-		}
+			return (free_fd_pid(shell, nbr_pipes), 4);
 		free_fd_pid(shell, nbr_pipes);
 	}
 	return (0);
