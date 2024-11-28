@@ -41,3 +41,29 @@ minishell: echo hello | grep h | cat -e | cat -e | cat -e
 hello$$$
 
 <------------------------------------------------>
+
+
+$EMPTY echo hi 
+
+bash output = (hi)
+
+--> problem is in the parser/expansion
+--> in the args double char Empty becomes an empty string
+--> the logic of the tester is probably replacing the string altogether
+
+minishell:
+    [0] $EMPTY  ->  [0] ()
+    [1] echo    ->  [1] echo
+    [2] hi      ->  [2] hi
+
+tester expectation:
+    [0] $EMPTY  ->  [0] echo
+    [1] echo    ->  [1] hi
+    [2] hi      ->  
+
+<------------------------------------------------>
+
+<------------------------------------------------->
+
+137 and 142
+    -> captial N for (no such file or directory)

@@ -22,21 +22,15 @@ void	minishell_loop(t_shell *shell)
 		input = readline("minishell: ");
 		handle_signals(1);
 		if (!input)
-		{
-			printf("exit\n");
 			return (clear_all(shell->env));
-		}
 		if (input[0] != '\0')
 		{
 			lexer(shell, input);
 			parser(shell);
-			// print_table(shell);
 			expansion(shell, shell->env);
-			// print_table(shell);
 			executor(shell->env, shell->table, shell);
 			add_history(input);
 			free_minishell(shell, input);
-
 			if (shell->exit == true)
 				break ;
 		}
@@ -48,17 +42,17 @@ int	main(int argc, char *argv[], char **env)
 	t_shell	shell;
 	int		error_code;
 
-	// printf("minishell started\n");
 	init_terminal();
 	shell.table = NULL;
 	shell.exit = false;
 	if (argc == 1)
 	{
 		if (copy_env(env, &shell) == -1)
-			return (-1); //
+			return (-1);
 		if (shlvl(&shell) != 0)
 			return (-1);
 		minishell_loop(&shell);
+		printf("exit\n");
 	}
 	(void) argv;
 	error_code = print_error(-1, NULL, NOTPRINT);
