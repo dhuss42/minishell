@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/28 11:49:53 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 14:24:25 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ int	execute_pipechain(t_list *table, int nbr_pipes, t_shell *shell)
 	n = 0;
 	while (n < nbr_pipes)
 	{
+		// shell->fd[n] = NULL;
+		// shell->fd[n] = malloc(sizeof(int) * 2);
+		// if (!shell->fd[n])
+		// 	return (3);
+		// shell->fd[n][0] = 0;
+		// shell->fd[n][1] = 0;
 		if (pipe(shell->fd[n]) == -1)
 			return (print_error(errno, NULL, PRINT));
 		n++;
@@ -67,7 +73,6 @@ if it doesnt fail, exit code is 0
 ---------------------------------------------------------------*/
 void	single_child(char *path, char **envp, t_command *row, t_shell *shell)
 {
-	// handle_signals(0);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	if (execve(path, row->args, envp))
