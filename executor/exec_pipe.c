@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/28 14:05:17 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 15:18:15 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*-------------------------------------------------------------
 Close all opened filedescriptors from piping, we won't need
 ---------------------------------------------------------------*/
-static int	close_fds(int **fd, int id, int nbr_pipes)
+static int	close_fds(t_shell *shell, int id, int nbr_pipes)
 {
 	int	i;
 
@@ -24,12 +24,12 @@ static int	close_fds(int **fd, int id, int nbr_pipes)
 	{
 		if (id == 0 || i != id - 1)
 		{
-			if (close(fd[i][0]) == -1)
+			if (close(shell->fd[i][0]) == -1)
 				return (errno);
 		}
 		if (i != id)
 		{
-			if (close(fd[i][1]) == -1)
+			if (close(shell->fd[i][1]) == -1)
 				return (errno);
 		}
 		i++;
@@ -40,21 +40,21 @@ static int	close_fds(int **fd, int id, int nbr_pipes)
 /*-------------------------------------------------------------
 Parent handler for pipechain
 ---------------------------------------------------------------*/
-int	pipe_parent(pid_t *pid, int **fd, t_list *table, int nbr_pipes)
+int	pipe_parent(t_shell *shell, t_list *table, int nbr_pipes)
 {
 	int		wstatus;
 	int		exit_code;
 	int		i;
 	t_list	*tmp;
 
-	if (close_fds(fd, -1, nbr_pipes))
+	if (close_fds(shell, -1, nbr_pipes))
 		exit (print_error(errno, NULL, PRINT));
 	tmp = table;
 	exit_code = 0;
 	i = 0;
 	while (i <= nbr_pipes)
 	{
-		if (waitpid(pid[i], &wstatus, 0) == -1)
+		if (waitpid(shell->pid[i], &wstatus, 0) == -1)
 			return (1);
 		if (WIFEXITED(wstatus))
 			exit_code = WEXITSTATUS(wstatus);
@@ -70,7 +70,7 @@ int	pipe_parent(pid_t *pid, int **fd, t_list *table, int nbr_pipes)
 /*-------------------------------------------------------------
 Redirect input / output for pipechild
 ---------------------------------------------------------------*/
-static int	duplicate_fd(t_command *row, int **fd, int nbr_pipes)
+static int	duplicate_fd(t_command *row, t_shell *shell, int nbr_pipes)
 {
 	row->original_stdin = 0;//probably not necessary
 	row->original_stdout = 1;
@@ -80,24 +80,24 @@ static int	duplicate_fd(t_command *row, int **fd, int nbr_pipes)
 	row->original_stderr = dup(STDERR_FILENO);
 	if (row->id != 0 && row->final_infile == NULL)
 	{
-		if (dup2(fd[row->id - 1][0], STDIN_FILENO) == -1)
+		if (dup2(shell->fd[row->id - 1][0], STDIN_FILENO) == -1)
 			return (print_error(errno, NULL, PRINT));
-		if (close(fd[row->id - 1][0]) == -1)
+		if (close(shell->fd[row->id - 1][0]) == -1)
 			return (print_error(errno, NULL, PRINT));
 	}
 	if (row->final_infile)
 	{
-		if (redirect_input(*row, &fd[row->id - 1][0]))
+		if (redirect_input(*row, &shell->fd[row->id - 1][0]))
 			return (errno);
 	}
 	if (row->id != nbr_pipes && row->final_outfile == NULL)
 	{
-		if (redirect_output_pipe(&fd[row->id][1]))
+		if (redirect_output_pipe(&shell->fd[row->id][1]))
 			return (errno);
 	}
 	if (row->final_outfile)
 	{
-		if (redirect_output(*row, &fd[row->id][1]))
+		if (redirect_output(*row, &shell->fd[row->id][1]))
 			return (errno);
 	}
 	return (0);
@@ -106,7 +106,7 @@ static int	duplicate_fd(t_command *row, int **fd, int nbr_pipes)
 /*-------------------------------------------------------------
 Child handler for pipechain
 ---------------------------------------------------------------*/
-static void	pipe_child(t_command *row, int **fd, t_list *table,
+static void	pipe_child(t_command *row, t_list *table,
 	t_shell *shell)
 {
 	int	nbr_pipes;
@@ -115,9 +115,9 @@ static void	pipe_child(t_command *row, int **fd, t_list *table,
 	if (check_files(row))
 		free_child_exit(shell, print_error(-1, NULL, NOTPRINT));
 	nbr_pipes = ft_lstsize(table) - 1;
-	if (close_fds(fd, row->id, nbr_pipes))
+	if (close_fds(shell, row->id, nbr_pipes))
 		free_child_exit(shell, errno);
-	if (duplicate_fd(row, fd, nbr_pipes))
+	if (duplicate_fd(row, shell, nbr_pipes))
 		free_child_exit(shell, errno);
 	if (check_builtins(shell, row) < 1)
 		free_child_exit(shell, 0);
@@ -136,7 +136,7 @@ static void	pipe_child(t_command *row, int **fd, t_list *table,
 /*-------------------------------------------------------------
 Loop through all the pipes
 ---------------------------------------------------------------*/
-int	pipechain_loop(t_list *table, pid_t *pid, int **fd, t_shell *shell)
+int	pipechain_loop(t_list *table, t_shell *shell)
 {
 	int			n;
 	t_command	*row;
@@ -147,14 +147,14 @@ int	pipechain_loop(t_list *table, pid_t *pid, int **fd, t_shell *shell)
 	while (tmp != NULL)
 	{
 		row = (t_command *) tmp->content;
-		pid[n] = fork();
-		if (pid[n] == -1)
+		shell->pid[n] = fork();
+		if (shell->pid[n] == -1)
 			return (print_error(errno, NULL, PRINT));
-		if (pid[n] == 0)
+		if (shell->pid[n] == 0)
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
-			pipe_child(row, fd, table, shell);
+			pipe_child(row, table, shell);
 		}
 		tmp = tmp->next;
 		n++;

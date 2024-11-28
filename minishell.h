@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:40:51 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/27 17:10:18 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 14:55:58 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,8 @@ int			redirect_output(t_command row, int *fd);
 int			redirect_output_pipe(int *fd);
 void		reset_redirections(t_command row);
 int			executor(char **envp, t_list *table, t_shell *shell);
-int			pipechain_loop(t_list *table, pid_t *pid, int **fd, t_shell *shell);
-int			pipe_parent(pid_t *pid, int **fd, t_list *table, int nbr_pipes);
+int			pipechain_loop(t_list *table, t_shell *shell);
+int			pipe_parent(t_shell *shell, t_list *table, int nbr_pipes);
 void		free_child_exit(t_shell *shell, int exit_code);
 int			init_fd_pid(t_shell *shell, int nbr_pipes);
 void		free_fd_pid(t_shell *shell, int nbr_pipes);
