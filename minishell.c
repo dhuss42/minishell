@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/28 16:42:45 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 16:46:26 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	main(int argc, char *argv[], char **env)
 		if (shlvl(&shell) != 0)
 			return (-1);
 		minishell_loop(&shell);
-		clear_all(shell.env);
+		// clear_all(shell.env); only when testing for leaks
 		rl_clear_history();
 		printf("exit\n");
 	}
