@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/27 16:15:10 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 11:49:53 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,9 @@ if it doesnt fail, exit code is 0
 ---------------------------------------------------------------*/
 void	single_child(char *path, char **envp, t_command *row, t_shell *shell)
 {
+	// handle_signals(0);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (execve(path, row->args, envp))
 	{
 		print_error(127, row->args[0], PRINT);
@@ -92,6 +95,7 @@ int	execute_single_command(char **envp, t_command *row, t_shell *shell)
 	if (row->args[0])
 	{
 		id = fork();
+		// handle_signals(1);
 		if (id == -1)
 			return (print_error(errno, NULL, PRINT));
 		else if (id == 0)
@@ -108,6 +112,9 @@ int	execute_single_command(char **envp, t_command *row, t_shell *shell)
 
 /*-------------------------------------------------------------
 Main function for executor
+signal() ignores the handle_signals().
+This is needed to catch the exit code of such programs like cat and sleep.
+and also for ./minishell in minishell
 ---------------------------------------------------------------*/
 int	executor(char **envp, t_list *table, t_shell *shell)
 {
@@ -118,7 +125,7 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 		return (1);
 	if (handle_heredoc(table, envp))
 		return (2);
-	handle_signals(1);
+	signal(SIGINT, SIG_IGN);
 	nbr_pipes = ft_lstsize(table) - 1;
 	if (nbr_pipes == 0)
 	{

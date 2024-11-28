@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/27 16:54:18 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/28 11:35:57 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,9 +145,12 @@ int	pipechain_loop(t_list *table, pid_t *pid, int **fd, t_shell *shell)
 		if (pid[n] == -1)
 			return (print_error(errno, NULL, PRINT));
 		if (pid[n] == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			pipe_child(row, fd, table, shell);
+		}
 		tmp = tmp->next;
-		printf("%d\n", n);
 		n++;
 	}
 	return (0);
