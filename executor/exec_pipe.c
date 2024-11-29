@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/28 16:51:55 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/29 10:33:42 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ static int	duplicate_fd(t_command *row, t_shell *shell, int nbr_pipes)
 	{
 		if (dup2(shell->fd[row->id - 1][0], STDIN_FILENO) == -1)
 			return (print_error(errno, NULL, PRINT));
+		printf("REDIRECT INPUT %d\n", shell->fd[row->id - 1][0]);
 		if (close(shell->fd[row->id - 1][0]) == -1)
 			return (print_error(errno, NULL, PRINT));
 	}
@@ -84,6 +85,7 @@ static int	duplicate_fd(t_command *row, t_shell *shell, int nbr_pipes)
 	{
 		if (redirect_input(*row, &shell->fd[row->id - 1][0]))
 			return (errno);
+		printf("REDIRECT INPUT %d\n", shell->fd[row->id - 1][0]);
 	}
 	if (row->id != nbr_pipes && row->final_outfile == NULL)
 	{
