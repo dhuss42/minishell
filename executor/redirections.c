@@ -6,17 +6,21 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:38:08 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/28 16:52:46 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/29 09:00:24 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	reset_redirections(t_command row)
+/*-------------------------------------------------------------
+Redirect to normal stdin / stdout (necessary for single command,
+because builtins are called in main process, not in child)
+---------------------------------------------------------------*/
+void	reset_redirections(t_command *row)
 {
-	dup2(row.original_stdout, STDOUT_FILENO);
-	dup2(row.original_stdin, STDIN_FILENO);
-	dup2(row.original_stderr, STDERR_FILENO);
+	dup2(row->original_stdout, STDOUT_FILENO);
+	dup2(row->original_stdin, STDIN_FILENO);
+	dup2(row->original_stderr, STDERR_FILENO);
 }
 
 /*-------------------------------------------------------------
@@ -75,7 +79,6 @@ int	exec_redirections(t_command *row)
 {
 	int	fd;
 
-	set_original_std(row);
 	if (row->final_outfile && row->final_out_red)
 	{
 		if (redirect_output(*row, &fd))

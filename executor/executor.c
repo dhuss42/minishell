@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/28 16:58:14 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/29 09:00:57 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	execute_single_command(char **envp, t_command *row, t_shell *shell)
 				return (2);
 		}
 	}
-	reset_redirections(*row);
+	reset_redirections(row);
 	return (0);
 }
 
@@ -128,11 +128,9 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 	if (nbr_pipes == 0)
 	{
 		current_cmd = (t_command *) table->content;
+		set_original_std(current_cmd);
 		if (execute_single_command(envp, current_cmd, shell))
-		{
-			reset_redirections(*current_cmd);
-			return (3);
-		}
+			return (reset_redirections(current_cmd), 3);
 	}
 	else if (nbr_pipes > 0)
 	{

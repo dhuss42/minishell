@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 15:07:24 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/28 17:03:57 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/29 08:54:37 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,6 @@ static int	builtins_1(t_shell *shell, t_command *row)
 }
 
 /*-------------------------------------------------------------
-Redirect to normal stdin / stdout (necessary for single command,
-because builtins are called in main process, not in child)
----------------------------------------------------------------*/
-static void	re_redirect(t_command *row)
-{
-	dup2(row->original_stdout, STDOUT_FILENO);
-	dup2(row->original_stdin, STDIN_FILENO);
-	dup2(row->original_stderr, STDERR_FILENO);
-}
-
-/*-------------------------------------------------------------
 Check if command is builtin and call function, if it is.
 ---------------------------------------------------------------*/
 int	check_builtins(t_shell *shell, t_command *row)
@@ -89,12 +78,12 @@ int	check_builtins(t_shell *shell, t_command *row)
 			is_builtin = builtins_2(shell, row);
 		if (is_builtin == 0)
 		{
-			re_redirect(row);
+			reset_redirections(row);
 			return (0);
 		}
 		else if (is_builtin < 0)
 		{
-			re_redirect(row);
+			reset_redirections(row);
 			return (-1);
 		}
 	}
