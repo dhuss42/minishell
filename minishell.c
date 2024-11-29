@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/29 10:44:21 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/29 12:08:02 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	minishell_loop(t_shell *shell)
 	{
 		handle_signals(0);
 		input = readline("minishell: ");
-		// input = strdup("<nix | cat <out");//leaks testing
 		handle_signals(1);
 		if (!input)
 			return (clear_all(shell->env));
@@ -34,7 +33,6 @@ void	minishell_loop(t_shell *shell)
 			free_minishell(shell, input);
 			if (shell->exit == true)
 				break ;
-			// break;	//leaks testing
 		}
 	}
 }
@@ -54,7 +52,6 @@ int	main(int argc, char *argv[], char **env)
 		if (shlvl(&shell) != 0)
 			return (-1);
 		minishell_loop(&shell);
-		// clear_all(shell.env); only when testing for leaks
 		rl_clear_history();
 		printf("exit\n");
 	}
@@ -63,5 +60,4 @@ int	main(int argc, char *argv[], char **env)
 	(void) argv;
 	error_code = print_error(-1, NULL, NOTPRINT);
 	return (error_code);
-	//hi david
 }

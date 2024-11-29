@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:13:49 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/29 11:16:25 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/29 12:07:21 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	init_fd_pid(t_shell *shell, int nbr_pipes)
 		if (!shell->fd[i])
 			return (3);
 		shell->fd[i][0] = dup(STDIN_FILENO);
-		shell->fd[i][1] = dup(STDOUT_FILENO);;
+		shell->fd[i][1] = dup(STDOUT_FILENO);
 		shell->pid[i] = 0;
 		i++;
 	}
