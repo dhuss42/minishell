@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/29 09:00:57 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/29 11:46:00 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 	t_command	*current_cmd;
 	int			nbr_pipes;
 
+	shell->pid = NULL;
+	shell->fd = NULL;
 	if (shell->syntax_error == true)
 		return (1);
 	if (handle_heredoc(table, envp))
