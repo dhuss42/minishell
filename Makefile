@@ -3,7 +3,6 @@ CFLAGS = -Wall -Werror -Wextra -g
 LFLAGS = -lreadline
 NAME = minishell
 CFILES = minishell.c\
-	minishell_utils.c\
 	environment/shlvl.c\
 	environment/get_env.c\
 	lexer/lexer.c\
@@ -55,7 +54,8 @@ CFILES = minishell.c\
 	executor/heredoc_expansion.c\
 	executor/redirections.c\
 	signals/handle_signals.c\
-	free_minishell.c\
+	minishell_memory/free_minishell.c\
+	minishell_memory/safe_allocation.c\
 	print_tokenlist.c\
 	print_table.c
 

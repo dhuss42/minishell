@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/29 10:10:13 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/29 10:44:21 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,5 @@ int	main(int argc, char *argv[], char **env)
 	(void) argv;
 	error_code = print_error(-1, NULL, NOTPRINT);
 	return (error_code);
+	//hi david
 }
