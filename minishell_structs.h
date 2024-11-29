@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:19 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/28 10:39:27 by maustel          ###   ########.fr       */
+/*   Updated: 2024/11/29 10:14:35 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_command
 	char	**filename;
 	char	**red_symbol;
 	int		id;
-	char	*path;				//to free
+	char	*path;
 	char	*final_infile;
 	char	*final_outfile;
 	char	*final_in_red;
@@ -53,7 +53,7 @@ typedef struct s_command
 	int		original_stdout;
 	int		original_stdin;
 	int		original_stderr;
-	char	*heredoc_file_path;	//to free
+	char	*heredoc_file_path;
 }	t_command;
 
 typedef struct s_shell
@@ -76,13 +76,14 @@ typedef struct s_shell
 	char	quote;
 	char	*res;
 	char	**env;
-	pid_t	*pid;	//free required
-	int		**fd;	//double free required
+	pid_t	*pid;
+	int		**fd;
 }	t_shell;
 
 typedef enum e_custom_err
 {
-	E_PATH = 107,
+	E_ARGC = 107,
+	E_PATH,
 	E_FILENOEXIST,
 	E_DIRNOEXIST,
 	E_NOPERMISSION_PATH,
@@ -104,33 +105,5 @@ typedef enum e_print_err
 	NOTPRINT,
 	PRINT
 }			t_print_err;
-
-//t_list:
-//void *content --> t_command *example
-//t_list *next
-
-// typedef struct s_command
-// {
-// 	char	**args;
-// 	char	**filename;
-// 	char	**red_symbol;
-// 	int		id;
-// 	char	*path;				//to free
-// 	char	*final_infile;
-// 	char	*final_outfile;
-// 	char	*final_in_red;
-// 	char	*final_out_red;
-// 	char	*heredoc_file_path;	//to free
-// } t_command;
-
-// typedef struct	s_exec
-// {
-// 	// int		exit_code;
-// 	int		nbr_pipes;
-// 	// char	*final_infile;
-// 	// char	*final_outfile;
-// 	// char	*final_in_red;
-// 	// char	*final_out_red;
-// }					t_exec;
 
 #endif

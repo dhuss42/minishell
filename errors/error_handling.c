@@ -88,7 +88,12 @@ static int	custom_error_message_1(int err_no, char *str)
 
 static int	custom_err(int err_no, char *str)
 {
-	if (str && (err_no == E_NOTSET || err_no == E_CDNOSUCHFOD
+	if (err_no == E_ARGC)
+	{
+		ft_putstr_fd("Too many arguments!\n", 2);
+		return (err_no);
+	}
+	else if (str && (err_no == E_NOTSET || err_no == E_CDNOSUCHFOD
 			|| err_no == E_NOTVALIDIDENT))
 		return (custom_error_message_1(err_no, str));
 	else if (str && (err_no == E_NUMERICARG || err_no == E_SYNTAXERROR))

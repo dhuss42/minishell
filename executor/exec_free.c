@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:50:18 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/27 11:08:22 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/29 10:16:09 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	delete_heredoc_files(char *path)
 /*-------------------------------------------------------------
 free all pointers of a row
 ---------------------------------------------------------------*/
-int	free_row(t_command *cmd)	//usefull for whole project
+int	free_row(t_command *cmd)
 {
 	if (cmd->args)
 		free_double(cmd->args);
