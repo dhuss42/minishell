@@ -22,7 +22,7 @@ Below is the basic structure of the project, with the names in brackets indicati
 4. [Parser](#34-Parser)
 5. [Expansion](#35-Expansion)
 6. [Heredoc](#36-Heredoc)
-7. [Executer](#37-Executer)
+7. [Executor](#37-Executor)
 8. [Signals](#38-Signals)
 
 ## 3. Description of individual steps
@@ -91,26 +91,28 @@ echo "the current Shell level is $SHLVL !!"
 Lastly, [remove_quotes](expansion/remove_quotes.c) removes the outer most quote couple. It obtains the length of the string without quotes and allocates enough memory for a temporary string. It then populates the string skipping the opening and the closing quote couple. Then the string in args is freed and replaced by the contents of the temporary string.
 
 ### 3.6 Heredoc
-The heredoc implementation creates separate temporary files for each heredoc encountered. A new process handles SIGINT signals separately. Child processes are managed carefully, with proper cleanup and resource management.
+The heredoc implementation creates separate temporary files for each command with a heredoc encountered (<<'EOF'). A new process handles SIGINT signals separately. Child processes are managed carefully, with proper cleanup and resource management.
 
-Input is obtained using readline, allowing for interactive heredoc creation. Lines are expanded before writing to temporary files. The heredoc delimiter (e.g., >hello $USER) is expanded to generate the corresponding filename.
+Input is obtained using readline, allowing for interactive heredoc creation. Lines are expanded before writing to temporary files (e.g., >hello $USER --> >hello maustel).
 
 When the last heredoc reaches EOF, its content is redirected to stdin, and the temporary file is deleted. This approach efficiently manages heredoc content and cleans up resources after processing.
 
 ### 3.7 Executor
-The executor handles single commands, pipes, and redirections. It first checks for existing input (<) and output (> and >>) files, verifying read/write permissions. The last input file for each command is redirected to stdin using dup2, the last output file to stdout/stderr.
+The executor uses the linked list, that was prepared in lexer, parser and expander.
+It handles single commands, pipes, and redirections. It first checks for existing input (<) and output (> and >>) files, verifying read/write permissions. The last input file for each command is redirected to stdin using dup2, the last output file to stdout/stderr.
 
-For built-in commands, it calls the corresponding function. Otherwise, it searches for the absolute path, forks a new process, and executes the command using execve().
+For built-in commands, it calls the corresponding function.
+Otherwise, it searches for the absolute path, forks a new process, and executes the command using execve().
 
-This implementation allows for flexible execution of various command combinations while managing file descriptors and process creation efficiently.
+This implementation allows flexible execution of various command combinations while managing file descriptors and process creation efficiently.
 
 ### 3.8 Signals
 Signal handling is implemented to manage interrupt and termination signals:
 
-    -SIGINT (Ctrl+C): Caught and handled to print a newline followed by a new command line prompt, preventing premature process termination.
+-SIGINT (Ctrl+C): Caught and handled to print a newline followed by a new command line prompt, preventing premature process termination.
 
-    -SIGQUIT (Ctrl+\): Ignored, allowing the program to continue running without interruption.
+-SIGQUIT (Ctrl+\): Ignored, allowing the program to continue running without interruption.
 
-    -Ctrl+D: Used for graceful shutdown, similar to "exit".
+Ctrl+D: Used for graceful shutdown, similar to "exit".
 
 
