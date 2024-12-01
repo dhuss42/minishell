@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:59:17 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/29 11:46:00 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/12/01 13:07:09 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*-------------------------------------------------------------
 Handle pipechain
 ---------------------------------------------------------------*/
-int	execute_pipechain(t_list *table, int nbr_pipes, t_shell *shell)
+int	execute_pipechain(int nbr_pipes, t_shell *shell)
 {
 	int		n;
 
@@ -28,9 +28,9 @@ int	execute_pipechain(t_list *table, int nbr_pipes, t_shell *shell)
 			return (print_error(errno, NULL, PRINT));
 		n++;
 	}
-	if (pipechain_loop(table, shell))
+	if (pipechain_loop(shell))
 		return (1);
-	if (pipe_parent(shell, table, nbr_pipes))
+	if (pipe_parent(shell, nbr_pipes))
 		return (2);
 	return (0);
 }
@@ -65,11 +65,11 @@ if execve fails, its because of command not found (127)
 child then exits with 127 and the parent will store the exit state
 if it doesnt fail, exit code is 0
 ---------------------------------------------------------------*/
-void	single_child(char *path, char **envp, t_command *row, t_shell *shell)
+void	single_child(char *path, t_command *row, t_shell *shell)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	if (execve(path, row->args, envp))
+	if (execve(path, row->args, shell->env))
 	{
 		print_error(127, row->args[0], PRINT);
 		free_child_exit(shell, 127);
@@ -79,7 +79,7 @@ void	single_child(char *path, char **envp, t_command *row, t_shell *shell)
 /*-------------------------------------------------------------
 execute single command without pipe
 ---------------------------------------------------------------*/
-int	execute_single_command(char **envp, t_command *row, t_shell *shell)
+int	execute_single_command(t_command *row, t_shell *shell)
 {
 	pid_t	id;
 
@@ -89,7 +89,7 @@ int	execute_single_command(char **envp, t_command *row, t_shell *shell)
 		return (2);
 	if (check_builtins(shell, row) < 1)
 		return (0);
-	if (get_check_path(row, envp))
+	if (get_check_path(row, shell->env))
 		return (3);
 	if (row->args[0])
 	{
@@ -97,7 +97,7 @@ int	execute_single_command(char **envp, t_command *row, t_shell *shell)
 		if (id == -1)
 			return (print_error(errno, NULL, PRINT));
 		else if (id == 0)
-			single_child(row->path, envp, row, shell);
+			single_child(row->path, row, shell);
 		else if (id > 0)
 		{
 			if (single_parent(id, row->args[0]))
@@ -114,7 +114,7 @@ signal() ignores the handle_signals().
 This is needed to catch the exit code of such programs like cat and sleep.
 and also for ./minishell in minishell
 ---------------------------------------------------------------*/
-int	executor(char **envp, t_list *table, t_shell *shell)
+int	executor(t_shell *shell)
 {
 	t_command	*current_cmd;
 	int			nbr_pipes;
@@ -123,20 +123,20 @@ int	executor(char **envp, t_list *table, t_shell *shell)
 	shell->fd = NULL;
 	if (shell->syntax_error == true)
 		return (1);
-	if (handle_heredoc(table, envp))
+	if (handle_heredoc(shell->table, shell->env))
 		return (2);
 	signal(SIGINT, SIG_IGN);
-	nbr_pipes = ft_lstsize(table) - 1;
+	nbr_pipes = ft_lstsize(shell->table) - 1;
 	if (nbr_pipes == 0)
 	{
-		current_cmd = (t_command *) table->content;
+		current_cmd = (t_command *) shell->table->content;
 		set_original_std(current_cmd);
-		if (execute_single_command(envp, current_cmd, shell))
+		if (execute_single_command(current_cmd, shell))
 			return (reset_redirections(current_cmd), 3);
 	}
 	else if (nbr_pipes > 0)
 	{
-		if (execute_pipechain(table, nbr_pipes, shell))
+		if (execute_pipechain(nbr_pipes, shell))
 			return (free_fd_pid(shell, nbr_pipes), 4);
 		free_fd_pid(shell, nbr_pipes);
 	}

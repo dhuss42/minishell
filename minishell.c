@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/11/29 12:08:02 by maustel          ###   ########.fr       */
+/*   Updated: 2024/12/01 13:05:50 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	minishell_loop(t_shell *shell)
 			lexer(shell, input);
 			parser(shell);
 			expansion(shell, shell->env);
-			executor(shell->env, shell->table, shell);
+			executor(shell);
 			add_history(input);
 			free_minishell(shell, input);
 			if (shell->exit == true)

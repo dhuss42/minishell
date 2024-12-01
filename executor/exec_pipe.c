@@ -6,7 +6,7 @@
 /*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:05 by maustel           #+#    #+#             */
-/*   Updated: 2024/11/29 11:30:29 by maustel          ###   ########.fr       */
+/*   Updated: 2024/12/01 13:04:49 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	close_fds(t_shell *shell, int id, int nbr_pipes)
 /*-------------------------------------------------------------
 Parent handler for pipechain
 ---------------------------------------------------------------*/
-int	pipe_parent(t_shell *shell, t_list *table, int nbr_pipes)
+int	pipe_parent(t_shell *shell, int nbr_pipes)
 {
 	int		wstatus;
 	int		exit_code;
@@ -49,7 +49,7 @@ int	pipe_parent(t_shell *shell, t_list *table, int nbr_pipes)
 
 	if (close_fds(shell, -1, nbr_pipes))
 		exit (print_error(errno, NULL, PRINT));
-	tmp = table;
+	tmp = shell->table;
 	exit_code = 0;
 	i = 0;
 	while (i <= nbr_pipes)
@@ -101,15 +101,14 @@ static int	duplicate_fd(t_command *row, t_shell *shell, int nbr_pipes)
 /*-------------------------------------------------------------
 Child handler for pipechain
 ---------------------------------------------------------------*/
-static void	pipe_child(t_command *row, t_list *table,
-	t_shell *shell)
+static void	pipe_child(t_command *row, t_shell *shell)
 {
 	int	nbr_pipes;
 	int	ret;
 
 	if (check_files(row))
 		free_child_exit(shell, print_error(-1, NULL, NOTPRINT));
-	nbr_pipes = ft_lstsize(table) - 1;
+	nbr_pipes = ft_lstsize(shell->table) - 1;
 	if (close_fds(shell, row->id, nbr_pipes))
 		free_child_exit(shell, errno);
 	if (duplicate_fd(row, shell, nbr_pipes))
@@ -131,14 +130,14 @@ static void	pipe_child(t_command *row, t_list *table,
 /*-------------------------------------------------------------
 Loop through all the pipes
 ---------------------------------------------------------------*/
-int	pipechain_loop(t_list *table, t_shell *shell)
+int	pipechain_loop(t_shell *shell)
 {
 	int			n;
 	t_command	*row;
 	t_list		*tmp;
 
 	n = 0;
-	tmp = table;
+	tmp = shell->table;
 	while (tmp != NULL)
 	{
 		row = (t_command *) tmp->content;
@@ -149,7 +148,7 @@ int	pipechain_loop(t_list *table, t_shell *shell)
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
-			pipe_child(row, table, shell);
+			pipe_child(row, shell);
 		}
 		tmp = tmp->next;
 		n++;
