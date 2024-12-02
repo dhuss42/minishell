@@ -28,7 +28,6 @@ Below is the basic structure of the project, with the names in brackets indicati
 ## 3. Description of individual steps
 
 ### 3.1 Environment Variables
-Initializing environment variables enables their modification throughout the program, enabling bash-like behavior for certain built-ins and expansions.
 
 At program start, environment variables are duplicated and stored in the shell struct, allowing modification throughout the program phases. The SHLVL variable is then incremented by one, so when minishell runs within itself, SHLVL increases by one, just like opening bash within bash.
 
@@ -40,7 +39,7 @@ The minishell project implements several core built-in commands to manage the en
 changes the current working directory. If no argument is provided, it changes to the directory specified in the `HOME` variable. It also updates the `PWD` and `OLDPWD` environment variables.
 
 [echo](https://github.com/maustel/minishell/blob/david_new/builtins/echo.c)
-outputs the arguments passed to it, expanding variables where necessary (e.g., `e$t` becomes `echo hallo` if `t` is set to "hallo"). It also supports the `-n` flag to prevent printing a newline at the end.
+outputs the arguments passed to it. It also supports the `-n` flag to prevent printing a newline at the end.
 
 [env](https://github.com/maustel/minishell/blob/david_new/builtins/env.c)
 displays the current environment variables that contain an `=` sign, essentially showing the shell's environment.
@@ -63,7 +62,7 @@ The lexer serves to transform an input string of characters into meaningful toke
 It begins by normalizing the input, ensuring that there is a single space between potential tokens, while preserving the integrity of text within single or double quotes. After formatting the string, the lexer splits it into individual components based on spaces, storing these components in a double character array. Each string in the array is then matched with its corresponding token type and stored in a struct, which is added to a linked list for organized access. Finally, the lexer checks the linked list for any syntax errors, ensuring the validity of the parsed input.
 
 ### 3.4 Parser
-The parser takes the output from the lexer—a linked list of tokens—and organizes them into meaningful structures.
+The parser takes the output from the lexer — a linked list of tokens — and organizes them into meaningful structures.
 
 It utilizes a command table to separate these tokens into distinct blocks based on the presence of pipes. Each segment to the left of a pipe is treated as a separate row within the table. The command table itself is implemented as another linked list, featuring a different struct that contains three double character arrays: one for arguments, one for filenames, and one for redirection symbols. To maintain the correct order of the tokens, the parser indexes the associated redirection symbols and filenames using the same variable, ensuring they remain linked appropriately during parsing.
 
@@ -73,10 +72,11 @@ The Expansion is responsible for handling the expansion of variables both inside
 The function [expansion](expansion/expansion.c) is responsible for coordinating the expansion and the quote removal.
 
 In [check_for_expansion](expansion/check_for_expansion.c) follows an iteration through the table, the args double pointer and the individual strings of args.
-While iterating through the individual strings the current character is checked for **"'$**.
+While iterating through the individual strings the current character is checked for **"'$ and $?**.
 **"** handles the expansion between double quotes
 **'** skips the characters between single quotes
 **$** handles the ordinary expansion
+**$?** extracts the last exit code and expands to it  
 Otherwise the iteration through the string continues.
 
 [get_expanded](expansion/get_expanded.c) coordinates the exchange of the variable-to-be-expanded (**$SHLVL**) with the actual expanded string (**1**). First, the variable name is obtained. Then, the variable name is compared in [compare_with_env](expansion/compare_with_env.c) to the list of environment variables. If there is a match the string following the **=** is copied, otherwise and empty string is generated. Next, a temporary string is allocated and populated. It contains the contents of the original string up until the variable name, the expanded variable string and the remainder of the original string. In the final step, the original string in args is freed and replaced with the temporary string.
