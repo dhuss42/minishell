@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   compare_with_env.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/19 11:38:59 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/19 12:08:59 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 size_t	strlen_equal(char *str)
 {
@@ -13,26 +24,26 @@ size_t	strlen_equal(char *str)
 
 char	*compare_with_env(char *variable, char **env, char *exp)
 {
+	size_t	j;
 
-	size_t	j = 0;
-
-		while (env[j] != NULL)
+	j = 0;
+	while (env[j] != NULL)
+	{
+		if (ft_strlen(variable) - strlen_equal(env[j]) == 0)
 		{
-			if (ft_strlen(variable) - strlen_equal(env[j]) == 0)
+			if (ft_strncmp(variable, env[j], strlen_equal(env[j])) == 0)
 			{
-				if (ft_strncmp(variable, env[j], strlen_equal(env[j])) == 0)
-				{
-					return (exp = ft_substr(env[j], strlen_equal(env[j]) + 1, ft_strlen(env[j]) - strlen_equal(env[j]) - 1));
-				}
+				return (exp = safe_ft_substr(env[j], strlen_equal(env[j])
+						+ 1, ft_strlen(env[j]) - strlen_equal(env[j]) - 1));
 			}
-			j++;
 		}
+		j++;
+	}
 	if (!exp)
-		return (exp = ft_strdup(""));
+		return (exp = safe_ft_strdup(""));
 	return (NULL);
 }
 
 // compares the variable name (PATH) to every string in the env** list
 // env strings are only compared up until the equal sign =
-// all env variables are built like this (PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Users/dhuss/.brew/bin)
 // returns when the variable and the env are equal up until the '=' sign

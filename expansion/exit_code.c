@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit_code.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/19 11:36:31 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/27 15:45:14 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 int	get_int_length(int num)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	if (num == 0)
@@ -21,72 +32,77 @@ int	get_int_length(int num)
 	return (len);
 }
 
-int	get_exit_code(char *tmp, t_command *row, t_shell *expand)
+char	*copy_exit_code(t_shell *expand, t_command *row, char *tmp)
 {
-	char *tmp_ec;
-	int exit_code;
-	int len;
-	int	index;
+	size_t	len;
+	size_t	index;
+	char	*tmp_ec;
 
-	tmp_ec = NULL;
-	index = 0;
-	// exit_code = print_error(0, NULL);
-	exit_code = 106; // change here
-	len = get_int_length(exit_code);
-	tmp_ec = malloc(sizeof(char) * (len + 1));
-	if (!tmp_ec)
-	{
-		//  print_error(errno, NULL);
-		return (-1);
-	}
-	len += ft_strlen(row->args[expand->i]) - 2;
-	// + len from the entire string - 2 ($?)
-	tmp = malloc(sizeof(char) * (len + 1));
-	if (!tmp)
-	{
-		free(tmp_ec);
-		//  print_error(errno, NULL);
-		return (-1);
-	}
-	printf("[%zu]expand->k: %c\n", expand->k, row->args[expand->i][expand->k]);
 	len = 0;
 	expand->j = 0;
+	index = 0;
 	while (expand->j < expand->k)
 		tmp[len++] = row->args[expand->i][expand->j++];
 	expand->j += 2;
-	printf(MAGENTA"tmp before exit code: %s\n"WHITE, tmp);
-
-	tmp_ec = ft_itoa(exit_code);
+	tmp_ec = ft_itoa(print_error(-1, NULL, NOTPRINT));
+	if (!tmp_ec)
+	{
+		print_error(errno, NULL, PRINT);
+		return (free(tmp), NULL);
+	}
 	expand->k += ft_strlen(tmp_ec);
-	printf(RED"exit_code tmp_ec: %s\n"WHITE, tmp_ec);
-
-	while(tmp_ec[index] != '\0')
+	while (tmp_ec[index] != '\0')
 		tmp[len++] = tmp_ec[index++];
-	printf(MAGENTA"tmp after copying exitcode: %s\n"WHITE, tmp);
-	if (tmp_ec)
-		free(tmp_ec);
-
+	free(tmp_ec);
 	while (row->args[expand->i][expand->j] != '\0')
 		tmp[len++] = row->args[expand->i][expand->j++];
-	printf(MAGENTA"tmp after copying remainder: %s\n"WHITE, tmp);
 	tmp[len] = '\0';
+	return (tmp);
+}
+
+int	update_arg_and_free(t_shell *expand, t_command *row, char *tmp)
+{
 	if (row->args[expand->i])
 		free(row->args[expand->i]);
-	row->args[expand->i] = ft_strdup(tmp);
+	row->args[expand->i] = safe_ft_strdup(tmp);
 	if (!row->args[expand->i])
-	{
-		free(tmp);
-		//  print_error(errno, NULL);
-		return (-1);
-	}
-	printf("tmp: %s\n", tmp);
+		return (free(tmp), -1);
 	if (tmp)
 	{
 		free(tmp);
 		tmp = NULL;
 	}
-	// move expand->k accordingly
 	return (0);
 }
 
-// needs to be split into multiple functions
+int	get_exit_code(char *tmp, t_command *row, t_shell *expand)
+{
+	int	exit_code;
+	int	len;
+
+	exit_code = print_error(-1, NULL, NOTPRINT);
+	len = get_int_length(exit_code);
+	len += ft_strlen(row->args[expand->i]) - 2;
+	tmp = safe_malloc(sizeof(char) * (len + 1));
+	if (!tmp)
+		return (-1);
+	tmp = copy_exit_code(expand, row, tmp);
+	if (!tmp)
+		return (-1);
+	if (update_arg_and_free(expand, row, tmp) == -1)
+		return (-1);
+	return (0);
+}
+
+// gets the current exit_code
+// get the length of the exit code
+// allocates tmp_ec to store the exit_code
+// takes the length of th exit code and adds that of the args string minus $?
+// allocates a tmp with this length in which the entire string will be stored
+// copies up the $ in tmp and moves iterator j passt ?
+// itoa to get exitcode string in tmp_ec
+// copies tmp_ec into tmp
+// copies remainder of args into tmp
+// frees args
+// strdups tmp into args
+// frees tmp

@@ -86,7 +86,7 @@ all:	$(NAME)
 	@echo "\033[32m libft built successfully! \033[0m"
 
 clean:
-	@echo "\033[33m cleaning up libft... \033[0m"
+	@echo "\033[33m Cleaning up... \033[0m"
 	@rm -f $(OFILES) $(BONUS_OFILES)
 
 fclean:	clean

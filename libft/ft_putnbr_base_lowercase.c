@@ -33,5 +33,5 @@ void	ft_putnbr_base_lowercase(unsigned int n, int *counter)
 		if (*counter == -1)
 			return ;
 	}
-		ft_putchar_hex_lc(n % 16, counter);
+	ft_putchar_hex_lc(n % 16, counter);
 }

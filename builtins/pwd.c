@@ -1,21 +1,28 @@
-#include <unistd.h>
-#include "minishell_eichhoernchen.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/30 14:06:44 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/19 12:10:35 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int ft_pwd()
+#include "../minishell.h"
+
+int	ft_pwd(void)
 {
-    char *pathname;
+	char	*pathname;
 
-    pathname = getcwd(NULL, 0);
-    if (pathname != NULL)
-    {
-        ft_printf("%s\n", pathname);
-        free(pathname);
-        return (0);
-    }
-    else
-    {
-        perror("pwd error: \n"); // call error function
-        //  print_error(errno, NULL);
-        return (-1);
-    }
+	pathname = getcwd(NULL, 0);
+	if (pathname)
+	{
+		ft_printf("%s\n", pathname);
+		free(pathname);
+		return (0);
+	}
+	else
+		return (print_error(errno, NULL, PRINT));
 }

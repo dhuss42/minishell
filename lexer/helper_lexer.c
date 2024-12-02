@@ -6,15 +6,15 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:12:09 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/10 16:28:14 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:10:51 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 bool	is_special(char input)
 {
-	char *special;
+	char	*special;
 
 	special = "<>|\'\"";
 	while (*special != '\0')
@@ -28,7 +28,7 @@ bool	is_special(char input)
 
 bool	is_special_no_quotes(char input)
 {
-	char *special;
+	char	*special;
 
 	special = "<>|";
 	while (*special != '\0')

@@ -6,22 +6,19 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:50:24 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/10 11:19:11 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:11:14 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
-t_token *create_token(t_token_type type, char *input)
+t_token	*create_token(t_token_type type, char *input)
 {
-	t_token *new;
+	t_token	*new;
 
-	new = malloc(sizeof(t_token));
-	if(!new)
-	{
-		// print_error(errno, NULL);
+	new = safe_malloc(sizeof(t_token));
+	if (!new)
 		return (NULL);
-	}
 	new->type = type;
 	new->input = ft_strdup(input);
 	return (new);
@@ -49,11 +46,10 @@ t_token	*which_token(char *str)
 		tok = create_token(TOKEN_REDAPPEND, str);
 	else
 		tok = create_token(TOKEN_WORD, str);
-	if(!tok)
+	if (!tok)
 		return (NULL);
 	return (tok);
 }
-
 
 t_list	*tokeniser(char **split_double_array)
 {
@@ -66,18 +62,16 @@ t_list	*tokeniser(char **split_double_array)
 	head = NULL;
 	new = NULL;
 	i = 0;
-	while(split_double_array[i] != NULL)
+	while (split_double_array[i] != NULL)
 	{
 		tok = which_token(split_double_array[i]);
 		if (!tok)
 			return (NULL);
-		// print_token(tok);
 		new = ft_lstnew((void *)tok);
 		if (!new)
 		{
-			free_token(tok);
-			// print_error(errno, NULL);
-			return (NULL);
+			print_error(errno, NULL, PRINT);
+			return (free_token(tok), NULL);
 		}
 		ft_lstadd_back(&head, new);
 		i++;
@@ -85,4 +79,3 @@ t_list	*tokeniser(char **split_double_array)
 	clear_all(split_double_array);
 	return (head);
 }
-

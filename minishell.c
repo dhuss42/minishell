@@ -3,77 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*   By: maustel <maustel@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:04:16 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/18 16:04:51 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/12/01 13:05:50 by maustel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_eichhoernchen.h"
+#include "minishell.h"
 
 void	minishell_loop(t_shell *shell)
 {
 	char	*input;
 
-	while(1)
+	while (1)
 	{
-    	input = readline("minishell: ");
-    	if(!input)
-       		return ;
+		handle_signals(0);
+		input = readline("minishell: ");
+		handle_signals(1);
+		if (!input)
+			return (clear_all(shell->env));
 		if (input[0] != '\0')
 		{
 			lexer(shell, input);
 			parser(shell);
-			print_table(shell);
 			expansion(shell, shell->env);
-			print_table(shell);
-			test_builtins(shell);
-
-			ft_lstclear(&shell->list, free_token);
-			free_table(shell);
+			executor(shell);
+			add_history(input);
+			free_minishell(shell, input);
+			if (shell->exit == true)
+				break ;
 		}
 	}
-}
-
-int	copy_env(char **env, t_shell *shell)
-{
-	size_t i;
-	char **new_env;
-
-	i = 0;
-	while (env[i] != NULL)
-		i++;
-	new_env = malloc (sizeof(char *) * (i + 1));
-	if (!new_env)
-		return (-1);
-	i = 0;
-	while (env[i] != NULL)
-	{
-		new_env[i] = ft_strdup(env[i]);
-		if (!new_env)
-		{
-			clear_all(new_env);
-			return (-1);
-		}
-		i++;
-	}
-	new_env[i] = NULL;
-	shell->env = new_env;
-	return (0);
 }
 
 int	main(int argc, char *argv[], char **env)
 {
 	t_shell	shell;
+	int		error_code;
 
+	init_terminal();
 	shell.table = NULL;
+	shell.exit = false;
 	if (argc == 1)
 	{
 		if (copy_env(env, &shell) == -1)
-			return (-1); //
+			return (-1);
+		if (shlvl(&shell) != 0)
+			return (-1);
 		minishell_loop(&shell);
+		rl_clear_history();
+		printf("exit\n");
 	}
+	else
+		print_error(E_ARGC, NULL, PRINT);
 	(void) argv;
-	return (0);
+	error_code = print_error(-1, NULL, NOTPRINT);
+	return (error_code);
 }

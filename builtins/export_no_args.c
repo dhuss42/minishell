@@ -1,91 +1,109 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_no_args.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/30 14:06:57 by dhuss             #+#    #+#             */
+/*   Updated: 2024/11/27 12:26:43 by dhuss            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
-char    **allocate_sorted(t_shell *shell, char **sorted)
+void	put_str_n(char *str, size_t n, size_t i)
 {
-    shell->k = 0;
-        while(shell->env[shell->k] != NULL)
-            shell->k++;
-        sorted = malloc(sizeof(char *) * (shell->k + 1));
-        if (!sorted)
-        {
-            //print error
-            return (NULL);
-        }
-        shell->k = 0;
-        while(shell->env[shell->k] != NULL)
-        {
-            sorted[shell->k] = ft_strdup(shell->env[shell->k]);
-            if (!sorted[shell->k])
-            {
-                //print error
-                clear_all(sorted);
-                return (NULL);
-            }
-            shell->k++;
-        }
-    return (sorted);
+	while (str[i] != '\0' && i < n)
+		write(1, &str[i++], 1);
 }
 
-char    **bubble_sort(t_shell *shell)
+char	**allocate_sorted(t_shell *shell, char **sorted)
 {
-    size_t i;
-    char    *tmp;
-    char    **sorted;
-
-    sorted = NULL;
-    sorted = allocate_sorted(shell, sorted);
-    if (!sorted)
-        return (NULL);
-    i = 0;
-    while (i < shell->k - 1)
-    {
-        shell->j = 0;
-        while (shell->j < shell->k - i - 1)
-        {
-            if (strlen_equal(sorted[shell->j]) > strlen_equal(sorted[shell->j + 1]))
-                shell->len = strlen_equal(sorted[shell->j]);
-            else
-                shell->len = strlen_equal(sorted[shell->j + 1]);
-            if (ft_strncmp(sorted[shell->j], sorted[shell->j + 1], shell->len) > 0)
-            {
-                tmp = sorted[shell->j];
-                sorted[shell->j] = sorted[shell->j + 1];
-                sorted[shell->j + 1] = tmp;
-            }
-            shell->j++;
-        }
-        i++;
-    }
-    return (sorted);
+	shell->k = 0;
+	while (shell->env[shell->k] != NULL)
+		shell->k++;
+	sorted = safe_malloc(sizeof(char *) * (shell->k + 1));
+	if (!sorted)
+		return (NULL);
+	shell->k = 0;
+	while (shell->env[shell->k] != NULL)
+	{
+		sorted[shell->k] = safe_ft_strdup(shell->env[shell->k]);
+		if (!sorted[shell->k])
+			return (clear_all(sorted), NULL);
+		shell->k++;
+	}
+	sorted[shell->k] = NULL;
+	return (sorted);
 }
 
-void    put_str_n(char *str, size_t n, size_t i)
+char	**bubble_sort(t_shell *shell, char **res)
 {
-    while (str[i] != '\0' && i < n)
-        write(1, &str[i++], 1);
+	size_t	i;
+	char	*tmp;
+
+	i = 0;
+	while (i < shell->k - 1)
+	{
+		shell->j = 0;
+		while (shell->j < shell->k - i - 1)
+		{
+			if (strlen_equal(res[shell->j])
+				> strlen_equal(res[shell->j + 1]))
+				shell->len = strlen_equal(res[shell->j]);
+			else
+				shell->len = strlen_equal(res[shell->j + 1]);
+			if (ft_strncmp(res[shell->j], res[shell->j + 1], shell->len) > 0)
+			{
+				tmp = res[shell->j];
+				res[shell->j] = res[shell->j + 1];
+				res[shell->j + 1] = tmp;
+			}
+			shell->j++;
+		}
+		i++;
+	}
+	return (res);
 }
 
-void    export_no_argument(t_shell *shell)
+char	**sorter(t_shell *shell)
 {
-    size_t  i;
-    char    **sorted;
+	char	**sorted;
 
-    i = 0;
-    sorted = bubble_sort(shell);
-    if (!sorted)
-        return ;
-    while (sorted[i] != NULL)
-    {
-        if (ft_strncmp(sorted[i], "_=./minishell", ft_strlen(sorted[i])) != 0) // need to find out when to skip and when not
-        {
-            ft_printf("declare -x ");
-            put_str_n(sorted[i], strlen_equal(sorted[i]) + 1, 0);
-            write(1, "\"", 1);
-            put_str_n(sorted[i], ft_strlen(sorted[i]), strlen_equal(sorted[i]) + 1);
-            write(1, "\"\n", 2);
-        }
-        i++;
-    }
-    clear_all(sorted);
+	sorted = NULL;
+	sorted = allocate_sorted(shell, sorted);
+	if (!sorted)
+		return (NULL);
+	sorted = bubble_sort(shell, sorted);
+	return (sorted);
+}
+
+int	export_no_argument(t_shell *shell)
+{
+	size_t	i;
+	char	**sorted;
+
+	if (shell->env[0] == NULL)
+		return (0);
+	i = 0;
+	sorted = sorter(shell);
+	if (!sorted)
+		return (-1);
+	while (sorted[i] != NULL)
+	{
+		ft_printf("declare -x ");
+		put_str_n(sorted[i], strlen_equal(sorted[i]) + 1, 0);
+		if (has_equal(sorted[i]))
+		{
+			write(1, "\"", 1);
+			put_str_n(sorted[i], ft_strlen(sorted[i]),
+				strlen_equal(sorted[i]) + 1);
+			write(1, "\"", 1);
+		}
+		ft_printf("\n");
+		i++;
+	}
+	clear_all(sorted);
+	return (0);
 }

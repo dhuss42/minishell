@@ -6,11 +6,11 @@
 /*   By: dhuss <dhuss@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:16:00 by dhuss             #+#    #+#             */
-/*   Updated: 2024/10/10 11:19:02 by dhuss            ###   ########.fr       */
+/*   Updated: 2024/11/19 12:11:02 by dhuss            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell_eichhoernchen.h"
+#include "../minishell.h"
 
 void	clear_all(char **to_clear)
 {
@@ -29,7 +29,9 @@ void	clear_all(char **to_clear)
 
 void	free_token(void *content)
 {
-	t_token *tok = (t_token *)content;
+	t_token	*tok;
+
+	tok = (t_token *)content;
 	if (tok)
 	{
 		free(tok->input);
@@ -37,12 +39,12 @@ void	free_token(void *content)
 	}
 }
 
-void    free_lexer(char *input, char *trim_inpt, char *res)
+void	free_three(char *str, char *str2, char *str3)
 {
-    if (input)
-        free(input);
-    if (trim_inpt)
-        free(trim_inpt);
-    if (res)
-        free(res);
+	if (str)
+		free(str);
+	if (str2)
+		free(str2);
+	if (str3)
+		free(str3);
 }
