@@ -14,7 +14,7 @@ This project was the first team-based assignment at 42, requiring us to collabor
 
 ## 2. Project structure
 
-Below is the basic structure of the project, with the names in brackets indicating who was responsible for each part:
+Below is the basic structure of the project, with the names in brackets indicating who was responsible for each part. Minishell will run in an infinite loop once it has obtained the environment variables. In the loop the program will always ask for input and then procede going through the lexer, parser, expansion and executor before freeing the necessary memory.
 
 1. [Environment Variables](#31-Environment-Variables)
 2. [Builtins](#32-Builtins)
